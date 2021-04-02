@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf8">
+    <title>Feria digital HSBC</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js " integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin=" anonymous "></script>
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <!-- THIS LINE -->
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <link href="./assets/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <script type="module" src="./js/main.js"></script>
+    <script src="./js/service.js"></script>
+    <!--
+        Alertify
+    -->
+    <!-- JavaScript -->
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <!-- Default theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+    <!-- Semantic UI theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css" />
+    <!-- Bootstrap theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css" />
+
+
+</head>
+
+<body>
+    <div class="modal" id="balance" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="log">Agenda</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
+                        <div class="card card0 border-0">
+                            <div class="row d-flex">
+                                <div class="col-lg-6">
+                                    <div class="card1 pb-5">
+                                        <div class="row"> <img src="./assets/img/logoHSBC.jpg" width="90%" class="logo"> </div>
+                                        <div class="row px-3 justify-content-center mt-4 mb-5 border-line">
+                                            <img src="./assets/img/feria.png" width="90%" class="image "> </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 ">
+                                    <div class="card2 card border-0 px-4 py-5 ">
+                                        <img src="./assets/img/build.png" width="90%" class="image ">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="registro" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="log">Iniciar sesión</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
+                        <div class="card card0 border-0">
+                            <div class="row d-flex">
+                                <div class="col-lg-6">
+                                    <div class="card1 pb-5">
+                                        <div class="row"> <img src="./assets/img/logoHSBC.jpg" width="90%" class="logo"> </div>
+                                        <div class="row px-3 justify-content-center mt-4 mb-5 border-line">
+                                            <img src="./assets/img/feria.png" width="90%" class="image "> </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 " id="login">
+                                    <div class="card2 card border-0 px-4 py-5 ">
+                                        <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Correo Institucional</h6>
+                                            </label> <input class="form-control " type="text" name="emailLogin" id="emailLogin" placeholder="Ingrese su correo institucional"> </div>
+                                        <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Contraseña</h6>
+                                            </label> <input class="form-control " type="password" name="passwordLogin" id="passwordLogin" placeholder="Ingrese su contraseña"> </div>
+                                        <br>
+                                        <div class="row mb-3 px-3 "> <button type="button " class="btn btn-blue text-center " style="background-color: #db0011; color: white; " onclick="login()">Iniciar sesión</button> </div>
+                                        <div class="row mb-4 px-3 "> <small class="font-weight-bold ">¿Aún no te has registrado a la feria? <a class="btn text-danger " onclick="registro() ">Registrate</a></small> </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 " id="formRegistro" style="display: none; ">
+                                    <form id="registroForm">
+                                        <div class="card2 card border-0 px-4 py-5 ">
+                                            <h3>Datos Personales:</h3>
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Nombre(s) *</h6>
+                                            </label> <input class="form-control " type="text" name="name " id="name" placeholder="Ingresa tu(s) nombre(s) "> </div>
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Apellidos *</h6>
+                                            </label> <input class="form-control " type="text" name="lastname " id="lastname" placeholder="Ingresa tus apellidos ">
+                                            </div>
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Departamento *</h6>
+                                            </label> <input class="form-control " type="text" name="department" id="department" placeholder="Ingresa el departamento en donde trabajas ">
+                                            </div>
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Ocupación *</h6>
+                                            </label> <input class="form-control " type="text" name="job " id="job" placeholder="Registra la actividad principal que realizas ">
+                                            </div>
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Email institucional *</h6>
+                                            </label> <input class="form-control " type="email" name="email " id="email" placeholder="Registra tu correo institucional ">
+                                            </div>
+
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Teléfono a 10 digitos * </h6>
+                                            </label> <input class="form-control " type="text" name="phone" id="phone" placeholder="Ingresa tu número telefonico ">
+                                            </div>
+                                            <h3>Domicilio:</h3>
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Código Postal *</h6>
+                                            </label> <input class="form-control " type="number" name="cp" id="cp" placeholder="Registra el código postal.">
+                                            </div>
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Estado *</h6>
+                                            </label> <input class="form-control " type="text" name="edo" id="edo" placeholder="Registra el estado.">
+                                            </div>
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Municipio/Delegación *</h6>
+                                            </label> <input class="form-control " type="text" name="municipio" id="municipio" placeholder="Registra el municipio o delegación.">
+                                            </div>
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Colonia/Asentamiento *</h6>
+                                            </label> <input class="form-control " type="text" name="colonia" id="colonia" placeholder="Registra la colonia.">
+                                            </div>
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Calle *</h6>
+                                            </label> <input class="form-control " type="text" name="calle" id="calle" placeholder="Registra la calle.">
+                                            </div>
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Número Interior *</h6>
+                                            </label> <input class="form-control " type="number" name="int" id="inter" placeholder="Registra el número interior.">
+                                            </div>
+
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Numero Exterior </h6>
+                                            </label> <input class="form-control " type="number" name="ex" id="ex" placeholder="Registra el número exterior.">
+                                            </div>
+                                            <h3>Datos de Sesión:</h3>
+
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Contraseña(Debe contener como mínimo 8 caracteres) *</h6>
+                                            </label> <input class="form-control " type="password" name="password " id="password" placeholder="Ingresa la contraseña que usaras ">
+                                            </div>
+
+                                            <div class="row px-3 "> <label class="mb-1 ">
+                                                <h6 class="mb-0 text-sm ">Género *</h6>
+                                            </label>
+                                                <select class="form-control " name="gender " id="gender">
+                                                    <option value="-1">Selecciona el género con el que te identifiques</option>
+                                                    <option value="M">Mujer</option>
+                                                    <option value="H">Hombre</option>
+                                                    <option value="NA">Otro</option>
+                                                </select>
+                                            </div>
+                                            <br>
+                                            <div class="row mb-3 px-3 ">
+                                                <input type="button" class="btn btn-blue text-center " style="background-color: #db0011; color: white; " onclick="registroSend()" value="Registrarse">
+
+                                                <div class="row mb-4 px-3 "> <small class="font-weight-bold "><a class="btn text-danger " onclick="loginDiv() ">Iniciar sesión</a></small> </div>
+
+                                            </div>
+                                    </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+</body>
+
+</html>
