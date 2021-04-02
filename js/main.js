@@ -9,8 +9,8 @@ setTimeout(() => {
 
 
     if (!sessionStorage.getItem('token')) {
-        $('#registro').modal('toggle');
-        $('#collapseOne').collapse();
+        //$('#registro').modal('toggle');
+        //$('#collapseOne').collapse();
     }
 }, 1000);
 
@@ -50,11 +50,11 @@ class BasicCharacterController {
     }
     _LoadModels() {
         const loader = new FBXLoader();
-        loader.setPath('../threeJS/models/girl/');
+        loader.setPath('./models/girl/');
         loader.load('MUJER 2_Idle_1.fbx', (fbx) => {
 
-            fbx.position.x = 1350;
-            fbx.position.z = -5;
+            fbx.position.x = 1240;
+            fbx.position.z = 35;
             //fbx.position.y = 0.9;
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
@@ -79,7 +79,7 @@ class BasicCharacterController {
 
 
             const loader = new FBXLoader(this._manager);
-            loader.setPath('../threeJS/models/girl/');
+            loader.setPath('./models/girl/');
             loader.load('MUJER 2_Walking_1.fbx', (a) => { _OnLoad('walk', a); });
             loader.load('idle.fbx', (a) => { _OnLoad('pose', a); });
             loader.load('dance.fbx', (a) => { _OnLoad('dance', a); });
@@ -91,12 +91,12 @@ class BasicCharacterController {
 
     _LoadModelsLeon() {
         const loader = new FBXLoader();
-        loader.setPath('../threeJS/models/leon/LEONCIO TEX/');
+        loader.setPath('./models/leon/LEONCIO TEX/');
         loader.load('HSBC_Leon_RIG & TEXTURE_FINAL UV_1.fbx', (fbx) => {
             fbx.position.x = 550;
             fbx.position.z = -50;
             fbx.position.y = 0.9;
-            //fbx.scale.setScalar(1);
+            fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
             });
@@ -110,7 +110,7 @@ class BasicCharacterController {
             };*/
 
             //const loader = new FBXLoader(this._manager);
-            //loader.setPath('../threeJS/models/leon/');
+            //loader.setPath('./models/leon/');
             // loader.load('HSBC_Leon_Hip hop Dancing_1.fbx', (a) => { _OnLoad('dance', a); });
 
         })
@@ -719,7 +719,7 @@ export class CharacterControllerDemo {
         const controls = new OrbitControls(
             this._camera, this._threejs.domElement);
         console.log('controls :>> ', controls);
-        this._camera.position.set(800, 60, 5);
+        this._camera.position.set(1270, 18, 40);
 
         controls.target.set(0, 10, 0);
         controls.keys = {
@@ -775,7 +775,7 @@ export class CharacterControllerDemo {
         //const loader = new GLTFLoader();
 
         const loader = new FBXLoader();
-        loader.setPath('../threeJS/models/');
+        loader.setPath('./models/');
         loader.load('HSBC Entorno_MASTER 7.4.1 (ConP).fbx', (fbx) => {
                 //fbx.position.x = 1350;
                 //fbx.position.z = -5;
@@ -790,7 +790,7 @@ export class CharacterControllerDemo {
 
 
             })
-            /*loader.setPath('../threeJS/models/');
+            /*loader.setPath('./models/');
 
             loader.load('HSBC Entorno_PISO_4.2.fbx', (fbx) => {
 
