@@ -5,6 +5,13 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.mod
 import { FBXLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/FBXLoader.js';
 import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
+import { Octree } from '../tools/jsm/math/Octree.js';
+import { Capsule } from '../tools/jsm/math/Capsule.js';
+
+const worldOctree = new Octree();
+const playerCollider = new Capsule(new THREE.Vector3(0, 0.35, 0), new THREE.Vector3(0, 1, 0), 0.35);
+let playerOnFloor = false;
+
 setTimeout(() => {
 
 
@@ -553,9 +560,9 @@ class WalkState extends State {
     }
     Update(_, input) {
         if (input._keys.forward || input._keys.backward) {
+
             this._parent._camera.camera.position.set(this._parent._camera.scene.children[5].position.x + 30, 18, this._parent._camera.scene.children[5].position.z + 5);
             //this._parent._camera.camera.lookAt(this._parent._camera.scene.children[5].position);
-
             if (input._keys.shift) {
                 this._parent.SetState('run');
             }
@@ -776,7 +783,9 @@ export class CharacterControllerDemo {
 
         const loader = new FBXLoader();
         loader.setPath('./models/');
-        loader.load('HSBC Entorno_MASTER 7.4.1 (ConP).fbx', (fbx) => {
+        loader.load('HSBC Entorno_MASTER 8.6 (ConP).fbx', (fbx) => {
+                console.log('fbx :>> ', fbx);
+                //worldOctree.fromGraphNode(gltf.scene);
                 //fbx.position.x = 1350;
                 //fbx.position.z = -5;
                 //fbx.position.y = 0.9;
@@ -807,16 +816,19 @@ export class CharacterControllerDemo {
 
 
                 })*/
-            /*loader.load('./models/HSBC Entorno_MASTER 6 (SinP).glb', (gltf) => {
-                //gltf.scene.position.x=50;
-                //gltf.scene.position.y=90;
-                //gltf.scene.position.x=30;
-                console.log('gltf', gltf)
-                gltf.scene.traverse(c => {
-                    c.castShadow = true;
-                });
-                this._scene.add(gltf.scene, );
-            });*/
+            /* loader.load('./models/HSBC_Entorno C_1.glb', (gltf) => {
+                 //gltf.scene.position.x=50;
+                 //gltf.scene.position.y=90;
+                 //gltf.scene.position.x=30;
+                 console.log('gltf', gltf)
+                 gltf.scene.traverse(c => {
+                     c.castShadow = true;
+                 });
+                 console.log('gltf.scene :>> ', gltf.scene);
+                 this._scene.add(gltf.scene);
+                 worldOctree.fromGraphNode(gltf.scene);
+
+             });*/
 
         /*loader.load('./models/LUCES AREA_2.glb', (gltf) => {
             //gltf.scene.position.x=50;
@@ -932,6 +944,19 @@ export class CharacterControllerDemo {
     }
 }
 
+function playerCollitions() {
+
+
+    playerOnFloor = false;
+    if (result) {
+
+        playerOnFloor = result.normal.y > 0;
+        if (!playerOnFloor) {
+            playerVelocity.addScaledVector(result.normal, -result.normal.dot(playerVelocity));
+        }
+        playerCollider.translate(result.normal.multiplyScalar(result.depth));
+    }
+}
 
 let _APP = null;
 
