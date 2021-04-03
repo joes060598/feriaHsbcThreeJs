@@ -14,13 +14,10 @@ let playerOnFloor = false;
 
 setTimeout(() => {
     //$('#registro').modal({ backdrop: 'static', keyboard: false })
-
-
-    /* if (!sessionStorage.getItem('token')) {
-         console.log('entro :>> ');
-         $('#registro').modal('toggle');
-         //$('#collapseOne').collapse();
-     }*/
+    if (!sessionStorage.getItem('token')) {
+        console.log('entro :>> ');
+        $('#registro').modal('toggle');
+    }
 }, 1000);
 
 
@@ -58,8 +55,15 @@ class BasicCharacterController {
 
     }
     _LoadModels() {
+        let genderPath;
+        if (this._params.gender == 'M') {
+            genderPath = 'girl';
+        } else if (this._params.gender == 'H') {
+            genderPath = 'man';
+        }
+
         const loader = new FBXLoader();
-        loader.setPath('./models/girl/');
+        loader.setPath(`./models/${genderPath}/`);
         loader.load('idle.fbx', (fbx) => {
             fbx.position.x = 1740;
             fbx.position.z = 35;
@@ -85,7 +89,7 @@ class BasicCharacterController {
                 }
             }
             const loader = new FBXLoader(this._manager);
-            loader.setPath('./models/girl/');
+            loader.setPath(`./models/${genderPath}/`);
             loader.load('walk.fbx', (a) => { _OnLoad('walk', a); });
             loader.load('idle.fbx', (a) => { _OnLoad('pose', a); });
             loader.load('dance.fbx', (a) => { _OnLoad('dance', a); });
@@ -98,9 +102,9 @@ class BasicCharacterController {
     _LoadModelsLeon() {
         const loader = new FBXLoader();
         loader.setPath('./models/leon/LEONCIO TEX/');
-        loader.load('HSBC_Leon_RIG & TEXTURE_FINAL UV_1.fbx', (fbx) => {
-            fbx.position.x = 550;
-            fbx.position.z = -50;
+        loader.load('HSBC_Leon_Cheering_1.fbx', (fbx) => {
+            fbx.position.x = 1600;
+            fbx.position.z = -0;
             fbx.position.y = 0.9;
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
@@ -108,16 +112,12 @@ class BasicCharacterController {
             });
             this._targetLeon = fbx;
             this._targetLeon.name = 'leon';
-            this._params.scene.add(this._targetLeon);
             this._mixerLeon = new THREE.AnimationMixer(this._targetLeon);
             this._managerLeon = new THREE.LoadingManager();
-            /*this._managerLeon.onLoad = () => {
-                this._stateMachine.SetState('dance');
-            };*/
+            let action = this._mixerLeon.clipAction(this._targetLeon.animations[0]);
+            action.play();
+            this._params.scene.add(this._targetLeon);
 
-            //const loader = new FBXLoader(this._manager);
-            //loader.setPath('./models/leon/');
-            // loader.load('HSBC_Leon_Hip hop Dancing_1.fbx', (a) => { _OnLoad('dance', a); });
 
         })
     }
@@ -455,6 +455,7 @@ class DanceState extends State {
 
     Enter(prevState) {
         const curAction = this._parent._proxy._animations['dance'].action;
+        console.log('curAction :>> ', curAction);
         const mixer = curAction.getMixer();
         mixer.addEventListener('finished', this._FinishedCallback);
 
@@ -573,7 +574,8 @@ class WalkState extends State {
 }
 
 export class CharacterControllerDemo {
-    constructor() {
+    constructor(gender) {
+        this.gender = gender;
         this._Initialize();
     }
 
@@ -717,6 +719,7 @@ export class CharacterControllerDemo {
             sound.setVolume( 0.5 );
             sound.play();
         });*/
+
         this._LoadAnimatedModel();
         this._LoadModel();
 
@@ -748,6 +751,7 @@ export class CharacterControllerDemo {
         const params = {
             camera: this._camera,
             scene: this._scene,
+            gender: this.gender
         }
         this._controls = new BasicCharacterController(params);
 
@@ -951,11 +955,14 @@ function playerCollitions() {
 }
 
 let _APP = null;
-/*setInterval(() => {
-    if (_APP == null && sessionStorage.getItem('token')) {
 
-    }
-}, 1000)*/
+
 window.addEventListener('DOMContentLoaded', () => {
-    _APP = new CharacterControllerDemo();
+    setInterval(() => {
+        if (_APP == null && sessionStorage.getItem('gender')) {
+            _APP = new CharacterControllerDemo(sessionStorage.getItem('gender'));
+        }
+
+    }, 1000)
+
 });

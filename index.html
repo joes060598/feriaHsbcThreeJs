@@ -65,7 +65,7 @@
         </div>
     </div>
 
-    <div class="modal" id="registro" tabindex="-1">
+    <div class="modal" id="registro" tabindex="-1" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -100,65 +100,12 @@
                                 <div class="col-lg-6 " id="formRegistro" style="display: none; ">
                                     <form id="registroForm">
                                         <div class="card2 card border-0 px-4 py-5 ">
-                                            <h3>Datos Personales:</h3>
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Nombre(s) *</h6>
-                                            </label> <input class="form-control " type="text" name="name " id="name" placeholder="Ingresa tu(s) nombre(s) "> </div>
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Apellidos *</h6>
-                                            </label> <input class="form-control " type="text" name="lastname " id="lastname" placeholder="Ingresa tus apellidos ">
-                                            </div>
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Departamento *</h6>
-                                            </label> <input class="form-control " type="text" name="department" id="department" placeholder="Ingresa el departamento en donde trabajas ">
-                                            </div>
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Ocupación *</h6>
-                                            </label> <input class="form-control " type="text" name="job " id="job" placeholder="Registra la actividad principal que realizas ">
-                                            </div>
                                             <div class="row px-3 "> <label class="mb-1 ">
                                                 <h6 class="mb-0 text-sm ">Email institucional *</h6>
                                             </label> <input class="form-control " type="email" name="email " id="email" placeholder="Registra tu correo institucional ">
                                             </div>
-
                                             <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Teléfono a 10 digitos * </h6>
-                                            </label> <input class="form-control " type="text" name="phone" id="phone" placeholder="Ingresa tu número telefonico ">
-                                            </div>
-                                            <h3>Domicilio:</h3>
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Código Postal *</h6>
-                                            </label> <input class="form-control " type="number" name="cp" id="cp" placeholder="Registra el código postal.">
-                                            </div>
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Estado *</h6>
-                                            </label> <input class="form-control " type="text" name="edo" id="edo" placeholder="Registra el estado.">
-                                            </div>
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Municipio/Delegación *</h6>
-                                            </label> <input class="form-control " type="text" name="municipio" id="municipio" placeholder="Registra el municipio o delegación.">
-                                            </div>
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Colonia/Asentamiento *</h6>
-                                            </label> <input class="form-control " type="text" name="colonia" id="colonia" placeholder="Registra la colonia.">
-                                            </div>
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Calle *</h6>
-                                            </label> <input class="form-control " type="text" name="calle" id="calle" placeholder="Registra la calle.">
-                                            </div>
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Número Interior *</h6>
-                                            </label> <input class="form-control " type="number" name="int" id="inter" placeholder="Registra el número interior.">
-                                            </div>
-
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Numero Exterior </h6>
-                                            </label> <input class="form-control " type="number" name="ex" id="ex" placeholder="Registra el número exterior.">
-                                            </div>
-                                            <h3>Datos de Sesión:</h3>
-
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Contraseña(Debe contener como mínimo 8 caracteres) *</h6>
+                                                <h6 class="mb-0 text-sm ">Contraseña(No uses contraseñas institucionales) *</h6>
                                             </label> <input class="form-control " type="password" name="password " id="password" placeholder="Ingresa la contraseña que usaras ">
                                             </div>
 
@@ -169,7 +116,7 @@
                                                     <option value="-1">Selecciona el género con el que te identifiques</option>
                                                     <option value="M">Mujer</option>
                                                     <option value="H">Hombre</option>
-                                                    <option value="NA">Otro</option>
+                                                   <!--<option value="NA">Otro</option> --> 
                                                 </select>
                                             </div>
                                             <br>
