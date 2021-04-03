@@ -12,7 +12,24 @@ function loginDiv() {
     $("#formRegistro").hide();
     $("#login").fadeIn('slow');
 
-    $("#log").html("Iniciar sesión")
+    $("#log").html("Iniciar sesión");
+    $("#personaj").html('<img src="./assets/img/feria.png" width="90%" class="image "> </div>');
+
+
+}
+
+function setImageCharacter() {
+    let type = $('#gender').val();
+    if (type == 'H') {
+        $("#personaj").html('<img src="./assets/img/man.png" width="200px" heigth="800px" class="image "> </div>');
+
+    } else if (type == 'M') {
+        $("#personaj").html('<img src="./assets/img/girl.png" width="200px" heigth="450px" class="image "> </div>');
+
+    } else if (type == '-1') {
+        $("#personaj").html('');
+
+    }
 
 }
 

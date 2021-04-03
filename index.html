@@ -78,7 +78,7 @@
                                 <div class="col-lg-6">
                                     <div class="card1 pb-5">
                                         <div class="row"> <img src="./assets/img/logoHSBC.jpg" width="90%" class="logo"> </div>
-                                        <div class="row px-3 justify-content-center mt-4 mb-5 border-line">
+                                        <div class="row px-3 justify-content-center mt-4 mb-5 border-line" id="personaj">
                                             <img src="./assets/img/feria.png" width="90%" class="image "> </div>
 
 
@@ -112,7 +112,7 @@
                                             <div class="row px-3 "> <label class="mb-1 ">
                                                 <h6 class="mb-0 text-sm ">Género *</h6>
                                             </label>
-                                                <select class="form-control " name="gender " id="gender">
+                                                <select class="form-control " onchange="setImageCharacter()" name="gender " id="gender">
                                                     <option value="-1">Selecciona el género con el que te identifiques</option>
                                                     <option value="M">Mujer</option>
                                                     <option value="H">Hombre</option>
