@@ -13,12 +13,14 @@ const playerCollider = new Capsule(new THREE.Vector3(0, 0.35, 0), new THREE.Vect
 let playerOnFloor = false;
 
 setTimeout(() => {
+    //$('#registro').modal({ backdrop: 'static', keyboard: false })
 
 
-    if (!sessionStorage.getItem('token')) {
-        //$('#registro').modal('toggle');
-        //$('#collapseOne').collapse();
-    }
+    /* if (!sessionStorage.getItem('token')) {
+         console.log('entro :>> ');
+         $('#registro').modal('toggle');
+         //$('#collapseOne').collapse();
+     }*/
 }, 1000);
 
 
@@ -58,9 +60,8 @@ class BasicCharacterController {
     _LoadModels() {
         const loader = new FBXLoader();
         loader.setPath('./models/girl/');
-        loader.load('MUJER 2_Idle_1.fbx', (fbx) => {
-
-            fbx.position.x = 1240;
+        loader.load('idle.fbx', (fbx) => {
+            fbx.position.x = 1740;
             fbx.position.z = 35;
             //fbx.position.y = 0.9;
             fbx.scale.setScalar(0.1);
@@ -83,14 +84,12 @@ class BasicCharacterController {
                     action
                 }
             }
-
-
             const loader = new FBXLoader(this._manager);
             loader.setPath('./models/girl/');
-            loader.load('MUJER 2_Walking_1.fbx', (a) => { _OnLoad('walk', a); });
+            loader.load('walk.fbx', (a) => { _OnLoad('walk', a); });
             loader.load('idle.fbx', (a) => { _OnLoad('pose', a); });
             loader.load('dance.fbx', (a) => { _OnLoad('dance', a); });
-            loader.load('MUJER 2_Running_1.fbx', (a) => { _OnLoad('run', a); });
+            loader.load('run.fbx', (a) => { _OnLoad('run', a); });
 
         })
     }
@@ -587,7 +586,6 @@ export class CharacterControllerDemo {
          * 
          * vrotateCamera(fbx) {
   // current camera position
-
 }
          */
         this._threejs = new THREE.WebGLRenderer({
@@ -726,7 +724,7 @@ export class CharacterControllerDemo {
         const controls = new OrbitControls(
             this._camera, this._threejs.domElement);
         console.log('controls :>> ', controls);
-        this._camera.position.set(1270, 18, 40);
+        this._camera.position.set(1770, 18, 40);
 
         controls.target.set(0, 10, 0);
         controls.keys = {
@@ -739,7 +737,6 @@ export class CharacterControllerDemo {
 
 
         /* this.loadIglues();
-
          this.loadIglues2();
          this.loadIglues3();
          this.loadIglues4();*/
@@ -800,9 +797,7 @@ export class CharacterControllerDemo {
 
             })
             /*loader.setPath('./models/');
-
             loader.load('HSBC Entorno_PISO_4.2.fbx', (fbx) => {
-
                     //fbx.position.x = 1350;
                     //fbx.position.z = -5;
                     fbx.position.y = -240;
@@ -813,8 +808,6 @@ export class CharacterControllerDemo {
                     this._target = fbx;
                     this._target.name = 'piso';
                     this._scene.add(this._target);
-
-
                 })*/
             /* loader.load('./models/HSBC_Entorno C_1.glb', (gltf) => {
                  //gltf.scene.position.x=50;
@@ -827,7 +820,6 @@ export class CharacterControllerDemo {
                  console.log('gltf.scene :>> ', gltf.scene);
                  this._scene.add(gltf.scene);
                  worldOctree.fromGraphNode(gltf.scene);
-
              });*/
 
         /*loader.load('./models/LUCES AREA_2.glb', (gltf) => {
@@ -959,7 +951,11 @@ function playerCollitions() {
 }
 
 let _APP = null;
+/*setInterval(() => {
+    if (_APP == null && sessionStorage.getItem('token')) {
 
+    }
+}, 1000)*/
 window.addEventListener('DOMContentLoaded', () => {
     _APP = new CharacterControllerDemo();
 });
