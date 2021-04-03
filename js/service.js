@@ -94,6 +94,8 @@ function registroSend() {
             $('#registroForm')[0].reset();
             $("#formRegistro").hide();
             $("#login").fadeIn('slow');
+            $("#personaj").html('<img src="./assets/img/feria.png" width="90%" class="image "> </div>');
+
         } else {
             let err = data.message;
             if (err = 'User validation failed') {

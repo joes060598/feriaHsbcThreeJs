@@ -278,7 +278,7 @@ class BasicCharacterControllerInput {
                     z: -318.35156937411085
                 }
 
-                let position = this._params.scene.children[5].position;
+                let position = this._params.scene.children[4].position;
 
 
                 if (position.x >= balance.xn && position.x <= balance.xm) {
@@ -429,7 +429,7 @@ class RunState extends State {
 
     Update(timeElapsed, input) {
         if (input._keys.forward || input._keys.backward) {
-            this._parent._camera.camera.position.set(this._parent._camera.scene.children[5].position.x + 30, 18, this._parent._camera.scene.children[5].position.z + 5);
+            this._parent._camera.camera.position.set(this._parent._camera.scene.children[4].position.x + 30, 18, this._parent._camera.scene.children[4].position.z + 5);
 
             if (!input._keys.shift) {
                 this._parent.SetState('walk');
@@ -561,8 +561,8 @@ class WalkState extends State {
     Update(_, input) {
         if (input._keys.forward || input._keys.backward) {
 
-            this._parent._camera.camera.position.set(this._parent._camera.scene.children[5].position.x + 30, 18, this._parent._camera.scene.children[5].position.z + 5);
-            //this._parent._camera.camera.lookAt(this._parent._camera.scene.children[5].position);
+            this._parent._camera.camera.position.set(this._parent._camera.scene.children[4].position.x + 30, 18, this._parent._camera.scene.children[4].position.z + 5);
+            //this._parent._camera.camera.lookAt(this._parent._camera.scene.children[4].position);
             if (input._keys.shift) {
                 this._parent.SetState('run');
             }
