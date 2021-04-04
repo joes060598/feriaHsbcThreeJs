@@ -66,26 +66,5 @@ export let around = () => {
     });*/
 
 
-    loader.load('./models/juegos/DINAMICO_Pino Boliche_1.glb', (gltf) => {
-        //gltf.scene.position.x=50;
-        //gltf.scene.position.y=90;
-        //gltf.scene.position.x=30;
-
-        gltf.scene.traverse(c => {
-            c.castShadow = true;
-        });
-        this._scene.add(gltf.scene, );
-    });
-
-    loader.load('./models/juegos/DINAMICO_Ballon Futbol_1.glb', (gltf) => {
-        //gltf.scene.position.x=50;
-        //gltf.scene.position.y=90;
-        gltf.scene.position.x = 20;
-
-        gltf.scene.traverse(c => {
-            c.castShadow = true;
-        });
-        this._scene.add(gltf.scene, );
-    });
 
 }

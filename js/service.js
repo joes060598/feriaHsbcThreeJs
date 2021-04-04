@@ -1,4 +1,4 @@
-let url = 'http://localhost:4000/';
+let url = 'http://173.231.203.133:4000/';
 let _APP = null;
 
 

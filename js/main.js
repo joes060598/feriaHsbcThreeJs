@@ -43,14 +43,16 @@ class BasicCharacterController {
         this._decceleration = new THREE.Vector3(-0.0005, -0.0001, -5.0);
         this._acceleration = new THREE.Vector3(1, 0.25, 50.0);
         this._velocity = new THREE.Vector3(0, 0, 0);
+        this._position = new THREE.Vector3();
 
         this._animations = {};
 
         this._input = new BasicCharacterControllerInput(this._params);
-        this._LoadModels();
-        this._LoadModelsLeon();
         this._stateMachine = new CharacterFSM(
             new BasicCharacterControllerProxy(this._animations, this._params), this._params);
+        this._LoadModels();
+        //this._LoadModelsLeon();
+
 
 
     }
@@ -67,7 +69,7 @@ class BasicCharacterController {
         loader.load('idle.fbx', (fbx) => {
             fbx.position.x = 1740;
             fbx.position.z = 35;
-            //fbx.position.y = 0.9;
+            fbx.position.y = 0.5;
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -77,6 +79,8 @@ class BasicCharacterController {
             this._params.scene.add(this._target);
             this._mixer = new THREE.AnimationMixer(this._target);
             this._manager = new THREE.LoadingManager();
+            this._target.quaternion._w = 0.7440;
+            this._target.quaternion._y = -0.668;
             this._manager.onLoad = () => {
                 this._stateMachine.SetState('pose');
             };
@@ -97,37 +101,46 @@ class BasicCharacterController {
 
         })
     }
+    get Position() {
+        return this._position;
+    }
 
-
-    _LoadModelsLeon() {
-        const loader = new FBXLoader();
-        loader.setPath('./models/leon/LEONCIO TEX/');
-        loader.load('HSBC_Leon_Cheering_1.fbx', (fbx) => {
-            fbx.position.x = 1600;
-            fbx.position.z = -0;
-            fbx.position.y = 0.9;
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._targetLeon = fbx;
-            this._targetLeon.name = 'leon';
-            this._mixerLeon = new THREE.AnimationMixer(this._targetLeon);
-            this._managerLeon = new THREE.LoadingManager();
-            let action = this._mixerLeon.clipAction(this._targetLeon.animations[0]);
-            action.play();
-            this._params.scene.add(this._targetLeon);
-
-
-        })
+    get Rotation() {
+        if (!this._target) {
+            return new THREE.Quaternion();
+        }
+        return this._target.quaternion;
     }
 
 
+    /* _LoadModelsLeon() {
+         const loader = new FBXLoader();
+         loader.setPath('./models/leon/LEONCIO TEX/');
+         loader.load('HSBC_Leon_Cheering_1.fbx', (fbx) => {
+             fbx.position.x = 1600;
+             fbx.position.z = -0;
+             fbx.position.y = 0.9;
+             fbx.scale.setScalar(0.1);
+             fbx.traverse((c) => {
+                 c.castShadow = true;
+             });
+             this._targetLeon = fbx;
+             this._targetLeon.name = 'leon';
+             this._mixerLeon = new THREE.AnimationMixer(this._targetLeon);
+             this._managerLeon = new THREE.LoadingManager();
+             let action = this._mixerLeon.clipAction(this._targetLeon.animations[0]);
+             action.play();
+             this._params.scene.add(this._targetLeon);
+
+
+         })
+     }*/
+
+
     Update(timeInSeconds) {
-        if (!this._target) {
+        if (!this._stateMachine._currentState) {
             return;
         }
-
         this._stateMachine.Update(timeInSeconds, this._input);
         const velocity = this._velocity;
         const frameDecceleration = new THREE.Vector3(
@@ -138,30 +151,23 @@ class BasicCharacterController {
         frameDecceleration.multiplyScalar(timeInSeconds);
         frameDecceleration.z = Math.sign(frameDecceleration.z) * Math.min(
             Math.abs(frameDecceleration.z), Math.abs(velocity.z));
-
         velocity.add(frameDecceleration);
-
         const controlObject = this._target;
         const _Q = new THREE.Quaternion();
         const _A = new THREE.Vector3();
         const _R = controlObject.quaternion.clone();
-
         const acc = this._acceleration.clone();
         if (this._input._keys.shift) {
-            acc.multiplyScalar(3.0);
+            acc.multiplyScalar(2.0);
         }
-        if (this._stateMachine._currentState) {
-            if (this._stateMachine._currentState.Name == 'dance') {
-                acc.multiplyScalar(0.0);
-            }
+        if (this._stateMachine._currentState.Name == 'dance') {
+            acc.multiplyScalar(0.0);
         }
-
-
         if (this._input._keys.forward) {
-            velocity.z += acc.z * timeInSeconds + 2;
+            velocity.z += acc.z * timeInSeconds + 3;
         }
         if (this._input._keys.backward) {
-            velocity.z -= acc.z * timeInSeconds + 2;
+            velocity.z -= acc.z * timeInSeconds + 3;
         }
         if (this._input._keys.left) {
             _A.set(0, 1, 0);
@@ -173,28 +179,20 @@ class BasicCharacterController {
             _Q.setFromAxisAngle(_A, 4.0 * -Math.PI * timeInSeconds * this._acceleration.y);
             _R.multiply(_Q);
         }
-
         controlObject.quaternion.copy(_R);
-
         const oldPosition = new THREE.Vector3();
         oldPosition.copy(controlObject.position);
-
         const forward = new THREE.Vector3(0, 0, 1);
         forward.applyQuaternion(controlObject.quaternion);
         forward.normalize();
-
         const sideways = new THREE.Vector3(1, 0, 0);
         sideways.applyQuaternion(controlObject.quaternion);
         sideways.normalize();
-
         sideways.multiplyScalar(velocity.x * timeInSeconds);
         forward.multiplyScalar(velocity.z * timeInSeconds);
-
         controlObject.position.add(forward);
         controlObject.position.add(sideways);
-
-        oldPosition.copy(controlObject.position);
-
+        this._position.copy(controlObject.position);
         if (this._mixer) {
             this._mixer.update(timeInSeconds);
         }
@@ -754,7 +752,11 @@ export class CharacterControllerDemo {
             gender: this.gender
         }
         this._controls = new BasicCharacterController(params);
-
+        console.log('this._controls :>> ', this._controls);
+        this._thirdPersonCamera = new ThirdPersonCamera({
+            camera: this._camera,
+            target: this._controls,
+        });
     }
 
     _LoadAnimatedModelAndPlay(path, modelFile, animFile, offset) {
@@ -937,6 +939,8 @@ export class CharacterControllerDemo {
         if (this._controls) {
             this._controls.Update(timeElapsedS);
         }
+        this._thirdPersonCamera.Update(timeElapsedS);
+
     }
 }
 
@@ -953,7 +957,44 @@ function playerCollitions() {
         playerCollider.translate(result.normal.multiplyScalar(result.depth));
     }
 }
+class ThirdPersonCamera {
+    constructor(params) {
+        this._params = params;
+        this._camera = params.camera;
 
+        this._currentPosition = new THREE.Vector3();
+        this._currentLookat = new THREE.Vector3();
+    }
+
+    _CalculateIdealOffset() {
+        const idealOffset = new THREE.Vector3(10, 15, -30);
+        idealOffset.applyQuaternion(this._params.target.Rotation);
+        idealOffset.add(this._params.target.Position);
+        return idealOffset;
+    }
+
+    _CalculateIdealLookat() {
+        const idealLookat = new THREE.Vector3(0, 10, 50);
+        idealLookat.applyQuaternion(this._params.target.Rotation);
+        idealLookat.add(this._params.target.Position);
+        return idealLookat;
+    }
+
+    Update(timeElapsed) {
+        const idealOffset = this._CalculateIdealOffset();
+        const idealLookat = this._CalculateIdealLookat();
+
+        // const t = 0.05;
+        // const t = 4.0 * timeElapsed;
+        const t = 1.0 - Math.pow(0.001, timeElapsed);
+
+        this._currentPosition.lerp(idealOffset, t);
+        this._currentLookat.lerp(idealLookat, t);
+
+        this._camera.position.copy(this._currentPosition);
+        this._camera.lookAt(this._currentLookat);
+    }
+}
 let _APP = null;
 
 
