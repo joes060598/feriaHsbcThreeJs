@@ -44,24 +44,30 @@ function login() {
         return;
     }
     let request = {
-        email: email,
-        password: password
-    }
-    $.post(url + "user/login", request, function(data) {
-        if (data.statusCode == 200) {
-            console.log('data :>> ', data);
-            alertify.success('Bienvenido ' + data.data.name);
-            sessionStorage.setItem('token', data.data.token);
-            sessionStorage.setItem('name', data.data.name);
-            sessionStorage.setItem('gender', data.data.gender);
-
-            $('#registro').modal('hide');
-
-        } else {
-            alertify.error(data.message);
-
+            email: email,
+            password: password
         }
-    });
+        /*$.post(url + "user/login", request, function(data) {
+            if (data.statusCode == 200) {
+                console.log('data :>> ', data);
+                alertify.success('Bienvenido ' + data.data.name);
+                sessionStorage.setItem('token', data.data.token);
+                sessionStorage.setItem('name', data.data.name);
+                sessionStorage.setItem('gender', data.data.gender);
+
+                $('#registro').modal('hide');
+
+            } else {
+                alertify.error(data.message);
+
+            }
+        });*/
+    alertify.success('Bienvenido ');
+    sessionStorage.setItem('token', 'temporal');
+    sessionStorage.setItem('name', 'Pruebas');
+    sessionStorage.setItem('gender', 'H');
+
+    $('#registro').modal('hide');
 
 
 }

@@ -1038,7 +1038,7 @@ export class CharacterControllerDemo {
             });
             this._target = fbx;
             this._target.name = 'entorno';
-            this._target.receiveShadow = true;
+            this._target.receiveShadow = false;
             this._target.castShadows = true;
             this._scene.add(this._target);
 
