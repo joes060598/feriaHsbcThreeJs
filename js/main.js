@@ -898,10 +898,11 @@ export class CharacterControllerDemo {
             powerPreference: 'low-power',
             precision: 'lowp',
             premultipliedAlpha: false,
-            logarithmicDepthBuffer: true
+            logarithmicDepthBuffer: true,
+
         });
         this._threejs.outputEncoding = THREE.sRGBEncoding;
-        this._threejs.shadowMap.enabled = true;
+        this._threejs.shadowMap.enabled = false;
         this._threejs.shadowMap.type = THREE.PCFSoftShadowMap;
         this._threejs.setPixelRatio(window.devicePixelRatio);
         this._threejs.setSize(window.innerWidth, window.innerHeight);
@@ -1036,7 +1037,8 @@ export class CharacterControllerDemo {
         const controls = new OrbitControls(
             this._camera, this._threejs.domElement);
         this._camera.position.set(1770, 18, 40);
-
+        this._camera.castShadow = true;
+        this._camera.receiveShadow = true;
         controls.target.set(0, 10, 0);
         controls.keys = {
             LEFT: 1, //left arrow
@@ -1045,7 +1047,7 @@ export class CharacterControllerDemo {
             BOTTOM: 1 // down arrow
         }
         controls.update();
-
+        console.log('this._camera :>> ', this._camera);
         this._RAF();
     }
 
