@@ -91,6 +91,8 @@ class BasicCharacterController {
             this._manager = new THREE.LoadingManager();
             this._target.quaternion._w = 0.7440;
             this._target.quaternion._y = -0.668;
+            this._target.receiveShadow = true;
+            this._target.castShadows = true;
             this._manager.onLoad = () => {
                 this._stateMachine.SetState('pose');
             };
@@ -140,6 +142,8 @@ class BasicCharacterController {
             this._targetLeon.name = 'leon';
             this._targetLeon.quaternion._w = 0.7440;
             this._targetLeon.quaternion._y = 0.568;
+            this._targetLeon.receiveShadow = true;
+            this._targetLeon.castShadows = true
             this._params.scene.add(this._targetLeon);
             this._mixerLeon = new THREE.AnimationMixer(this._targetLeon);
             this._managerLeon = new THREE.LoadingManager();
@@ -172,6 +176,8 @@ class BasicCharacterController {
             this._targetLeon1.name = 'leonHipHop';
             this._targetLeon1.quaternion._w = 0.7440;
             this._targetLeon1.quaternion._y = 0.568;
+            this._targetLeon1.receiveShadow = true;
+            this._targetLeon1.castShadows = true
             this._params.scene.add(this._targetLeon1);
             this._mixerLeon1 = new THREE.AnimationMixer(this._targetLeon1);
             const action = this._mixerLeon1.clipAction(this._targetLeon1.animations[0]);
@@ -191,6 +197,8 @@ class BasicCharacterController {
             this._targetLeon2.name = 'leonKiss';
             this._targetLeon2.quaternion._w = 0.7440;
             this._targetLeon2.quaternion._y = -0.400;
+            this._targetLeon2.receiveShadow = true;
+            this._targetLeon2.castShadows = true
             this._params.scene.add(this._targetLeon2);
             this._mixerLeon2 = new THREE.AnimationMixer(this._targetLeon2);
             const action = this._mixerLeon2.clipAction(this._targetLeon2.animations[0]);
@@ -210,6 +218,8 @@ class BasicCharacterController {
             this._targetLeon3.name = 'salud';
             this._targetLeon3.quaternion._w = 0.7440;
             this._targetLeon3.quaternion._y = 0.568;
+            this._targetLeon3.receiveShadow = true;
+            this._targetLeon3.castShadows = true
             this._params.scene.add(this._targetLeon3);
             this._mixerLeon3 = new THREE.AnimationMixer(this._targetLeon3);
             const action = this._mixerLeon3.clipAction(this._targetLeon3.animations[0]);
@@ -230,6 +240,8 @@ class BasicCharacterController {
             this._targetLeon4.name = 'culturaValores';
             this._targetLeon4.quaternion._w = 0.7440;
             this._targetLeon4.quaternion._y = 0.568;
+            this._targetLeon4.receiveShadow = true;
+            this._targetLeon4.castShadows = true
             this._params.scene.add(this._targetLeon4);
             this._mixerLeon4 = new THREE.AnimationMixer(this._targetLeon4);
             const action = this._mixerLeon4.clipAction(this._targetLeon4.animations[0]);
@@ -248,6 +260,8 @@ class BasicCharacterController {
             this._targetLeon5.name = 'Finanzas';
             this._targetLeon5.quaternion._w = 0.7440;
             this._targetLeon5.quaternion._y = -0.300;
+            this._targetLeon5.receiveShadow = true;
+            this._targetLeon5.castShadows = true;
             this._params.scene.add(this._targetLeon5);
             this._mixerLeon5 = new THREE.AnimationMixer(this._targetLeon5);
             const action = this._mixerLeon5.clipAction(this._targetLeon5.animations[0]);
@@ -266,6 +280,8 @@ class BasicCharacterController {
             this._targetLeon6.name = 'pistaBaile';
             this._targetLeon6.quaternion._w = 0.7440;
             this._targetLeon6.quaternion._y = 0.800;
+            this._targetLeon6.receiveShadow = true;
+            this._targetLeon6.castShadows = true;
             this._params.scene.add(this._targetLeon6);
             this._mixerLeon6 = new THREE.AnimationMixer(this._targetLeon6);
             const action = this._mixerLeon6.clipAction(this._targetLeon6.animations[0]);
@@ -284,6 +300,8 @@ class BasicCharacterController {
             this._targetLeon7.name = 'rampa';
             this._targetLeon7.quaternion._w = 0.7440;
             this._targetLeon7.quaternion._y = 0.800;
+            this._targetLeon7.receiveShadow = true;
+            this._targetLeon7.castShadows = true;
             this._params.scene.add(this._targetLeon7);
             this._mixerLeon7 = new THREE.AnimationMixer(this._targetLeon7);
             const action = this._mixerLeon7.clipAction(this._targetLeon7.animations[0]);
@@ -902,11 +920,11 @@ export class CharacterControllerDemo {
 
         });
         this._threejs.outputEncoding = THREE.sRGBEncoding;
-        this._threejs.shadowMap.enabled = false;
+        this._threejs.shadowMap.enabled = true;
         this._threejs.shadowMap.type = THREE.PCFSoftShadowMap;
+        this._threejs.shadowMap.needsUpdate = true;
         this._threejs.setPixelRatio(window.devicePixelRatio);
         this._threejs.setSize(window.innerWidth, window.innerHeight);
-
         document.body.appendChild(this._threejs.domElement);
 
         window.addEventListener('resize', () => {
@@ -920,11 +938,12 @@ export class CharacterControllerDemo {
         this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
         this._scene = new THREE.Scene();
+        console.log('this._threejs :>> ', this._threejs);
+        let light = new THREE.HemisphereLight(0xAEF0FF, 0xB78E79, 0.6);
 
-        let light = new THREE.DirectionalLight(0xFFFFFF, 0.6);
-        light.position.set(100, 300, 300);
+        /*light.position.set(100, 300, 300);
         light.target.position.set(0, 0, 0);
-        light.castShadow = true;
+        
         light.shadow.bias = -0.001;
         light.shadow.mapSize.width = 4096;
         light.shadow.mapSize.height = 4096;
@@ -934,12 +953,18 @@ export class CharacterControllerDemo {
         light.shadow.camera.left = 500;
         light.shadow.camera.right = -50;
         light.shadow.camera.top = 500;
-        light.shadow.camera.bottom = -50;
+        light.shadow.camera.bottom = -50;*/
         console.log("light", light)
         this._scene.add(light);
 
+        const spotLight = new THREE.SpotLight(0xffffff, 0.8);
+        spotLight.castShadow = true;
+        spotLight.receiveShadow = true;
+        spotLight.position.set(2500, 5000, 800)
+        this._scene.add(spotLight);
+
         let light2 = new THREE.DirectionalLight(0xFFFFFF, 0.6);
-        light2.position.set(100, 300, -300);
+        light2.position.set(800, 700, 0);
         light2.target.position.set(0, 0, 0);
         light2.castShadow = true;
         light2.shadow.bias = -0.001;
@@ -954,7 +979,7 @@ export class CharacterControllerDemo {
         light2.shadow.camera.top = 50;
         light2.shadow.camera.bottom = -50;
 
-        this._scene.add(light2);
+        //this._scene.add(light2);
         let light3 = new THREE.DirectionalLight(0xFFFFFF, 0.5);
         light3.position.set(-300, 300, 0);
         light3.target.position.set(0, 0, 0);
@@ -970,14 +995,14 @@ export class CharacterControllerDemo {
         light3.shadow.camera.right = -50;
         light3.shadow.camera.top = 50;
         light3.shadow.camera.bottom = -50;
-        this._scene.add(light3);
+        //this._scene.add(light3);
         const width = 1500;
         const height = 1000;
         const intensity = 0.1;
         const rectLight = new THREE.RectAreaLight(0xFFFFFF, intensity, width, height);
         rectLight.position.set(2500, 5, 0);
         rectLight.lookAt(0, 0, 0);
-        this._scene.add(rectLight)
+        //this._scene.add(rectLight)
         const width2 = 1500;
         const height2 = 1000;
         const intensity2 = 1;
@@ -997,19 +1022,7 @@ export class CharacterControllerDemo {
             './resources/HSBC_Fondo-Gris-Cielo_6.jpg',
         ]);
         texture.encoding = THREE.sRGBEncoding;
-
         this._scene.background = texture;
-
-        const plane = new THREE.Mesh(
-            new THREE.PlaneGeometry(10000, 10000, 10, 10),
-            new THREE.MeshStandardMaterial({
-                color: 0xFFFFFF,
-            }));
-        plane.castShadow = false;
-        plane.receiveShadow = true;
-        plane.rotation.x = -Math.PI / 2;
-        //this._scene.add(plane);
-
         this._mixers = [];
         this._previousRAF = null;
         const listener = new THREE.AudioListener();
@@ -1085,6 +1098,8 @@ export class CharacterControllerDemo {
             });
             this._target = fbx;
             this._target.name = 'entorno';
+            this._target.receiveShadow = true;
+            this._target.castShadows = true
             this._scene.add(this._target);
 
 
