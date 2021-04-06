@@ -8,12 +8,9 @@ import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples
 import { Octree } from '../tools/jsm/math/Octree.js';
 import { Capsule } from '../tools/jsm/math/Capsule.js';
 
-const worldOctree = new Octree();
-const playerCollider = new Capsule(new THREE.Vector3(0, 0.35, 0), new THREE.Vector3(0, 1, 0), 0.35);
-let playerOnFloor = false;
+
 
 setTimeout(() => {
-    //$('#registro').modal({ backdrop: 'static', keyboard: false })
     if (!sessionStorage.getItem('token')) {
         console.log('entro :>> ');
         $('#registro').modal('toggle');
@@ -22,6 +19,21 @@ setTimeout(() => {
 
 
 class BasicCharacterControllerProxy {
+    constructor(animations, camera) {
+        this._animations = animations;
+        this._camera = camera;
+    }
+
+    get animations() {
+        return this._animations;
+    }
+    get camera() {
+        return this._camera;
+    }
+};
+
+
+class BasicCharacterControllerProxyLeon {
     constructor(animations, camera) {
         this._animations = animations;
         this._camera = camera;
@@ -46,15 +58,14 @@ class BasicCharacterController {
         this._position = new THREE.Vector3();
 
         this._animations = {};
-
+        this._animationsLeon = {};
         this._input = new BasicCharacterControllerInput(this._params);
         this._stateMachine = new CharacterFSM(
             new BasicCharacterControllerProxy(this._animations, this._params), this._params);
+        this._stateMachineLeon = new CharacterFSMLeon(
+            new BasicCharacterControllerProxyLeon(this._animationsLeon, this._params), this._params);
         this._LoadModels();
-        //this._LoadModelsLeon();
-
-
-
+        this._LoadModelsLeon();
     }
     _LoadModels() {
         let genderPath;
@@ -63,7 +74,6 @@ class BasicCharacterController {
         } else if (this._params.gender == 'H') {
             genderPath = 'man';
         }
-
         const loader = new FBXLoader();
         loader.setPath(`./models/${genderPath}/`);
         loader.load('idle.fbx', (fbx) => {
@@ -99,6 +109,8 @@ class BasicCharacterController {
             loader.load('dance.fbx', (a) => { _OnLoad('dance', a); });
             loader.load('run.fbx', (a) => { _OnLoad('run', a); });
 
+            loader.load('runJump.fbx', (a) => { _OnLoad('jump', a); });
+
         })
     }
     get Position() {
@@ -113,28 +125,173 @@ class BasicCharacterController {
     }
 
 
-    /* _LoadModelsLeon() {
-         const loader = new FBXLoader();
-         loader.setPath('./models/leon/LEONCIO TEX/');
-         loader.load('HSBC_Leon_Cheering_1.fbx', (fbx) => {
-             fbx.position.x = 1600;
-             fbx.position.z = -0;
-             fbx.position.y = 0.9;
-             fbx.scale.setScalar(0.1);
-             fbx.traverse((c) => {
-                 c.castShadow = true;
-             });
-             this._targetLeon = fbx;
-             this._targetLeon.name = 'leon';
-             this._mixerLeon = new THREE.AnimationMixer(this._targetLeon);
-             this._managerLeon = new THREE.LoadingManager();
-             let action = this._mixerLeon.clipAction(this._targetLeon.animations[0]);
-             action.play();
-             this._params.scene.add(this._targetLeon);
+    _LoadModelsLeon() {
+        const loader = new FBXLoader();
+        loader.setPath('./models/leon/LEONCIO TEX/');
+        loader.load('HSBC_Leon_Cheering_1.fbx', (fbx) => {
+            fbx.position.x = 1600;
+            fbx.position.z = -0;
+            fbx.position.y = 0.9;
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._targetLeon = fbx;
+            this._targetLeon.name = 'leon';
+            this._targetLeon.quaternion._w = 0.7440;
+            this._targetLeon.quaternion._y = 0.568;
+            this._params.scene.add(this._targetLeon);
+            this._mixerLeon = new THREE.AnimationMixer(this._targetLeon);
+            this._managerLeon = new THREE.LoadingManager();
+            const _OnLoad = (animName, anim) => {
+                const clip = anim.animations[0];
+                const action = this._mixerLeon.clipAction(clip);
+                this._animationsLeon[animName] = {
+                    clip,
+                    action
+                }
+            }
+            this._managerLeon.onLoad = () => {
+                this._stateMachineLeon.SetState('dance1');
+            };
+
+            const loader = new FBXLoader(this._managerLeon);
+            loader.setPath('./models/leon/LEONCIO TEX/');
+            loader.load('HSBC_Leon_Victory idle_1.fbx', (a) => { _OnLoad('dance1', a); });
+
+        });
+        loader.load('HSBC_Leon_Robot Hip Hop Dance_1.fbx', (fbx) => {
+            fbx.position.x = 427;
+            fbx.position.y = -0.5;
+            fbx.position.z = 449;
+            fbx.scale.setScalar(0.01);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._targetLeon1 = fbx;
+            this._targetLeon1.name = 'leonHipHop';
+            this._targetLeon1.quaternion._w = 0.7440;
+            this._targetLeon1.quaternion._y = 0.568;
+            this._params.scene.add(this._targetLeon1);
+            this._mixerLeon1 = new THREE.AnimationMixer(this._targetLeon1);
+            const action = this._mixerLeon1.clipAction(this._targetLeon1.animations[0]);
+            action.play();
+
+        });
+
+        loader.load('HSBC_Leon_Blowing Kiss_1.fbx', (fbx) => {
+            fbx.position.x = 74;
+            fbx.position.y = -0.5;
+            fbx.position.z = -393;
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._targetLeon2 = fbx;
+            this._targetLeon2.name = 'leonKiss';
+            this._targetLeon2.quaternion._w = 0.7440;
+            this._targetLeon2.quaternion._y = -0.400;
+            this._params.scene.add(this._targetLeon2);
+            this._mixerLeon2 = new THREE.AnimationMixer(this._targetLeon2);
+            const action = this._mixerLeon2.clipAction(this._targetLeon2.animations[0]);
+            action.play();
+
+        });
+
+        loader.load('HSBC_Leon_Burpee_1.fbx', (fbx) => {
+            fbx.position.x = -89;
+            fbx.position.y = -0.5;
+            fbx.position.z = 457;
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._targetLeon3 = fbx;
+            this._targetLeon3.name = 'salud';
+            this._targetLeon3.quaternion._w = 0.7440;
+            this._targetLeon3.quaternion._y = 0.568;
+            this._params.scene.add(this._targetLeon3);
+            this._mixerLeon3 = new THREE.AnimationMixer(this._targetLeon3);
+            const action = this._mixerLeon3.clipAction(this._targetLeon3.animations[0]);
+            action.play();
+
+        });
 
 
-         })
-     }*/
+        loader.load('HSBC_Leon_Cheering (Chiquito)_1.fbx', (fbx) => {
+            fbx.position.x = -378;
+            fbx.position.y = -0.5;
+            fbx.position.z = -53;
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._targetLeon4 = fbx;
+            this._targetLeon4.name = 'culturaValores';
+            this._targetLeon4.quaternion._w = 0.7440;
+            this._targetLeon4.quaternion._y = 0.568;
+            this._params.scene.add(this._targetLeon4);
+            this._mixerLeon4 = new THREE.AnimationMixer(this._targetLeon4);
+            const action = this._mixerLeon4.clipAction(this._targetLeon4.animations[0]);
+            action.play();
+        });
+
+        loader.load('HSBC_Leon_Shuffling_1.fbx', (fbx) => {
+            fbx.position.x = 548;
+            fbx.position.y = -0.5;
+            fbx.position.z = -396;
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._targetLeon5 = fbx;
+            this._targetLeon5.name = 'Finanzas';
+            this._targetLeon5.quaternion._w = 0.7440;
+            this._targetLeon5.quaternion._y = -0.300;
+            this._params.scene.add(this._targetLeon5);
+            this._mixerLeon5 = new THREE.AnimationMixer(this._targetLeon5);
+            const action = this._mixerLeon5.clipAction(this._targetLeon5.animations[0]);
+            action.play();
+        });
+
+        loader.load('HSBC_Leon_Hip Hop Dancing_1 (1).fbx', (fbx) => {
+            fbx.position.x = 400;
+            fbx.position.z = 35;
+            fbx.position.y = 0.5;
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._targetLeon6 = fbx;
+            this._targetLeon6.name = 'pistaBaile';
+            this._targetLeon6.quaternion._w = 0.7440;
+            this._targetLeon6.quaternion._y = 0.800;
+            this._params.scene.add(this._targetLeon6);
+            this._mixerLeon6 = new THREE.AnimationMixer(this._targetLeon6);
+            const action = this._mixerLeon6.clipAction(this._targetLeon6.animations[0]);
+            action.play();
+        });
+
+        loader.load('HSBC_Leon_Air Squats Bend Arms_1.fbx', (fbx) => {
+            fbx.position.x = -50;
+            fbx.position.z = -10;
+            fbx.position.y = 0.5;
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._targetLeon7 = fbx;
+            this._targetLeon7.name = 'rampa';
+            this._targetLeon7.quaternion._w = 0.7440;
+            this._targetLeon7.quaternion._y = 0.800;
+            this._params.scene.add(this._targetLeon7);
+            this._mixerLeon7 = new THREE.AnimationMixer(this._targetLeon7);
+            const action = this._mixerLeon7.clipAction(this._targetLeon7.animations[0]);
+            action.play();
+        });
+
+
+    }
 
 
     Update(timeInSeconds) {
@@ -158,17 +315,20 @@ class BasicCharacterController {
         const _R = controlObject.quaternion.clone();
         const acc = this._acceleration.clone();
         if (this._input._keys.shift) {
-            acc.multiplyScalar(2.0);
+            acc.multiplyScalar(3.0);
         }
         if (this._stateMachine._currentState.Name == 'dance') {
             acc.multiplyScalar(0.0);
         }
-        if (this._input._keys.forward) {
+        if (this._input._keys.forward && this._stateMachine._currentState.Name != 'dance') {
             velocity.z += acc.z * timeInSeconds + 3;
         }
-        if (this._input._keys.backward) {
+        if (this._input._keys.backward && this._stateMachine._currentState.Name != 'dance') {
             velocity.z -= acc.z * timeInSeconds + 3;
         }
+        /*if (this._input._keys.space) {
+            velocity.z += acc.z * timeInSeconds + 10;
+        }*/
         if (this._input._keys.left) {
             _A.set(0, 1, 0);
             _Q.setFromAxisAngle(_A, 4.0 * Math.PI * timeInSeconds * this._acceleration.y);
@@ -196,6 +356,32 @@ class BasicCharacterController {
         if (this._mixer) {
             this._mixer.update(timeInSeconds);
         }
+        if (this._mixerLeon) {
+            this._mixerLeon.update(timeInSeconds);
+        }
+        if (this._mixerLeon1) {
+            this._mixerLeon1.update(timeInSeconds);
+        }
+        if (this._mixerLeon2) {
+            this._mixerLeon2.update(timeInSeconds);
+        }
+        if (this._mixerLeon3) {
+            this._mixerLeon3.update(timeInSeconds);
+        }
+        if (this._mixerLeon4) {
+            this._mixerLeon4.update(timeInSeconds);
+        }
+        if (this._mixerLeon5) {
+            this._mixerLeon5.update(timeInSeconds);
+        }
+
+        if (this._mixerLeon6) {
+            this._mixerLeon6.update(timeInSeconds);
+        }
+        if (this._mixerLeon7) {
+            this._mixerLeon7.update(timeInSeconds);
+        }
+
     }
 };
 class BasicCharacterControllerInput {
@@ -211,12 +397,14 @@ class BasicCharacterControllerInput {
             right: false,
             space: false,
             shift: false,
-            enter: false
+            enter: false,
+            b: false
         }
         document.addEventListener('keydown', (e) => { this._onKeyDown(e), false });
         document.addEventListener('keyup', (e) => { this._onKeyUp(e), false });
     }
     _onKeyDown(event) {
+        console.log('event.keyCode :>> ', event.keyCode);
         switch (event.keyCode) {
             //case 87: //W: FORWARD
             case 38: //up arrow
@@ -238,11 +426,15 @@ class BasicCharacterControllerInput {
             case 32: //space
                 this._keys.space = true;
                 break;
+            case 66: //b
+                this._keys.b = true;
+                break;
             case 16: //shift
                 this._keys.shift = true;
                 break;
             case 13: //enter
                 this._keys.enter = true;
+
                 let balance = {
                     xn: 611,
                     xm: 619,
@@ -332,6 +524,9 @@ class BasicCharacterControllerInput {
             case 13: //shift
                 this._keys.enter = false;
                 break;
+            case 66: //b
+                this._keys.b = false;
+                break;
         }
     }
 }
@@ -345,12 +540,14 @@ class FiniteStateMachine {
         this._states[name] = type;
     }
     SetState(name) {
-
+        console.log('namesetState :>> ', name);
         const prevState = this._currentState;
         if (prevState) {
+
             if (prevState.Name == name) {
                 return;
             }
+
             prevState.Exit();
         }
         const state = new this._states[name](this);
@@ -376,6 +573,27 @@ class CharacterFSM extends FiniteStateMachine {
         this._AddState('walk', WalkState);
         this._AddState('dance', DanceState);
         this._AddState('run', RunState);
+        this._AddState('jump', JumpState);
+
+
+    }
+}
+
+
+class CharacterFSMLeon extends FiniteStateMachine {
+    constructor(proxy, camera) {
+        super();
+        this._proxy = proxy;
+        this._camera = camera;
+        this._Init();
+    }
+    _Init() {
+        this._AddState('dance1', DanceStateLeon);
+        /*this._AddState('dance2', DanceState);
+        this._AddState('dance3', DanceState);
+        this._AddState('dance4', DanceState);
+        this._AddState('dance5', DanceState);*/
+
 
     }
 }
@@ -427,8 +645,6 @@ class RunState extends State {
 
     Update(timeElapsed, input) {
         if (input._keys.forward || input._keys.backward) {
-            this._parent._camera.camera.position.set(this._parent._camera.scene.children[4].position.x + 30, 18, this._parent._camera.scene.children[4].position.z + 5);
-
             if (!input._keys.shift) {
                 this._parent.SetState('walk');
             }
@@ -437,6 +653,107 @@ class RunState extends State {
 
         this._parent.SetState('pose');
     }
+};
+
+
+
+class JumpState extends State {
+    constructor(parent) {
+        super(parent);
+    }
+
+    get Name() {
+        return 'jump';
+    }
+
+    Enter(prevState) {
+
+        const curAction = this._parent._proxy._animations['jump'].action;
+        const mixer = curAction.getMixer();
+        if (prevState) {
+            const prevAction = this._parent._proxy._animations[prevState.Name].action;
+            curAction.reset();
+            curAction.setLoop(THREE.LoopOnce, 1);
+            curAction.clampWhenFinished = true;
+            curAction.crossFadeFrom(prevAction, 0.2, true);
+            curAction.play();
+        } else {
+            curAction.play();
+        }
+    }
+
+    _Finished() {
+        this._Cleanup();
+        //this._parent.SetState('pose');
+    }
+
+    _Cleanup() {
+        const action = this._parent._proxy._animations['jump'].action;
+
+        action.getMixer().removeEventListener('finished', this._CleanupCallback);
+    }
+
+    Exit() {
+        //this._Cleanup();
+    }
+
+    Update(timeElapsed, input) {
+        console.log('timeElapsed :>> ', timeElapsed);
+
+        this._parent.SetState('pose');
+
+    }
+};
+
+class DanceStateLeon extends State {
+    constructor(parent) {
+        super(parent);
+
+        this._FinishedCallback = () => {
+            this._Finished();
+        }
+    }
+
+    get Name() {
+        return 'dance1';
+    }
+
+    Enter(prevState) {
+        console.log('this._parent._proxy._animations :>> ', this._parent._proxy._animations);
+        const curAction = this._parent._proxy._animations['dance1'].action;
+        const mixer = curAction.getMixer();
+        mixer.addEventListener('finished', this._FinishedCallback);
+
+        if (prevState) {
+            const prevAction = this._parent._proxy._animations[prevState.Name].action;
+
+            curAction.reset();
+            curAction.setLoop(THREE.LoopOnce, 1);
+            curAction.clampWhenFinished = true;
+            curAction.crossFadeFrom(prevAction, 0.2, true);
+            curAction.play();
+        } else {
+            console.log('play :>> ');
+            curAction.play();
+        }
+    }
+
+    _Finished() {
+        this._Cleanup();
+        this._parent.SetState('dance1');
+    }
+
+    _Cleanup() {
+        const action = this._parent._proxy._animations['dance1'].action;
+
+        action.getMixer().removeEventListener('finished', this._CleanupCallback);
+    }
+
+    Exit() {
+        this._Cleanup();
+    }
+
+    Update(_) {}
 };
 class DanceState extends State {
     constructor(parent) {
@@ -453,7 +770,6 @@ class DanceState extends State {
 
     Enter(prevState) {
         const curAction = this._parent._proxy._animations['dance'].action;
-        console.log('curAction :>> ', curAction);
         const mixer = curAction.getMixer();
         mixer.addEventListener('finished', this._FinishedCallback);
 
@@ -515,8 +831,10 @@ class PoseState extends State {
     Update(_, input) {
         if (input._keys.forward || input._keys.backward) {
             this._parent.SetState('walk');
-        } else if (input._keys.space) {
+        } else if (input._keys.b) {
             this._parent.SetState('dance');
+        } else if (input._keys.space) {
+            this._parent.SetState('jump');
         }
 
     }
@@ -534,8 +852,6 @@ class WalkState extends State {
         const curAction = this._parent._proxy._animations['walk'].action;
         console.log('this._camera', this._parent._camera)
         if (prevState) {
-            console.log('this._parent', this._parent)
-
             const prevAction = this._parent._proxy._animations[prevState.Name].action;
             curAction.time = 0.0;
             curAction.enabled = true;
@@ -558,13 +874,12 @@ class WalkState extends State {
     }
     Update(_, input) {
         if (input._keys.forward || input._keys.backward) {
-
-            this._parent._camera.camera.position.set(this._parent._camera.scene.children[4].position.x + 30, 18, this._parent._camera.scene.children[4].position.z + 5);
-            //this._parent._camera.camera.lookAt(this._parent._camera.scene.children[4].position);
             if (input._keys.shift) {
                 this._parent.SetState('run');
             }
-            //this._parent.SetState('walk');
+            if (input._keys.space) {
+                this._parent.SetState('jump');
+            }
             return;
         }
         this._parent.SetState('pose');
@@ -578,18 +893,12 @@ export class CharacterControllerDemo {
     }
 
     _Initialize() {
-        //renderizador
-
-
-        /**
-         * 
-         * 
-         * vrotateCamera(fbx) {
-  // current camera position
-}
-         */
         this._threejs = new THREE.WebGLRenderer({
             antialias: true,
+            powerPreference: 'low-power',
+            precision: 'lowp',
+            premultipliedAlpha: false,
+            logarithmicDepthBuffer: true
         });
         this._threejs.outputEncoding = THREE.sRGBEncoding;
         this._threejs.shadowMap.enabled = true;
@@ -702,21 +1011,23 @@ export class CharacterControllerDemo {
 
         this._mixers = [];
         this._previousRAF = null;
-        /*const listener = new THREE.AudioListener();
+        const listener = new THREE.AudioListener();
         this._camera.add(listener)
-        
-        
+
+
         // create a global audio source
-        /*const sound = new THREE.Audio( listener );
-        
+        this.sound = new THREE.Audio(listener);
+
         // load a sound and set it as the Audio object's buffer
         const audioLoader = new THREE.AudioLoader();
-        audioLoader.load( 'resources/music.ogg', function( buffer ) {
-            sound.setBuffer( buffer );
-            sound.setLoop( true );
-            sound.setVolume( 0.5 );
-            sound.play();
-        });*/
+        console.log('this.sound :>> ', this.sound);
+        audioLoader.load('resources/casio.ogg', (buffer) => {
+            console.log('this :>> ', this);
+            this.sound.setBuffer(buffer);
+            this.sound.setLoop(true);
+            this.sound.setVolume(0.5);
+            //
+        });
 
         this._LoadAnimatedModel();
         this._LoadModel();
@@ -724,7 +1035,6 @@ export class CharacterControllerDemo {
 
         const controls = new OrbitControls(
             this._camera, this._threejs.domElement);
-        console.log('controls :>> ', controls);
         this._camera.position.set(1770, 18, 40);
 
         controls.target.set(0, 10, 0);
@@ -736,12 +1046,6 @@ export class CharacterControllerDemo {
         }
         controls.update();
 
-
-        /* this.loadIglues();
-         this.loadIglues2();
-         this.loadIglues3();
-         this.loadIglues4();*/
-
         this._RAF();
     }
 
@@ -751,163 +1055,41 @@ export class CharacterControllerDemo {
             scene: this._scene,
             gender: this.gender
         }
+        this.sound.play();
         this._controls = new BasicCharacterController(params);
-        console.log('this._controls :>> ', this._controls);
+        if (isTouchscreenDevice()) {
+            createJoystick(document.getElementById("joystick-wrapper"));
+            document.getElementById("joystick-wrapper").style.visibility = "visible";
+            document.getElementById("joystick").style.visibility = "visible";
+        }
         this._thirdPersonCamera = new ThirdPersonCamera({
             camera: this._camera,
             target: this._controls,
         });
     }
 
-    _LoadAnimatedModelAndPlay(path, modelFile, animFile, offset) {
-        const loader = new FBXLoader();
-        loader.setPath(path);
-        loader.load(modelFile, (fbx) => {
-            fbx.scale.setScalar(0.04);
-            fbx.traverse(c => {
-                c.castShadow = true;
-            });
-            fbx.position.copy(offset);
 
-            const anim = new FBXLoader();
-            anim.setPath(path);
-            anim.load(animFile, (anim) => {
-                const m = new THREE.AnimationMixer(fbx);
-                this._mixers.push(m);
-                const idle = m.clipAction(anim.animations[0]);
-                idle.play();
-            });
-            this._scene.add(fbx);
-        });
-    }
 
     _LoadModel() {
-        //const loader = new GLTFLoader();
+
 
         const loader = new FBXLoader();
         loader.setPath('./models/');
-        loader.load('HSBC Entorno_MASTER 8.6 (ConP).fbx', (fbx) => {
-                console.log('fbx :>> ', fbx);
-                //worldOctree.fromGraphNode(gltf.scene);
-                //fbx.position.x = 1350;
-                //fbx.position.z = -5;
-                //fbx.position.y = 0.9;
-                fbx.scale.setScalar(0.1);
-                fbx.traverse((c) => {
-                    c.castShadow = true;
-                });
-                this._target = fbx;
-                this._target.name = 'entorno';
-                this._scene.add(this._target);
-
-
-            })
-            /*loader.setPath('./models/');
-            loader.load('HSBC Entorno_PISO_4.2.fbx', (fbx) => {
-                    //fbx.position.x = 1350;
-                    //fbx.position.z = -5;
-                    fbx.position.y = -240;
-                    //fbx.scale.setScalar(1);
-                    fbx.traverse((c) => {
-                        c.castShadow = true;
-                    });
-                    this._target = fbx;
-                    this._target.name = 'piso';
-                    this._scene.add(this._target);
-                })*/
-            /* loader.load('./models/HSBC_Entorno C_1.glb', (gltf) => {
-                 //gltf.scene.position.x=50;
-                 //gltf.scene.position.y=90;
-                 //gltf.scene.position.x=30;
-                 console.log('gltf', gltf)
-                 gltf.scene.traverse(c => {
-                     c.castShadow = true;
-                 });
-                 console.log('gltf.scene :>> ', gltf.scene);
-                 this._scene.add(gltf.scene);
-                 worldOctree.fromGraphNode(gltf.scene);
-             });*/
-
-        /*loader.load('./models/LUCES AREA_2.glb', (gltf) => {
-            //gltf.scene.position.x=50;
-            //gltf.scene.position.y=90;
-            //gltf.scene.position.x=30;
-            console.log('gltf', gltf)
-            gltf.scene.traverse(c => {
+        loader.load('HSBC Entorno_MASTER 9 (ConP).fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
                 c.castShadow = true;
             });
-            this._scene.add(gltf.scene, );
-        });*/
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._scene.add(this._target);
 
 
-        loader.load('./models/juegos/DINAMICO_Pino Boliche_1.glb', (gltf) => {
-            //gltf.scene.position.x=50;
-            //gltf.scene.position.y=90;
-            //gltf.scene.position.x=30;
-
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
-            });
-            this._scene.add(gltf.scene, );
-        });
-
-        loader.load('./models/juegos/DINAMICO_Ballon Futbol_1.glb', (gltf) => {
-            //gltf.scene.position.x=50;
-            //gltf.scene.position.y=90;
-            gltf.scene.position.x = 20;
-
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
-            });
-            this._scene.add(gltf.scene, );
-        });
-
-    }
-
-    loadIglues() {
-        const loader = new GLTFLoader();
-        loader.load('./models/iglu.glb', (gltf) => {
-            gltf.scene.position.x = 40;
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
-            });
-            this._scene.add(gltf.scene);
-        });
-    }
-    loadIglues2() {
-        const loader = new GLTFLoader();
-        loader.load('./models/iglu.glb', (gltf) => {
-            gltf.scene.position.x = 70;
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
-            });
-            this._scene.add(gltf.scene);
-        });
-    }
-
-    loadIglues3() {
-        const loader = new GLTFLoader();
-        loader.load('./models/iglu.glb', (gltf) => {
-            gltf.scene.position.x = 50;
-            gltf.scene.position.z = 60;
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
-            });
-            this._scene.add(gltf.scene);
-        });
-    }
+        })
 
 
-    loadIglues4() {
-        const loader = new GLTFLoader();
-        loader.load('./models/iglu.glb', (gltf) => {
-            gltf.scene.position.x = 70;
-            gltf.scene.position.z = 60;
-            gltf.scene.traverse(c => {
-                c.castShadow = true;
-            });
-            this._scene.add(gltf.scene);
-        });
+
     }
 
     _OnWindowResize() {
@@ -917,10 +1099,12 @@ export class CharacterControllerDemo {
     }
 
     _RAF() {
+
         requestAnimationFrame((t) => {
             if (this._previousRAF === null) {
                 this._previousRAF = t;
             }
+
 
             this._RAF();
 
@@ -944,19 +1128,7 @@ export class CharacterControllerDemo {
     }
 }
 
-function playerCollitions() {
 
-
-    playerOnFloor = false;
-    if (result) {
-
-        playerOnFloor = result.normal.y > 0;
-        if (!playerOnFloor) {
-            playerVelocity.addScaledVector(result.normal, -result.normal.dot(playerVelocity));
-        }
-        playerCollider.translate(result.normal.multiplyScalar(result.depth));
-    }
-}
 class ThirdPersonCamera {
     constructor(params) {
         this._params = params;
@@ -996,7 +1168,20 @@ class ThirdPersonCamera {
     }
 }
 let _APP = null;
+export function isTouchscreenDevice() {
+    let supportsTouch = false;
+    if ("ontouchstart" in window)
+    // iOS & android
+        supportsTouch = true;
+    else if (window.navigator.msPointerEnabled)
+    // Win8
+        supportsTouch = true;
+    else if ("ontouchstart" in document.documentElement)
+    // Controversial way to check touch support
+        supportsTouch = true;
 
+    return supportsTouch;
+}
 
 window.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
@@ -1007,3 +1192,101 @@ window.addEventListener('DOMContentLoaded', () => {
     }, 1000)
 
 });
+
+
+export function createJoystick(parent) {
+    const maxDiff = 62; //how far drag can go
+    const stick = document.createElement("div");
+    //stick.classList.add("joystick");
+    stick.setAttribute("id", "joystick");
+
+    stick.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    stick.addEventListener("touchstart", handleMouseDown);
+    document.addEventListener("touchmove", handleMouseMove);
+    document.addEventListener("touchend", handleMouseUp);
+
+    let dragStart = null;
+    let currentPos = { x: 0, y: 0 };
+
+    function handleMouseDown(event) {
+        event.preventDefault();
+        stick.style.transition = "0s";
+
+        if (event.changedTouches) {
+            dragStart = {
+                x: event.changedTouches[0].clientX,
+                y: event.changedTouches[0].clientY,
+            };
+
+            return;
+        }
+        dragStart = {
+            x: event.clientX,
+            y: event.clientY,
+        };
+    }
+
+    function handleMouseMove(event) {
+        if (dragStart === null) return;
+
+        //console.log("entered handleMouseMove");
+        if (event.changedTouches) {
+            event.clientX = event.changedTouches[0].clientX;
+            event.clientY = event.changedTouches[0].clientY;
+            //touchEvent(currentPos);
+        }
+
+        const xDiff = event.clientX - dragStart.x;
+        const yDiff = event.clientY - dragStart.y;
+        const angle = Math.atan2(yDiff, xDiff);
+        const distance = Math.min(maxDiff, Math.hypot(xDiff, yDiff));
+        const xNew = distance * Math.cos(angle);
+        const yNew = distance * Math.sin(angle);
+        stick.style.transform = `translate3d(${xNew}px, ${yNew}px, 0px)`;
+        currentPos = { x: xNew, y: yNew };
+        touchEvent(currentPos);
+    }
+
+    function handleMouseUp(event) {
+        if (dragStart === null) return;
+        stick.style.transition = ".2s";
+        stick.style.transform = `translate3d(0px, 0px, 0px)`;
+        dragStart = null;
+        currentPos = { x: 0, y: 0 };
+        moveDirection.forward = 0;
+        moveDirection.left = 0;
+        moveDirection.right = 0;
+        moveDirection.back = 0;
+    }
+
+    parent.appendChild(stick);
+    return {
+        getPosition: () => currentPos,
+    };
+}
+
+export function touchEvent(coordinates) {
+    if (coordinates.x > 30) {
+        moveDirection.right = 1;
+        moveDirection.left = 0;
+    } else if (coordinates.x < -30) {
+        moveDirection.left = 1;
+        moveDirection.right = 0;
+    } else {
+        moveDirection.right = 0;
+        moveDirection.left = 0;
+    }
+
+    if (coordinates.y > 30) {
+        moveDirection.back = 1;
+        moveDirection.forward = 0;
+    } else if (coordinates.y < -30) {
+        moveDirection.forward = 1;
+        moveDirection.back = 0;
+    } else {
+        moveDirection.forward = 0;
+        moveDirection.back = 0;
+    }
+}

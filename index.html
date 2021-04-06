@@ -27,11 +27,49 @@
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css" />
     <!-- Bootstrap theme -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css" />
-
+    <style>
+        #joystick-wrapper {
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            width: 125px;
+            height: 125px;
+            position: fixed;
+            bottom: 15px;
+            left: 15px;
+            text-align: center;
+            border-radius: 100%;
+            display: flex;
+            /* [1] */
+            justify-content: center;
+            /* [2] */
+            align-items: center;
+            visibility: hidden;
+            opacity: 1;
+        }
+        
+        #joystick {
+            background-color: rgba(0, 0, 0, 0.25);
+            border-radius: 100%;
+            cursor: pointer;
+            height: 45%;
+            user-select: none;
+            width: 45%;
+            margin: 0 auto;
+            visibility: hidden;
+            opacity: 1;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            -webkit-user-select: none;
+            /* Chrome/Safari */
+            -moz-user-select: none;
+            /* Firefox */
+            -ms-user-select: none;
+            /* IE10+ */
+        }
+    </style>
 
 </head>
 
 <body>
+    <div id="joystick-wrapper"></div>
     <div class="modal" id="balance" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -116,7 +154,7 @@
                                                     <option value="-1">Selecciona el género con el que te identifiques</option>
                                                     <option value="M">Mujer</option>
                                                     <option value="H">Hombre</option>
-                                                   <!--<option value="NA">Otro</option> --> 
+                                                   <option value="NA">Otro</option> 
                                                 </select>
                                             </div>
                                             <br>
