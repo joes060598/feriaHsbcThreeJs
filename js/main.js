@@ -957,7 +957,7 @@ export class CharacterControllerDemo {
         console.log("light", light)
         this._scene.add(light);
 
-        const spotLight = new THREE.SpotLight(0xffffff, 0.5);
+        const spotLight = new THREE.SpotLight(0xffffff, 0.55);
         spotLight.castShadow = true;
         spotLight.receiveShadow = true;
         spotLight.position.set(2500, 5000, 800)
@@ -1099,7 +1099,7 @@ export class CharacterControllerDemo {
             this._target = fbx;
             this._target.name = 'entorno';
             this._target.receiveShadow = true;
-            this._target.castShadows = true
+            this._target.castShadows = true;
             this._scene.add(this._target);
 
 
