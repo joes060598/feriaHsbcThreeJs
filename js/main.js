@@ -957,7 +957,7 @@ export class CharacterControllerDemo {
         console.log("light", light)
         this._scene.add(light);
 
-        const spotLight = new THREE.SpotLight(0xffffff, 0.4);
+        const spotLight = new THREE.SpotLight(0xffffff, 0.5);
         spotLight.castShadow = true;
         spotLight.receiveShadow = true;
         spotLight.position.set(2500, 5000, 800)
