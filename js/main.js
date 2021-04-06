@@ -921,7 +921,7 @@ export class CharacterControllerDemo {
         });
         this._threejs.outputEncoding = THREE.sRGBEncoding;
         this._threejs.shadowMap.enabled = true;
-        this._threejs.shadowMap.type = THREE.PCFSoftShadowMap;
+        this._threejs.shadowMap.type = new THREE.SpotLight();
         this._threejs.shadowMap.needsUpdate = true;
         this._threejs.setPixelRatio(window.devicePixelRatio);
         this._threejs.setSize(window.innerWidth, window.innerHeight);
@@ -936,82 +936,23 @@ export class CharacterControllerDemo {
         const near = 0.01;
         const far = 2600.0;
         this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-
+        this._camera.castShadow = true;
+        this._camera.receiveShadow = true;
         this._scene = new THREE.Scene();
-        console.log('this._threejs :>> ', this._threejs);
+        this._scene.castShadow = true;
+        this._scene.receiveShadow = true;
         let light = new THREE.HemisphereLight(0xAEF0FF, 0xB78E79, 0.6);
-
-        /*light.position.set(100, 300, 300);
-        light.target.position.set(0, 0, 0);
-        
-        light.shadow.bias = -0.001;
-        light.shadow.mapSize.width = 4096;
-        light.shadow.mapSize.height = 4096;
-        light.shadow.camera.near = 0.1;
-        light.shadow.camera.far = 500.0;
-        light.shadow.camera.near = 0.5;
-        light.shadow.camera.left = 500;
-        light.shadow.camera.right = -50;
-        light.shadow.camera.top = 500;
-        light.shadow.camera.bottom = -50;*/
-        console.log("light", light)
         this._scene.add(light);
-
         const spotLight = new THREE.SpotLight(0xffffff, 0.55);
         spotLight.castShadow = true;
-        spotLight.receiveShadow = true;
-        spotLight.position.set(2500, 5000, 800)
+        spotLight.shadow.camera.castShadow = true;
+        spotLight.shadow.camera.focus = 1;
+
+        //spotLight.receiveShadow = true;
+        spotLight.shadow.bias = 1;
+        spotLight.position.set(2500, 5000, 800);
+        console.log('spotLight :>> ', spotLight);
         this._scene.add(spotLight);
-
-        let light2 = new THREE.DirectionalLight(0xFFFFFF, 0.6);
-        light2.position.set(800, 700, 0);
-        light2.target.position.set(0, 0, 0);
-        light2.castShadow = true;
-        light2.shadow.bias = -0.001;
-        //verificar 
-        light2.shadow.mapSize.width = 4096;
-        light2.shadow.mapSize.height = 4096;
-        light2.shadow.camera.far = 500.0;
-        light2.shadow.camera.near = 0.5;
-        light2.shadow.camera.far = 500.0;
-        light2.shadow.camera.left = 50;
-        light2.shadow.camera.right = -50;
-        light2.shadow.camera.top = 50;
-        light2.shadow.camera.bottom = -50;
-
-        //this._scene.add(light2);
-        let light3 = new THREE.DirectionalLight(0xFFFFFF, 0.5);
-        light3.position.set(-300, 300, 0);
-        light3.target.position.set(0, 0, 0);
-        light3.castShadow = true;
-        light3.shadow.bias = -0.001;
-        light3.shadow.mapSize.width = 4096;
-        light3.shadow.mapSize.height = 4096;
-        light3.shadow.camera.near = 0.1;
-        light3.shadow.camera.far = 500.0;
-        light3.shadow.camera.near = 0.5;
-        light3.shadow.camera.far = 500.0;
-        light3.shadow.camera.left = 50;
-        light3.shadow.camera.right = -50;
-        light3.shadow.camera.top = 50;
-        light3.shadow.camera.bottom = -50;
-        //this._scene.add(light3);
-        const width = 1500;
-        const height = 1000;
-        const intensity = 0.1;
-        const rectLight = new THREE.RectAreaLight(0xFFFFFF, intensity, width, height);
-        rectLight.position.set(2500, 5, 0);
-        rectLight.lookAt(0, 0, 0);
-        //this._scene.add(rectLight)
-        const width2 = 1500;
-        const height2 = 1000;
-        const intensity2 = 1;
-        const rectLight2 = new THREE.RectAreaLight(0xFFFFFF, intensity2, width2, height2);
-        rectLight2.position.set(-2000, 5, 0);
-        rectLight2.lookAt(0, 0, 0);
-        //this._scene.add(rectLight2)
-
-
         const loader = new THREE.CubeTextureLoader();
         const texture = loader.load([
             './resources/HSBC_Fondo-Gris-Cielo_6.jpg',
@@ -1050,8 +991,7 @@ export class CharacterControllerDemo {
         const controls = new OrbitControls(
             this._camera, this._threejs.domElement);
         this._camera.position.set(1770, 18, 40);
-        this._camera.castShadow = true;
-        this._camera.receiveShadow = true;
+
         controls.target.set(0, 10, 0);
         controls.keys = {
             LEFT: 1, //left arrow
@@ -1060,7 +1000,7 @@ export class CharacterControllerDemo {
             BOTTOM: 1 // down arrow
         }
         controls.update();
-        console.log('this._camera :>> ', this._camera);
+        console.log('this.scene :>> ', this._scene);
         this._RAF();
     }
 
