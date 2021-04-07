@@ -1,166 +1,346 @@
-body {
-    color: #000;
-    overflow-x: hidden;
-    height: 100%;
-    background-color: #B0BEC5;
-    background-repeat: no-repeat
+a:active,
+a:hover,
+a:link,
+a:visited {
+    text-decoration: none
 }
 
-.card0 {
-    box-shadow: 0px 4px 8px 0px #757575;
-    border-radius: 0px
+.space0 {
+    margin-top: 5px;
+    margin-bottom: 5px
 }
 
-.card2 {
-    margin: 0px 40px
+.space1 {
+    margin-top: 10px;
+    margin-bottom: 10px
 }
 
-.logo {
-    width: 200px;
-    height: 100px;
+.space2 {
     margin-top: 20px;
-    margin-left: 35px
+    margin-bottom: 20px
 }
 
-.image {
-    width: 360px;
-    height: 280px
+.space3 {
+    margin-top: 30px;
+    margin-bottom: 30px
 }
 
-.border-line {
-    border-right: 1px solid #EEEEEE
+.space4 {
+    margin-top: 40px;
+    margin-bottom: 40px
 }
 
-.facebook {
-    background-color: #3b5998;
-    color: #fff;
-    font-size: 18px;
-    padding-top: 5px;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    cursor: pointer
+.space5 {
+    margin-top: 50px;
+    margin-bottom: 50px
 }
 
-.twitter {
-    background-color: #1DA1F2;
-    color: #fff;
-    font-size: 18px;
-    padding-top: 5px;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    cursor: pointer
+.space6 {
+    margin-top: 60px;
+    margin-bottom: 60px
 }
 
-.linkedin {
-    background-color: #2867B2;
-    color: #fff;
-    font-size: 18px;
-    padding-top: 5px;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    cursor: pointer
+.space7 {
+    margin-top: 70px;
+    margin-bottom: 70px
 }
 
-.line {
-    height: 1px;
-    width: 45%;
-    background-color: #E0E0E0;
-    margin-top: 10px
+.space8 {
+    margin-top: 80px;
+    margin-bottom: 80px
 }
 
-.or {
-    width: 10%;
-    font-weight: bold
+.space9 {
+    margin-top: 90px;
+    margin-bottom: 90px
 }
 
-.text-sm {
-    font-size: 14px !important
+.space10 {
+    margin-top: 100px;
+    margin-bottom: 100px
 }
 
-::placeholder {
-    color: #BDBDBD;
-    opacity: 1;
-    font-weight: 300
+.no-padding {
+    margin: 0;
+    padding: 0
 }
 
-:-ms-input-placeholder {
-    color: #BDBDBD;
-    font-weight: 300
-}
-
-::-ms-input-placeholder {
-    color: #BDBDBD;
-    font-weight: 300
-}
-
-input,
-textarea {
-    padding: 10px 12px 10px 12px;
-    border: 1px solid lightgrey;
-    border-radius: 2px;
-    margin-bottom: 5px;
-    margin-top: 2px;
+html,
+body {
+    margin: 0;
     width: 100%;
-    box-sizing: border-box;
-    color: #2C3E50;
-    font-size: 14px;
-    letter-spacing: 1px
+    height: 100%;
+    font-family: 'Open Sans', sans-serif;
 }
 
-input:focus,
-textarea:focus {
-    -moz-box-shadow: none !important;
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
-    border: 1px solid #304FFE;
-    outline-width: 0
+table {
+    width: 100%;
+    height: 100%;
 }
 
-button:focus {
-    -moz-box-shadow: none !important;
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
-    outline-width: 0
+.shadowbox {
+    background-color: rgba(35, 31, 32, 0.91);
+    position: absolute;
 }
 
-a {
-    color: inherit;
-    cursor: pointer
+.login {
+    background-color: #f00;
+    height: 600px;
+    MAX-width: 1000px;
+    margin: 0px auto;
+    border-radius: 10px;
+    padding: 20px;
 }
 
-.btn-blue {
-    background-color: #1A237E;
-    width: 150px;
+.cajadatos {
+    max-width: 300px;
+    margin: 0px auto;
+}
+
+.cajadatos2 {
+    max-width: 600px;
+    margin: 0px auto;
+}
+
+.logohsbc {
+    text-align: center;
+}
+
+.titulog {
+    text-align: center;
+}
+
+.titulog h1 {
+    margin: 0px;
+    font-size: 1.5em;
     color: #fff;
-    border-radius: 2px
 }
 
-.btn-blue:hover {
-    background-color: #000;
-    cursor: pointer
+.separador {
+    width: 70px;
+    height: 6px;
+    margin: 0px auto;
+    background-color: #fff;
+    border-radius: 6px;
 }
 
-.bg-blue {
+.logdate label {
     color: #fff;
-    background-color: #1A237E
+    font-size: 1em;
 }
 
-@media screen and (max-width: 991px) {
-    .logo {
-        margin-left: 0px
-    }
-    .image {
-        width: 300px;
-        height: 220px
-    }
-    .border-line {
-        border-right: none
-    }
-    .card2 {
-        border-top: 1px solid #EEEEEE !important;
-        margin: 0px 15px
-    }
+.logdate label span {
+    color: #fff;
+    font-size: .8em;
+    font-weight: normal;
+}
+
+.campostyle {
+    width: 100% !important;
+    padding: 14px !important;
+    border-radius: 5px !important;
+    border: none !important;
+    height: 50px;
+}
+
+.btngo {
+    width: 100%;
+    padding: 15px;
+    border-radius: 5px;
+    border: none;
+    color: #fff;
+    font-size: 1em;
+    background-color: #231f20;
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+.btngocomm0 {
+    width: 100%;
+    display: block;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    color: #fff;
+    font-size: 1em;
+    background-color: #6d6060;
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+.btngocomm0:hover {
+    color: #fff;
+}
+
+.btngocomm {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    color: #fff;
+    font-size: 1em;
+    background-color: #f00;
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+.cajamore {
+    text-align: center;
+}
+
+.cajamore p {
+    margin: 0px;
+    font-size: .9em;
+    color: #fff;
+}
+
+.cajamore a {
+    margin: 0px;
+    font-size: .9em;
+    color: #fff;
+}
+
+.cajamore a {
+    margin: 0px;
+    font-size: .9em;
+    color: #231f20;
+}
+
+.cajamore a:hover {
+    color: #e2e2e2;
+}
+
+.cajacluster {
+    height: 600px;
+    MAX-width: 1000px;
+    margin: 0px auto;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.finanzas {
+    background-color: #27719f;
+}
+
+.salud {
+    background-color: #6a803a;
+}
+
+.balance {
+    background-color: #da6e29;
+}
+
+.desarrollo {
+    background-color: #703988;
+}
+
+.cultura {
+    background-color: #bb2228;
+}
+
+.iconlog {
+    position: absolute;
+    margin-top: -70px;
+    margin-left: -70px;
+}
+
+.imgscosos {
+    position: relative;
+    height: 500px;
+}
+
+.agendaicon {
+    max-width: 450px;
+    margin: 0px auto;
+}
+
+.cosaalader {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+}
+
+.tituloscluster {
+    margin-left: 50px;
+}
+
+.tituloscluster h1 {
+    font-size: 2em;
+    color: #fff;
+}
+
+.infoalign {
+    margin-left: 50px;
+    max-height: 450px;
+    overflow-y: scroll;
+    padding-right: 20px;
+}
+
+.txtinfo {}
+
+.txtinfo h2 {
+    margin: 0px;
+    color: #fff;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.txtinfo p {
+    margin: 0px;
+    color: rgba(255, 255, 255, 0.79);
+    font-size: .9em;
+}
+
+#calendar {
+    max-width: 1100px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.scrollcal {
+    height: 450px !important;
+    max-height: 450px;
+    overflow-y: scroll;
+    border-radius: 10px;
+}
+
+.agendaicon img {
+    transition: transform .5s ease;
+}
+
+.agendaicon img:hover {
+    transform: scale(1.05);
+}
+
+.cajacoments {
+    background-color: #081423;
+    padding: 10px;
+    border-radius: 10px;
+    position: absolute;
+    z-index: 100;
+    width: 382px;
+    margin-top: 100px;
+    margin-left: 83px;
+}
+
+.cajacoments label {
+    font-size: 1em;
+    color: #fff;
+    text-align: left !important;
+    text-transform: uppercase;
+    float: left;
+}
+
+.titucom {
+    overflow: hidden;
+}
+
+.cajacom {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
 }

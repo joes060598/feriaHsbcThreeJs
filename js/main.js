@@ -12,9 +12,14 @@ import { Capsule } from '../tools/jsm/math/Capsule.js';
 
 setTimeout(() => {
     if (!sessionStorage.getItem('token')) {
-        console.log('entro :>> ');
-        $('#registro').modal('toggle');
+        console.log('check :>> ');
+        $('#pasoLogin').show();
+        $('#login').show();
+
+    } else {
+        $('#pasoLogin').hide();
     }
+
 }, 1000);
 
 
@@ -454,61 +459,145 @@ class BasicCharacterControllerInput {
                 this._keys.enter = true;
 
                 let balance = {
-                    xn: 611,
-                    xm: 619,
-                    y: 0.9,
-                    z: 325.8824197480127,
+                    xn: 474,
+                    xm: 500,
+                    zn: 450,
+                    zm: 482
                 }
                 let finanzas = {
-                    xn: 620,
-                    xm: 628,
-                    y: 0.9,
-                    z: -318.35156937411085
+                    zm: -370,
+                    zn: -399.5,
+                    xm: 524.5,
+                    xn: 494
                 }
 
                 let desarrollo = {
-                    xn: 140,
-                    xm: 150,
-                    y: 0.9,
-                    z: -318.35156937411085
+                    zm: -369.6,
+                    zn: -399.5,
+                    xm: 24.5,
+                    xn: -10
                 }
 
                 let valores = {
-                    xn: -120,
-                    xm: -130,
-                    y: 0.9,
-                    z: -318.35156937411085
+                    xm: -349,
+                    xn: -379,
+                    zn: 7.7,
+                    zm: 38.1
                 }
                 let salud = {
-                    xn: 102,
-                    xm: 112,
-                    y: 0.9,
-                    z: -318.35156937411085
+                    xm: -15.5,
+                    xn: -46,
+                    zm: 483,
+                    zn: 454.5
+
                 }
 
-                let position = this._params.scene.children[4].position;
+                let position = this._params.scene.children[2].position;
 
+                if ((position.x >= balance.xn && position.x <= balance.xm) && (position.z >= balance.zn && position.z <= balance.zm)) {
+                    $('#agenda').show();
+                    $("#classCluster").removeClass();
+                    $("#classCluster").addClass("cajacluster balance");
+                    $("#icon").html(`<img src="img/balance.svg" height="130"></img>`);
 
-                if (position.x >= balance.xn && position.x <= balance.xm) {
-                    $('#balance').modal('toggle');
-                    //$('#bodyAgenda').html("<img src='./assets/img/build.png' width='500px' height='500px' class='image'>");
+                    $("#classCluster2").addClass(" balance");
+                    $("#icon2").html(`<img src="img/balance.svg" height="130"></img>`);
+                    $("#icon3").html(`<img src="img/balance.svg" height="130"></img>`);
+                    $("#tituloCluster").html(`<h1>Balance entre Trabajo y Tiempo Libre</h1>`);
+                    let textInfo = `<h2>Balance entre Trabajo y Tiempo Libre</h2>
+                    <div class="space2"></div>
+                    <p style="text-align: justify;">
+                        Lograr un balance entre tu vida personal, profesional y social es importante.
+                        HSBC te ofrece una gran variedad de actividades, herramietnas y opciones para lograrlo.
+                    </p>`
+                    $("#textInfo").html(textInfo);
+                    $("#buttonAgenda").html(`<a onclick="agenda('Balance')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
                 }
 
-                if (position.x >= finanzas.xn && position.x <= finanzas.xm) {
-                    $('#balance').modal('toggle');
-                    //$('#bodyAgenda').html("<img src='./assets/img/build.png' width='500px' height='500px' class='image'>");
+                if ((position.x >= salud.xn && position.x <= salud.xm) && (position.z >= salud.zn && position.z <= salud.zm)) {
+
+                    $('#agenda').show();
+                    $("#classCluster").removeClass();
+                    $("#classCluster2").removeClass();
+                    $("#classCluster").addClass("cajacluster salud");
+                    $("#icon").html(`<img src="img/salud-y-bienestar.svg" height="130"></img>`);
+                    $("#classCluster2").addClass("cajacluster salud");
+                    $("#icon2").html(`<img src="img/salud-y-bienestar.svg" height="130"></img>`);
+
+                    $("#icon3").html(`<img src="img/salud-y-bienestar.svg" height="130"></img>`);
+                    $("#tituloCluster").html(`<h1>Salud y Bienestar</h1>`);
+                    let textInfo = `<h2>Salud y Bienestar</h2>
+                    <div class="space2"></div>
+                    <p style="text-align: justify;">
+                        Tu salud y bienestar son importantes para ser la mejor versión de ti.
+                        HSBC te ofrece una variedad de beneficios que te ayudarán a sentirte bien física y emocionalmente.
+                    </p>`
+                    $("#textInfo").html(textInfo);
+                    $("#buttonAgenda").html(`<a onclick="agenda('SaludBienestar')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
                 }
-                if (position.x >= desarrollo.xn && position.x <= desarrollo.xm) {
-                    $('#balance').modal('toggle');
-                    //$('#bodyAgenda').html("<img src='./assets/img/build.png' width='500px' height='500px' class='image'>");
+                if ((position.x >= valores.xn && position.x <= valores.xm) && (position.z >= valores.zn && position.z <= valores.zm)) {
+                    $('#agenda').show();
+                    $("#classCluster").removeClass();
+                    $("#classCluster2").removeClass();
+                    $("#classCluster").addClass("cajacluster cultura");
+                    $("#classCluster2").addClass("cajacluster cultura");
+                    $("#icon").html(`<img src="img/cultura-y-valores.svg" height="130"></img>`);
+                    $("#icon2").html(`<img src="img/cultura-y-valores.svg" height="130"></img>`);
+
+                    $("#icon3").html(`<img src="img/cultura-y-valores.svg" height="130"></img>`);
+                    $("#tituloCluster").html(`<h1>Cultura y Valores</h1>`);
+                    let textInfo = `<h2>Cultura y Valores</h2>
+                    <div class="space2"></div>
+                    <p style="text-align: justify;">
+                        HSBC es una empresa internacional sólida y sustentable, comprometida en ser una influencia positiva en la
+                        comunidad, haciendo lo correcto en todo momento. ¡Siéntete orgulloso de pertenecer a una institución como ésta!
+                        Para conocer más sobre la cultura y los programas ingresa al siguiente apartado.
+                    </p>`
+                    $("#textInfo").html(textInfo);
+                    $("#buttonAgenda").html(`<a onclick="agenda('Cultura')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
                 }
-                if (position.x >= valores.xn && position.x <= valores.xm) {
-                    $('#balance').modal('toggle');
-                    //$('#bodyAgenda').html("<img src='./assets/img/build.png' width='500px' height='500px' class='image'>");
+                if ((position.x >= finanzas.xn && position.x <= finanzas.xm) && (position.z >= finanzas.zn && position.z <= finanzas.zm)) {
+                    $('#agenda').show();
+                    $("#classCluster").removeClass();
+                    $("#classCluster2").removeClass();
+                    $("#classCluster").addClass("cajacluster finanzas");
+                    $("#classCluster2").addClass("cajacluster finanzas");
+                    $("#icon").html(`<img src="img/finanzas.svg" height="130"></img>`);
+                    $("#icon2").html(`<img src="img/finanzas.svg" height="130"></img>`);
+                    $("#icon3").html(`<img src="img/finanzas.svg" height="130"></img>`);
+
+                    $("#tituloCluster").html(`<h1>Finanzas</h1>`);
+                    let textInfo = `<h2>Finanzas</h2>
+                    <div class="space2"></div>
+                    <p style="text-align: justify;">
+                    En HSBC apoyamos a nuestros colegas a cumplir sus sueños, conectando sus ambiciones con oportunidades. 
+                    ¡HSBC te ayuda a cumplir tus sueños! Ingresa al siguiente apartado para conocer  cómo puedes incrementar tus ahorros
+                    y/o ingresos para alcanzar todo lo que habías soñado.
+                    </p>`
+                    $("#textInfo").html(textInfo);
+                    $("#buttonAgenda").html(`<a onclick="agenda('Finanzas')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
                 }
-                if (position.x >= salud.xn && position.x <= salud.xm) {
-                    $('#balance').modal('toggle');
-                    //$('#bodyAgenda').html("<img src='./assets/img/build.png' width='500px' height='500px' class='image'>");
+                if ((position.x >= desarrollo.xn && position.x <= desarrollo.xm) && (position.z >= desarrollo.zn && position.z <= desarrollo.zm)) {
+                    $('#agenda').show();
+                    $("#classCluster").removeClass();
+                    $("#classCluster2").removeClass();
+                    $("#classCluster").addClass("cajacluster desarrollo");
+                    $("#classCluster2").addClass("cajacluster desarrollo");
+                    $("#icon").html(`<img src="img/desarrollo.svg" height="130"></img>`);
+
+                    $("#icon2").html(`<img src="img/desarrollo.svg" height="130"></img>`);
+                    $("#icon3").html(`<img src="img/desarrollo.svg" height="130"></img>`);
+
+                    $("#tituloCluster").html(`<h1>Desarrollo y Carrera</h1>`);
+                    let textInfo = `<h2>Desarrollo y Carrera</h2>
+                    <div class="space2"></div>
+                    <p style="text-align: justify;">
+                    HSBC brinda oportunidades de desarrollo de carrera y aprendizaje continuo en un ambiente retador
+                     e inclusivo en donde el talento es el único diferenciador, con oportunidades de desarrollo nacionales e internacionales. 
+                     Tú, que buscas retos y cambios constantes, ingresa a la siguiente sección para conocer cuál será tu siguiente paso y cómo darlo. 
+                    </p>`
+                    $("#textInfo").html(textInfo);
+                    $("#buttonAgenda").html(`<a onclick="agenda('DesarrolloCarrera')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
                 }
                 break;
         }
@@ -868,7 +957,7 @@ class WalkState extends State {
     }
     Enter(prevState) {
         const curAction = this._parent._proxy._animations['walk'].action;
-        console.log('this._camera', this._parent._camera)
+        console.log('this._camera', this._parent._camera.scene.children[2].position)
         if (prevState) {
             const prevAction = this._parent._proxy._animations[prevState.Name].action;
             curAction.time = 0.0;
@@ -1030,7 +1119,7 @@ export class CharacterControllerDemo {
 
         const loader = new FBXLoader();
         loader.setPath('./models/');
-        loader.load('HSBC Entorno_MASTER 9 (ConP).fbx', (fbx) => {
+        /*loader.load('HSBC Entorno_MASTER 9 (ConP).fbx', (fbx) => {
             console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
@@ -1041,9 +1130,159 @@ export class CharacterControllerDemo {
             this._target.receiveShadow = false;
             this._target.castShadows = true;
             this._scene.add(this._target);
+        })*/
+        loader.load('HSBC Entorno_10_CAPAS_EXTRAS.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+        loader.load('HSBC Entorno_10_CAPAS_Lounge y Alrededores.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
 
 
-        })
+        loader.load('HSBC Entorno_10_CAPAS_LETRAS.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+        loader.load('HSBC Entorno_10_CAPAS_Entrada.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+
+        loader.load('HSBC Entorno_10_CAPAS_IGLUS.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_COMERCIAL.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_DISCO.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+        loader.load('HSBC Entorno_10_CAPAS_PISO.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_BOLICHE.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_PATIO fUTBOL.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+        loader.load('HSBC Entorno_10_CAPAS_porteRIA fUTBOL.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+        loader.load('HSBC Entorno_10_CAPAS_RAMPA.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
 
 
 

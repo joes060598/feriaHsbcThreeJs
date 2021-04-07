@@ -7,12 +7,22 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js " integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin=" anonymous "></script>
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <!-- THIS LINE -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <link href="./assets/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <script type="module" src="./js/main.js"></script>
     <script src="./js/service.js"></script>
+    <script>
+    </script>
+    <link href='resources/lib/main.css' rel='stylesheet' />
+    <link href='assets/login.css' rel='stylesheet' />
+
+    <script src='resources/lib/main.js'></script>
+    <script src='resources/lib/es.js'></script>
+
     <!--
         Alertify
     -->
@@ -70,110 +80,221 @@
 
 <body>
     <div id="joystick-wrapper"></div>
-    <div class="modal" id="balance" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title" id="log">Agenda</h2>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
-                        <div class="card card0 border-0">
-                            <div class="row d-flex">
-                                <div class="col-lg-6">
-                                    <div class="card1 pb-5">
-                                        <div class="row"> <img src="./assets/img/logoHSBC.jpg" width="90%" class="logo"> </div>
-                                        <div class="row px-3 justify-content-center mt-4 mb-5 border-line">
-                                            <img src="./assets/img/feria.png" width="90%" class="image "> </div>
 
 
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 ">
-                                    <div class="card2 card border-0 px-4 py-5 ">
-                                        <img src="./assets/img/build.png" width="90%" class="image ">
-                                    </div>
-                                </div>
 
-                            </div>
+    <table class="shadowbox" id="pasoLogin">
+        <tr>
+            <td valign="middle">
+                <div class="login" id="login" style="display: none;">
+                    <div class="hidden-xs"><br><br><br></div>
+                    <div class="visible-xs"><br></div>
+                    <div class="cajadatos">
+                        <div class="logohsbc">
+                            <img src="img/logo-hsbc.svg" width="300">
+                        </div>
+                        <div class="space3"></div>
+                        <div class="titulog">
+                            <h1>Inicio de Sesión</h1>
+                            <div class="space0"></div>
+                            <div class="separador"></div>
+                        </div>
+                        <div class="space5"></div>
+                        <form class="logdate">
+                            <label>Correo Institucional</label>
+                            <input type="text" id="emailLogin" class="campostyle" placeholder="@hsbc.com.mx">
+                            <div class="space2"></div>
+                            <label>Contraseña</label>
+                            <input type="password" id="passwordLogin" class="campostyle" placeholder="************">
+                            <div class="space2"></div>
+                            <input type="button" class="btngo" onclick="login()" value="ENTRAR A LA FERIA">
+
+                        </form>
+                        <div class="space2"></div>
+                        <div class="cajamore">
+                            <p>¿Aún no te has registrado a la feria?</p>
+                            <a onclick="registro()">REGISTRATE AHORA</a>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="registro" tabindex="-1" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title" id="log">Iniciar sesión</h2>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-5 mx-auto">
-                        <div class="card card0 border-0">
-                            <div class="row d-flex">
-                                <div class="col-lg-6">
-                                    <div class="card1 pb-5">
-                                        <div class="row"> <img src="./assets/img/logoHSBC.jpg" width="90%" class="logo"> </div>
-                                        <div class="row px-3 justify-content-center mt-4 mb-5 border-line" id="personaj">
-                                            <img src="./assets/img/feria.png" width="90%" class="image "> </div>
 
 
-                                    </div>
+                <!--Registro-->
+                <div class="login" id="registro" style="display: none;">
+                    <div class="hidden-xs"><br><br><br><br></div>
+                    <div class="visible-xs"><br></div>
+                    <div class="cajadatos2">
+                        <div class="logohsbc">
+                            <img src="img/logo-hsbc.svg" width="300">
+                        </div>
+                        <div class="space3"></div>
+                        <div class="titulog">
+                            <h1>Regístrate</h1>
+                            <div class="space0"></div>
+                            <div class="separador"></div>
+                        </div>
+                        <div class="space5"></div>
+                        <form class="logdate" id="registroForm">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label>Correo Institucional *</label>
+                                    <input type="text" id="email" class="campostyle" placeholder="@hsbc.com.mx">
+                                    <div class="space2"></div>
                                 </div>
-                                <div class="col-lg-6 " id="login">
-                                    <div class="card2 card border-0 px-4 py-5 ">
-                                        <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Correo Institucional</h6>
-                                            </label> <input class="form-control " type="text" name="emailLogin" id="emailLogin" placeholder="Ingrese su correo institucional"> </div>
-                                        <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Contraseña</h6>
-                                            </label> <input class="form-control " type="password" name="passwordLogin" id="passwordLogin" placeholder="Ingrese su contraseña"> </div>
-                                        <br>
-                                        <div class="row mb-3 px-3 "> <button type="button " class="btn btn-blue text-center " style="background-color: #db0011; color: white; " onclick="login()">Iniciar sesión</button> </div>
-                                        <div class="row mb-4 px-3 "> <small class="font-weight-bold ">¿Aún no te has registrado a la feria? <a class="btn text-danger " onclick="registro() ">Registrate</a></small> </div>
-                                    </div>
+                                <div class="col-sm-6">
+                                    <label>Contraseña * <span>(no usar contraseña institucional)</span></label>
+                                    <input type="text" id="password" class="campostyle" placeholder="************">
+                                    <div class="space2"></div>
                                 </div>
-                                <div class="col-lg-6 " id="formRegistro" style="display: none; ">
-                                    <form id="registroForm">
-                                        <div class="card2 card border-0 px-4 py-5 ">
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Email institucional *</h6>
-                                            </label> <input class="form-control " type="email" name="email " id="email" placeholder="Registra tu correo institucional ">
-                                            </div>
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Contraseña(No uses contraseñas institucionales) *</h6>
-                                            </label> <input class="form-control " type="password" name="password " id="password" placeholder="Ingresa la contraseña que usaras ">
-                                            </div>
-
-                                            <div class="row px-3 "> <label class="mb-1 ">
-                                                <h6 class="mb-0 text-sm ">Género *</h6>
-                                            </label>
-                                                <select class="form-control " onchange="setImageCharacter()" name="gender " id="gender">
-                                                    <option value="-1">Selecciona el género con el que te identifiques</option>
-                                                    <option value="M">Mujer</option>
-                                                    <option value="H">Hombre</option>
-                                                   <option value="NA">Otro</option> 
-                                                </select>
-                                            </div>
-                                            <br>
-                                            <div class="row mb-3 px-3 ">
-                                                <input type="button" class="btn btn-blue text-center " style="background-color: #db0011; color: white; " onclick="registroSend()" value="Registrarse">
-
-                                                <div class="row mb-4 px-3 "> <small class="font-weight-bold "><a class="btn text-danger " onclick="loginDiv() ">Iniciar sesión</a></small> </div>
-
-                                            </div>
-                                    </form>
-
-                                    </div>
+                                <div class="col-sm-6">
+                                    <label>Género *</label>
+                                    <select class="campostyle" id="gender">
+                                        <option selected value="-1">Género con el que te identifiques</option>
+                                        <option value="H">Hombre</option>
+                                        <option value="M">Mujer</option>
+                                        <option value="NA">Otro</option>
+                                    </select>
+                                    <div class="space2"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="space2"></div>
+                                    <input type="button" class="btngo" onclick="registroSend()" value="Registrarme ahora">
+                                    <div class="space2"></div>
                                 </div>
                             </div>
+                        </form>
+                        <div class="space2"></div>
+                        <div class="cajamore">
+                            <p>Accede directamente a vivir la experiencia</p>
+                            <a onclick="loginDiv()">ENTRAR A LA FERIA</a>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </td>
+        </tr>
+    </table>
+    <!--Finanzas-->
+    <table class="shadowbox" id="agenda" style="display: none;">
+        <tr id="agendaGral">
+            <td valign="middle">
+                <div class="cajacluster" id="classCluster">
+                    <div class="iconlog" id="icon">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="tituloscluster" id="tituloCluster">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-5" style="text-align: right;">
+                            <div class="cajacoments" style="display: none;">
+                                <form>
+                                    <div class="space1"></div>
+                                    <div class="titucom">
+                                        <label>Escribe tus Comentarios</label>
+                                    </div>
+                                    <div class="space1"></div>
+                                    <textarea rows="5" class="cajacom" placeholder="Comentarios"></textarea>
+                                    <div class="space2"></div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <a class="ocultar btngocomm0">Cerrar</a>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <button class="btngocomm">Enviar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="dudasx">
+                                <img class="mostrar" src="img/dejanostusdudas.svg" width="300">
+                            </div>
+                        </div>
+                        <div class="col-sm-1" style="text-align: right;">
+                            <a onclick="cerrarAgenda()"><img src="img/equis.svg" width="15"></a>
+                        </div>
+                    </div>
+                    <div class="space2"></div>
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <div class="infoalign">
+                                <div class="row">
+                                    <div class="col-sm-3" id="icon3">
+
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <div class="space2"></div>
+                                        <div class="txtinfo" id="textInfo">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space2"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-5" id="buttonAgenda">
+
+                        </div>
+                    </div>
+
+                </div>
+            </td>
+        </tr>
+        <tr id="agendaEspecifica" style="display: none;">
+            <td valign="middle">
+                <div class="cajacluster " id="classCluster2">
+                    <div class="iconlog" id="icon2">
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="tituloscluster">
+                                <h1>Calendario de Eventos</h1>
+                            </div>
+                        </div>
+                        <div class="col-sm-5" style="text-align: right;">
+                            <div class="cajacoments" style="display: none;">
+                                <form>
+                                    <div class="space1"></div>
+                                    <div class="titucom">
+                                        <label>Escribe tus Comentarios</label>
+                                    </div>
+                                    <div class="space1"></div>
+                                    <textarea rows="5" class="cajacom" placeholder="Comentarios"></textarea>
+                                    <div class="space2"></div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <a class="ocultar btngocomm0">Cerrar</a>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <button class="btngocomm">Enviar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="dudasx">
+                                <img class="mostrar" src="img/dejanostusdudas.svg" width="300">
+                            </div>
+                        </div>
+                        <div class="col-sm-1" style="text-align: right;">
+                            <a onclick="cerrarAgenda()"><img src="img/equis.svg" width="15"></a>
+                        </div>
+                    </div>
+                    <div class="space2"></div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="scrollcal">
+                                <div id='calendar'></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
 
 
 
