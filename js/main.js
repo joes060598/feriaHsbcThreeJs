@@ -78,6 +78,8 @@ class BasicCharacterController {
             genderPath = 'girl';
         } else if (this._params.gender == 'H') {
             genderPath = 'man';
+        } else if (this._params.gender == 'NA') {
+            genderPath = 'robot';
         }
         const loader = new FBXLoader();
         loader.setPath(`./models/${genderPath}/`);
@@ -115,8 +117,7 @@ class BasicCharacterController {
             loader.load('idle.fbx', (a) => { _OnLoad('pose', a); });
             loader.load('dance.fbx', (a) => { _OnLoad('dance', a); });
             loader.load('run.fbx', (a) => { _OnLoad('run', a); });
-
-            loader.load('runJump.fbx', (a) => { _OnLoad('jump', a); });
+            loader.load('jump.fbx', (a) => { _OnLoad('jump', a); });
 
         })
     }
@@ -343,6 +344,9 @@ class BasicCharacterController {
         if (this._stateMachine._currentState.Name == 'dance') {
             acc.multiplyScalar(0.0);
         }
+        if (this._stateMachine._currentState.Name == 'jump' && this._input._keys.shift) {
+            acc.multiplyScalar(5.0);
+        }
         if (this._input._keys.forward && this._stateMachine._currentState.Name != 'dance') {
             velocity.z += acc.z * timeInSeconds + 3;
         }
@@ -492,8 +496,9 @@ class BasicCharacterControllerInput {
 
                 }
 
-                let position = this._params.scene.children[2].position;
-
+                let character = this._params.scene.children.find((a) => { return a.name == 'personaje' });
+                let position = character.position;
+                console.log('this._params.scene :>> ', this._params.scene);
                 if ((position.x >= balance.xn && position.x <= balance.xm) && (position.z >= balance.zn && position.z <= balance.zm)) {
                     $('#agenda').show();
                     $("#classCluster").removeClass();
@@ -755,6 +760,10 @@ class RunState extends State {
             if (!input._keys.shift) {
                 this._parent.SetState('walk');
             }
+            console.log('input._keys.space :>> ', input._keys.space);
+            if (input._keys.space) {
+                this._parent.SetState('jump');
+            }
             return;
         }
 
@@ -767,6 +776,10 @@ class RunState extends State {
 class JumpState extends State {
     constructor(parent) {
         super(parent);
+
+        this._FinishedCallback = () => {
+            this._Finished();
+        }
     }
 
     get Name() {
@@ -777,6 +790,7 @@ class JumpState extends State {
 
         const curAction = this._parent._proxy._animations['jump'].action;
         const mixer = curAction.getMixer();
+        mixer.addEventListener('finished', this._FinishedCallback);
         if (prevState) {
             const prevAction = this._parent._proxy._animations[prevState.Name].action;
             curAction.reset();
@@ -791,7 +805,7 @@ class JumpState extends State {
 
     _Finished() {
         this._Cleanup();
-        //this._parent.SetState('pose');
+        this._parent.SetState('pose');
     }
 
     _Cleanup() {
@@ -801,13 +815,13 @@ class JumpState extends State {
     }
 
     Exit() {
-        //this._Cleanup();
+        this._Cleanup();
     }
 
     Update(timeElapsed, input) {
         console.log('timeElapsed :>> ', timeElapsed);
 
-        this._parent.SetState('pose');
+        //this._parent.SetState('pose');
 
     }
 };
@@ -1335,7 +1349,7 @@ class ThirdPersonCamera {
     }
 
     _CalculateIdealOffset() {
-        const idealOffset = new THREE.Vector3(10, 15, -30);
+        const idealOffset = new THREE.Vector3(0, 15, -30);
         idealOffset.applyQuaternion(this._params.target.Rotation);
         idealOffset.add(this._params.target.Position);
         return idealOffset;
