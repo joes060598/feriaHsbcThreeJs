@@ -134,6 +134,24 @@ class BasicCharacterController {
 
     _LoadModelsLeon() {
         const loader = new FBXLoader();
+
+        loader.setPath('./models/');
+        loader.load('HSBC Entorno_10_CAPAS_BOTONES ENTER.fbx', (fbx) => {
+            fbx.position.y = 3;
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._targetTeclasAnimadas = fbx;
+            this._targetTeclasAnimadas.name = 'teclasAnimadas';
+            this._targetTeclasAnimadas.receiveShadow = false;
+            this._targetTeclasAnimadas.castShadows = true;
+            this._params.scene.add(this._targetTeclasAnimadas);
+            /*this._mixerTeclasAnimadas = new THREE.AnimationMixer(this._targetTeclasAnimadas);
+            const action = this._mixerTeclasAnimadas.clipAction(this._targetTeclasAnimadas.animations[0]);
+            action.play();*/
+        });
+
         loader.setPath('./models/leon/LEONCIO TEX/');
         loader.load('HSBC_Leon_Cheering_1.fbx', (fbx) => {
             fbx.position.x = 1600;
@@ -385,6 +403,9 @@ class BasicCharacterController {
         if (this._mixer) {
             this._mixer.update(timeInSeconds);
         }
+        if (this._mixerTeclasAnimadas) {
+            this._mixerTeclasAnimadas.update(timeInSeconds);
+        }
         if (this._mixerLeon) {
             this._mixerLeon.update(timeInSeconds);
         }
@@ -433,7 +454,6 @@ class BasicCharacterControllerInput {
         document.addEventListener('keyup', (e) => { this._onKeyUp(e), false });
     }
     _onKeyDown(event) {
-        console.log('event.keyCode :>> ', event.keyCode);
         switch (event.keyCode) {
             //case 87: //W: FORWARD
             case 38: //up arrow
@@ -500,7 +520,7 @@ class BasicCharacterControllerInput {
 
                 let character = this._params.scene.children.find((a) => { return a.name == 'personaje' });
                 let position = character.position;
-                console.log('this._params.scene :>> ', this._params.scene);
+
                 if ((position.x >= balance.xn && position.x <= balance.xm) && (position.z >= balance.zn && position.z <= balance.zm)) {
                     $('#agenda').show();
                     $("#classCluster").removeClass();
@@ -654,7 +674,6 @@ class FiniteStateMachine {
         this._states[name] = type;
     }
     SetState(name) {
-        console.log('namesetState :>> ', name);
         const prevState = this._currentState;
         if (prevState) {
 
@@ -703,10 +722,7 @@ class CharacterFSMLeon extends FiniteStateMachine {
     }
     _Init() {
         this._AddState('dance1', DanceStateLeon);
-        /*this._AddState('dance2', DanceState);
-        this._AddState('dance3', DanceState);
-        this._AddState('dance4', DanceState);
-        this._AddState('dance5', DanceState);*/
+
 
 
     }
@@ -762,7 +778,6 @@ class RunState extends State {
             if (!input._keys.shift) {
                 this._parent.SetState('walk');
             }
-            console.log('input._keys.space :>> ', input._keys.space);
             if (input._keys.space) {
                 this._parent.SetState('jump');
             }
@@ -808,7 +823,7 @@ class JumpState extends State {
     _Finished() {
         this._Cleanup();
 
-        this._parent.SetState('walk');
+        this._parent.SetState('pose');
     }
 
     _Cleanup() {
@@ -822,7 +837,6 @@ class JumpState extends State {
     }
 
     Update(timeElapsed, input) {
-        console.log('timeElapsed :>> ', timeElapsed);
 
         //this._parent.SetState('pose');
 
@@ -843,7 +857,6 @@ class DanceStateLeon extends State {
     }
 
     Enter(prevState) {
-        console.log('this._parent._proxy._animations :>> ', this._parent._proxy._animations);
         const curAction = this._parent._proxy._animations['dance1'].action;
         const mixer = curAction.getMixer();
         mixer.addEventListener('finished', this._FinishedCallback);
@@ -857,7 +870,6 @@ class DanceStateLeon extends State {
             curAction.crossFadeFrom(prevAction, 0.2, true);
             curAction.play();
         } else {
-            console.log('play :>> ');
             curAction.play();
         }
     }
@@ -974,7 +986,7 @@ class WalkState extends State {
     }
     Enter(prevState) {
         const curAction = this._parent._proxy._animations['walk'].action;
-        console.log('this._camera', this._parent._camera.scene.children[2].position)
+
         if (prevState) {
             const prevAction = this._parent._proxy._animations[prevState.Name].action;
             curAction.time = 0.0;
@@ -1013,14 +1025,29 @@ class WalkState extends State {
 export class CharacterControllerDemo {
     constructor(gender) {
         this.gender = gender;
-        this._Initialize();
-    }
+        this.rigidBodies = [];
+        this.tmpTrans = new Ammo.btTransform();
 
+        this.setupPhysicsWorld();
+        this._Initialize();
+
+
+    }
+    setupPhysicsWorld() {
+
+        let collisionConfiguration = new Ammo.btDefaultCollisionConfiguration(),
+            dispatcher = new Ammo.btCollisionDispatcher(collisionConfiguration),
+            overlappingPairCache = new Ammo.btDbvtBroadphase(),
+            solver = new Ammo.btSequentialImpulseConstraintSolver();
+
+        this.physicsWorld = new Ammo.btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+        this.physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
+    }
     _Initialize() {
 
         //Physijs.scripts.worker = '../physijs_worker.js';
         //|Physijs.scripts.ammo = 'examples/js/ammo.js';
-
+        this.clock = new THREE.Clock();
         this._threejs = new THREE.WebGLRenderer({
             antialias: true,
             powerPreference: 'low-power',
@@ -1035,7 +1062,6 @@ export class CharacterControllerDemo {
         this._threejs.shadowMap.needsUpdate = true;
         this._threejs.setPixelRatio(window.devicePixelRatio);
         this._threejs.setSize(window.innerWidth, window.innerHeight);
-        console.log('this._threejs.domElement :>> ', this._threejs.domElement);
         document.body.appendChild(this._threejs.domElement);
         $("canvas").hide();
         $("#padre").show();
@@ -1069,7 +1095,6 @@ export class CharacterControllerDemo {
         //spotLight.receiveShadow = true;
         spotLight.shadow.bias = 1;
         spotLight.position.set(2500, 5000, 800);
-        console.log('spotLight :>> ', spotLight);
         this._scene.add(spotLight);
         const loader = new THREE.CubeTextureLoader();
         const texture = loader.load([
@@ -1093,9 +1118,8 @@ export class CharacterControllerDemo {
 
         // load a sound and set it as the Audio object's buffer
         const audioLoader = new THREE.AudioLoader();
-        console.log('this.sound :>> ', this.sound);
+
         audioLoader.load('resources/casio.ogg', (buffer) => {
-            console.log('this :>> ', this);
             this.sound.setBuffer(buffer);
             this.sound.setLoop(true);
             this.sound.setVolume(0.5);
@@ -1118,7 +1142,6 @@ export class CharacterControllerDemo {
             BOTTOM: 1 // down arrow
         }
         controls.update();
-        console.log('this.scene :>> ', this._scene);
         this._RAF();
     }
 
@@ -1148,6 +1171,8 @@ export class CharacterControllerDemo {
 
         const loader = new FBXLoader();
         loader.setPath('./models/');
+
+
         /*loader.load('HSBC Entorno_MASTER 9 (ConP).fbx', (fbx) => {
             console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
@@ -1161,7 +1186,6 @@ export class CharacterControllerDemo {
             this._scene.add(this._target);
         })*/
         loader.load('HSBC Entorno_10_CAPAS_EXTRAS.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1173,7 +1197,6 @@ export class CharacterControllerDemo {
             this._scene.add(this._target);
         });
         loader.load('HSBC Entorno_10_CAPAS_Lounge y Alrededores.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1187,7 +1210,6 @@ export class CharacterControllerDemo {
 
 
         loader.load('HSBC Entorno_10_CAPAS_LETRAS.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1199,7 +1221,6 @@ export class CharacterControllerDemo {
             this._scene.add(this._target);
         });
         loader.load('HSBC Entorno_10_CAPAS_Entrada.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1213,7 +1234,6 @@ export class CharacterControllerDemo {
 
 
         loader.load('HSBC Entorno_10_CAPAS_IGLUS.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1226,7 +1246,6 @@ export class CharacterControllerDemo {
         });
 
         loader.load('HSBC Entorno_10_CAPAS_COMERCIAL.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1239,7 +1258,6 @@ export class CharacterControllerDemo {
         });
 
         loader.load('HSBC Entorno_10_CAPAS_DISCO.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1251,7 +1269,6 @@ export class CharacterControllerDemo {
             this._scene.add(this._target);
         });
         loader.load('HSBC Entorno_10_CAPAS_PISO.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1264,7 +1281,6 @@ export class CharacterControllerDemo {
         });
 
         loader.load('HSBC Entorno_10_CAPAS_BOLICHE.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1277,7 +1293,6 @@ export class CharacterControllerDemo {
         });
 
         loader.load('HSBC Entorno_10_CAPAS_PATIO fUTBOL.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1289,7 +1304,6 @@ export class CharacterControllerDemo {
             this._scene.add(this._target);
         });
         loader.load('HSBC Entorno_10_CAPAS_porteRIA fUTBOL.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1301,7 +1315,6 @@ export class CharacterControllerDemo {
             this._scene.add(this._target);
         });
         loader.load('HSBC Entorno_10_CAPAS_RAMPA.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1313,7 +1326,6 @@ export class CharacterControllerDemo {
             this._scene.add(this._target);
         });
         loader.load('HSBC Entorno_10_CAPAS_Cluster Balance.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1326,7 +1338,6 @@ export class CharacterControllerDemo {
         });
 
         loader.load('HSBC Entorno_10_CAPAS_Cluster Cultura.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1338,7 +1349,6 @@ export class CharacterControllerDemo {
             this._scene.add(this._target);
         });
         loader.load('HSBC Entorno_10_CAPAS_Cluster Desarrollo.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1350,7 +1360,6 @@ export class CharacterControllerDemo {
             this._scene.add(this._target);
         });
         loader.load('HSBC Entorno_10_CAPAS_Cluster Finanzas.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1363,7 +1372,6 @@ export class CharacterControllerDemo {
         });
 
         loader.load('HSBC Entorno_10_CAPAS_Cluster Salud.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1376,8 +1384,10 @@ export class CharacterControllerDemo {
         });
 
 
-        loader.load('HSBC Entorno_10_CAPAS_LETRAS Flecha_ moverte.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
+
+
+        loader.load('HSBC Entorno_10_CAPAS_TECLAS INICIO.fbx', (fbx) => {
+
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1387,193 +1397,19 @@ export class CharacterControllerDemo {
             this._target.receiveShadow = false;
             this._target.castShadows = true;
             this._scene.add(this._target);
-        });
 
-        loader.load('HSBC Entorno_10_CAPAS_LETRAS Flecha_ para.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
-        });
-
-        loader.load('HSBC Entorno_10_CAPAS_LETRAS Flecha_ Usa.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
-        });
-        loader.load('HSBC Entorno_10_CAPAS_LETRAS Shift_ correr.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
-        });
-
-        loader.load('HSBC Entorno_10_CAPAS_LETRAS Shift_ para.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
-        });
-
-        loader.load('HSBC Entorno_10_CAPAS_LETRAS Shift_ shift.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
-        });
-
-        loader.load('HSBC Entorno_10_CAPAS_LETRAS Shift_ Usa.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
         });
 
 
-        loader.load('HSBC Entorno_10_CAPAS_Tecla Flechas.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
-        });
 
 
-        loader.load('HSBC Entorno_10_CAPAS_Tecla Shift.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
-        });
+
+
 
         /**space
          * 
          */
-        loader.load('HSBC Entorno_10_CAPAS_LETRAS Spacebar_ Usa.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
-        });
 
-        loader.load('HSBC Entorno_10_CAPAS_LETRAS Spacebar_ spacebar.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
-        });
-
-        loader.load('HSBC Entorno_10_CAPAS_LETRAS Spacebar_ saltar.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
-        });
-
-        loader.load('HSBC Entorno_10_CAPAS_LETRAS Spacebar_ para.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
-        });
-
-        loader.load('HSBC Entorno_10_CAPAS_Tecla Spacebar.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
-        });
-
-        loader.load('HSBC Entorno_10_CAPAS_BOTONES ENTER.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
-        });
 
     }
 
@@ -1582,6 +1418,9 @@ export class CharacterControllerDemo {
         this._camera.updateProjectionMatrix();
         this._threejs.setSize(window.innerWidth, window.innerHeight);
     }
+
+
+
 
     _RAF() {
 
@@ -1592,7 +1431,9 @@ export class CharacterControllerDemo {
 
 
             this._RAF();
+            //let deltaTime = this.clock.getDelta();
 
+            //this.updatePhysics(deltaTime);
             this._threejs.render(this._scene, this._camera);
             this._Step(t - this._previousRAF);
             this._previousRAF = t;
@@ -1671,12 +1512,19 @@ export function isTouchscreenDevice() {
 window.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         if (_APP == null && sessionStorage.getItem('gender')) {
-            _APP = new CharacterControllerDemo(sessionStorage.getItem('gender'));
+
+            Ammo().then(start);
         }
 
     }, 1000)
 
 });
+
+function start() {
+
+    _APP = new CharacterControllerDemo(sessionStorage.getItem('gender'));
+
+}
 
 
 export function createJoystick(parent) {
@@ -1716,7 +1564,6 @@ export function createJoystick(parent) {
     function handleMouseMove(event) {
         if (dragStart === null) return;
 
-        //console.log("entered handleMouseMove");
         if (event.changedTouches) {
             event.clientX = event.changedTouches[0].clientX;
             event.clientY = event.changedTouches[0].clientY;

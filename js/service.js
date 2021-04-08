@@ -167,8 +167,15 @@ function registroSend() {
 function enviarPregunta(type, caja) {
     let pregunta = $('#' + type);
     let cajaHide = $('#' + caja);
+    if (pregunta.val() != undefined && pregunta.val() != "") {
+        alertify.success('Se ha enviado correctamente tu duda, espera a que el equipo de soporte te contacte.');
+        cajaHide.hide();
+    } else {
+        alertify.error('No puede enviar una pregunta vacía.');
 
-    $.ajax({
+    }
+
+    /*$.ajax({
         url: url + "questions/create",
         type: 'post',
         data: {
@@ -188,7 +195,8 @@ function enviarPregunta(type, caja) {
             alertify.error(err.message);
 
         }
-    });
+    });*/
+
 }
 
 function generatePasswordRand(length, type) {

@@ -14,6 +14,7 @@
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <link href="./assets/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <script src="./build/ammo.js"></script>
     <script type="module" src="./js/main.js"></script>
     <script src="./js/service.js"></script>
     <script>
@@ -222,21 +223,21 @@
                             </div>
                         </div>
                         <div class="col-sm-5" style="text-align: right;">
-                            <div class="cajacoments" id="cajacomments" style="display: none;">
+                            <div class="cajacoments" id="cajacomments1" style="display: none;">
                                 <form>
                                     <div class="space1"></div>
                                     <div class="titucom">
                                         <label>Escribe tus Comentarios</label>
                                     </div>
                                     <div class="space1"></div>
-                                    <textarea rows="5" class="cajacom" placeholder="Comentarios"></textarea>
+                                    <textarea rows="5" id="pregunta1" class="cajacom" placeholder="Comentarios"></textarea>
                                     <div class="space2"></div>
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <a class="ocultar btngocomm0">Cerrar</a>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input type="button" class="btngocomm" onclick="enviarPregunta('pregunta1','cajacomments1')" id="pregunta1" value="Enviar">
+                                            <input type="button" class="btngocomm" onclick="enviarPregunta('pregunta1','cajacomments1')" value="Enviar">
                                         </div>
                                     </div>
                                 </form>
