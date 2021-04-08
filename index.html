@@ -156,21 +156,21 @@
                             </div>
                         </div>
                         <div class="col-sm-5" style="text-align: right;">
-                            <div class="cajacoments" style="display: none;">
+                            <div class="cajacoments" id="cajacomments" style="display: none;">
                                 <form>
                                     <div class="space1"></div>
                                     <div class="titucom">
                                         <label>Escribe tus Comentarios</label>
                                     </div>
                                     <div class="space1"></div>
-                                    <textarea rows="5" class="cajacom" placeholder="Comentarios"></textarea>
+                                    <textarea rows="5" id="pregunta" class="cajacom" placeholder="Comentarios"></textarea>
                                     <div class="space2"></div>
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <a class="ocultar btngocomm0">Cerrar</a>
                                         </div>
                                         <div class="col-sm-6">
-                                            <button class="btngocomm">Enviar</button>
+                                            <input type="button" class="btngocomm" onclick="enviarPregunta('pregunta','cajacomments')" value="Enviar">
                                         </div>
                                     </div>
                                 </form>
@@ -222,7 +222,7 @@
                             </div>
                         </div>
                         <div class="col-sm-5" style="text-align: right;">
-                            <div class="cajacoments" style="display: none;">
+                            <div class="cajacoments" id="cajacomments" style="display: none;">
                                 <form>
                                     <div class="space1"></div>
                                     <div class="titucom">
@@ -236,7 +236,7 @@
                                             <a class="ocultar btngocomm0">Cerrar</a>
                                         </div>
                                         <div class="col-sm-6">
-                                            <button class="btngocomm">Enviar</button>
+                                            <input type="button" class="btngocomm" onclick="enviarPregunta('pregunta1','cajacomments1')" id="pregunta1" value="Enviar">
                                         </div>
                                     </div>
                                 </form>

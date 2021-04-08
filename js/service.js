@@ -164,6 +164,32 @@ function registroSend() {
 
 }
 
+function enviarPregunta(type, caja) {
+    let pregunta = $('#' + type);
+    let cajaHide = $('#' + caja);
+
+    $.ajax({
+        url: url + "questions/create",
+        type: 'post',
+        data: {
+            question: pregunta.val()
+        },
+        headers: {
+            token: sessionStorage.getItem('token'), //If your header name has spaces or any other char not appropriate
+            //"Header Name Two": 'Header Value Two' //for object property name, use quoted notation shown in second
+        },
+        dataType: 'json',
+        success: function(data) {
+            alertify.success('Se ha enviado correctamente tu duda, espera a que el equipo de soporte te contacte.');
+            pregunta.val('');
+            cajaHide.hide();
+        },
+        error: function(err) {
+            alertify.error(err.message);
+
+        }
+    });
+}
 
 function generatePasswordRand(length, type) {
     switch (type) {
