@@ -176,7 +176,7 @@ function enviarPregunta(type, caja) {
         },
         headers: {
             token: sessionStorage.getItem('token'), //If your header name has spaces or any other char not appropriate
-            //"Header Name Two": 'Header Value Two' //for object property name, use quoted notation shown in second
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         },
         dataType: 'json',
         success: function(data) {
