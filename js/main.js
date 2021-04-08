@@ -12,12 +12,12 @@ import { Capsule } from '../tools/jsm/math/Capsule.js';
 
 setTimeout(() => {
     if (!sessionStorage.getItem('token')) {
-        console.log('check :>> ');
         $('#pasoLogin').show();
         $('#login').show();
-
     } else {
         $('#pasoLogin').hide();
+
+
     }
 
 }, 1000);
@@ -1014,6 +1014,10 @@ export class CharacterControllerDemo {
     }
 
     _Initialize() {
+
+        //Physijs.scripts.worker = '../physijs_worker.js';
+        //|Physijs.scripts.ammo = 'examples/js/ammo.js';
+
         this._threejs = new THREE.WebGLRenderer({
             antialias: true,
             powerPreference: 'low-power',
@@ -1028,8 +1032,15 @@ export class CharacterControllerDemo {
         this._threejs.shadowMap.needsUpdate = true;
         this._threejs.setPixelRatio(window.devicePixelRatio);
         this._threejs.setSize(window.innerWidth, window.innerHeight);
+        console.log('this._threejs.domElement :>> ', this._threejs.domElement);
         document.body.appendChild(this._threejs.domElement);
+        $("canvas").hide();
+        $("#loader").show();
+        setTimeout(() => {
+            $("#loader").hide();
+            $("canvas").show();
 
+        }, 15000);
         window.addEventListener('resize', () => {
             this._OnWindowResize();
         }, false);
@@ -1297,8 +1308,268 @@ export class CharacterControllerDemo {
             this._target.castShadows = true;
             this._scene.add(this._target);
         });
+        loader.load('HSBC Entorno_10_CAPAS_Cluster Balance.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_Cluster Cultura.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+        loader.load('HSBC Entorno_10_CAPAS_Cluster Desarrollo.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+        loader.load('HSBC Entorno_10_CAPAS_Cluster Finanzas.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_Cluster Salud.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
 
 
+        loader.load('HSBC Entorno_10_CAPAS_LETRAS Flecha_ moverte.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_LETRAS Flecha_ para.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_LETRAS Flecha_ Usa.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+        loader.load('HSBC Entorno_10_CAPAS_LETRAS Shift_ correr.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_LETRAS Shift_ para.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_LETRAS Shift_ shift.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_LETRAS Shift_ Usa.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+
+        loader.load('HSBC Entorno_10_CAPAS_Tecla Flechas.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+
+        loader.load('HSBC Entorno_10_CAPAS_Tecla Shift.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        /**space
+         * 
+         */
+        loader.load('HSBC Entorno_10_CAPAS_LETRAS Spacebar_ Usa.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_LETRAS Spacebar_ spacebar.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_LETRAS Spacebar_ saltar.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_LETRAS Spacebar_ para.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_Tecla Spacebar.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_BOTONES ENTER.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
 
     }
 
