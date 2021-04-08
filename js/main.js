@@ -344,7 +344,10 @@ class BasicCharacterController {
             acc.multiplyScalar(0.0);
         }
         if (this._stateMachine._currentState.Name == 'jump' && this._input._keys.shift) {
-            acc.multiplyScalar(5.0);
+            acc.multiplyScalar(1.0);
+        }
+        if (this._stateMachine._currentState.Name == 'jump' && (this._input._keys.backward || this._input._keys.forward)) {
+            acc.multiplyScalar(2.5);
         }
         if (this._input._keys.forward && this._stateMachine._currentState.Name != 'dance') {
             velocity.z += acc.z * timeInSeconds + 3;
