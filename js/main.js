@@ -1040,7 +1040,7 @@ export class CharacterControllerDemo {
             $("canvas").show();
             $("#instrucciones").show();
 
-        }, 15000);
+        }, 20000);
         window.addEventListener('resize', () => {
             this._OnWindowResize();
         }, false);
