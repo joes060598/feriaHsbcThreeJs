@@ -780,7 +780,7 @@ class JumpState extends State {
         super(parent);
 
         this._FinishedCallback = () => {
-            this._Finished(this.prevState);
+            this._Finished();
         }
     }
 
@@ -793,9 +793,7 @@ class JumpState extends State {
         const curAction = this._parent._proxy._animations['jump'].action;
         const mixer = curAction.getMixer();
         mixer.addEventListener('finished', this._FinishedCallback);
-        this.prevState = undefined;
         if (prevState) {
-            this.prevState = prevState;
             const prevAction = this._parent._proxy._animations[prevState.Name].action;
             curAction.reset();
             curAction.setLoop(THREE.LoopOnce, 1);
@@ -807,16 +805,10 @@ class JumpState extends State {
         }
     }
 
-    _Finished(prevState) {
+    _Finished() {
         this._Cleanup();
-        if (prevState) {
-            console.log('prevState :>> ', prevState);
-            this._parent.SetState(prevState.Name);
 
-        } else {
-            this._parent.SetState('pose');
-
-        }
+        this._parent.SetState('walk');
     }
 
     _Cleanup() {
