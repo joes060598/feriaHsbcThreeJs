@@ -16,8 +16,7 @@ setTimeout(() => {
         $('#login').show();
     } else {
         $('#pasoLogin').hide();
-
-
+        $("#padre").show();
     }
 
 }, 1000);
@@ -1035,10 +1034,11 @@ export class CharacterControllerDemo {
         console.log('this._threejs.domElement :>> ', this._threejs.domElement);
         document.body.appendChild(this._threejs.domElement);
         $("canvas").hide();
-        $("#loader").show();
+        $("#padre").show();
         setTimeout(() => {
-            $("#loader").hide();
+            $("#padre").hide();
             $("canvas").show();
+            $("#instrucciones").show();
 
         }, 15000);
         window.addEventListener('resize', () => {
