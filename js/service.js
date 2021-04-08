@@ -83,7 +83,7 @@ function cerrarAgenda() {
     $("#agendaEspecifica").hide();
     $("canvas").show();
 }
-
+var hitSound;
 
 function login() {
     let email = $('#emailLogin').val();
@@ -97,6 +97,7 @@ function login() {
         email: email,
         password: password
     }
+
     $.post(url + "user/login", request, function(data) {
         if (data.statusCode == 200) {
             console.log('data :>> ', data);
@@ -106,7 +107,12 @@ function login() {
             sessionStorage.setItem('gender', data.data.gender);
 
             $('#pasoLogin').hide();
-
+            hitSound = new Audio('./assets/music2.mp3');
+            console.log('hitSound :>> ', hitSound);
+            hitSound.loop = true;
+            hitSound.volume = 0.5;
+            hitSound.currentTime = 0;
+            hitSound.play();
         } else {
             alertify.error(data.message);
 

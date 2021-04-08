@@ -477,6 +477,8 @@ class BasicCharacterControllerInput {
                 break;
             case 66: //b
                 this._keys.b = true;
+
+
                 break;
             case 16: //shift
                 this._keys.shift = true;
@@ -1521,7 +1523,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function start() {
-
+    console.log('hitSoundINMAIIIIN :>> ', hitSound);
     _APP = new CharacterControllerDemo(sessionStorage.getItem('gender'));
 
 }
@@ -1564,6 +1566,7 @@ export function createJoystick(parent) {
     function handleMouseMove(event) {
         if (dragStart === null) return;
 
+        //console.log("entered handleMouseMove");
         if (event.changedTouches) {
             event.clientX = event.changedTouches[0].clientX;
             event.clientY = event.changedTouches[0].clientY;
