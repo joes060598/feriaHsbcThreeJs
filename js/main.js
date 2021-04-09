@@ -1218,7 +1218,7 @@ export class CharacterControllerDemo {
         setTimeout(() => {
             $("#padre").hide();
             $("canvas").show();
-            $("#instrucciones").show();
+            $("#over").show();
 
         }, 20000);
         window.addEventListener('resize', () => {

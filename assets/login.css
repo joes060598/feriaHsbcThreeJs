@@ -344,3 +344,10 @@ table {
     border: none;
     border-radius: 10px;
 }
+
+#over img {
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
