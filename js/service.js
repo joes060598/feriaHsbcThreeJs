@@ -81,6 +81,8 @@ function cerrarAgenda() {
     $("#agenda").hide();
     $("#agendaGral").show();
     $("#agendaEspecifica").hide();
+    $("#nameGral").show();
+
     $("canvas").show();
 }
 var hitSound;

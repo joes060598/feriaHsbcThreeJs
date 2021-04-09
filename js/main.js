@@ -11,6 +11,7 @@ import { Capsule } from '../tools/jsm/math/Capsule.js';
 
 
 setTimeout(() => {
+
     if (!sessionStorage.getItem('token')) {
         $('#pasoLogin').show();
         $('#login').show();
@@ -20,6 +21,18 @@ setTimeout(() => {
     }
 
 }, 1000);
+
+
+setInterval(() => {
+
+    let display = $("#agenda").css("display");
+
+    if (display == 'none') {
+        alertify.alert('Aviso', 'Te invitamos asistir a los clusters.', function() { alertify.success('Disfruta tu experiencía.'); });
+    }
+
+}, 60000);
+
 
 
 class BasicCharacterControllerProxy {
@@ -525,6 +538,8 @@ class BasicCharacterControllerInput {
 
                 if ((position.x >= balance.xn && position.x <= balance.xm) && (position.z >= balance.zn && position.z <= balance.zm)) {
                     $('#agenda').show();
+                    $("#nameGral").hide();
+
                     $("#classCluster").removeClass();
                     $("#classCluster").addClass("cajacluster balance");
                     $("#icon").html(`<img src="img/balance.svg" height="130"></img>`);
@@ -544,7 +559,7 @@ class BasicCharacterControllerInput {
                 }
 
                 if ((position.x >= salud.xn && position.x <= salud.xm) && (position.z >= salud.zn && position.z <= salud.zm)) {
-
+                    $("#nameGral").hide();
                     $('#agenda').show();
                     $("#classCluster").removeClass();
                     $("#classCluster2").removeClass();
@@ -566,6 +581,7 @@ class BasicCharacterControllerInput {
                 }
                 if ((position.x >= valores.xn && position.x <= valores.xm) && (position.z >= valores.zn && position.z <= valores.zm)) {
                     $('#agenda').show();
+                    $("#nameGral").hide();
                     $("#classCluster").removeClass();
                     $("#classCluster2").removeClass();
                     $("#classCluster").addClass("cajacluster cultura");
@@ -587,6 +603,7 @@ class BasicCharacterControllerInput {
                 }
                 if ((position.x >= finanzas.xn && position.x <= finanzas.xm) && (position.z >= finanzas.zn && position.z <= finanzas.zm)) {
                     $('#agenda').show();
+                    $("#nameGral").hide();
                     $("#classCluster").removeClass();
                     $("#classCluster2").removeClass();
                     $("#classCluster").addClass("cajacluster finanzas");
@@ -608,6 +625,7 @@ class BasicCharacterControllerInput {
                 }
                 if ((position.x >= desarrollo.xn && position.x <= desarrollo.xm) && (position.z >= desarrollo.zn && position.z <= desarrollo.zm)) {
                     $('#agenda').show();
+                    $("#nameGral").hide();
                     $("#classCluster").removeClass();
                     $("#classCluster2").removeClass();
                     $("#classCluster").addClass("cajacluster desarrollo");
@@ -1316,6 +1334,17 @@ export class CharacterControllerDemo {
             this._target.castShadows = true;
             this._scene.add(this._target);
         });
+        loader.load('HSBC Entorno_10_CAPAS_BOTONES ROJOS.fbx', (fbx) => {
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
         loader.load('HSBC Entorno_10_CAPAS_RAMPA.fbx', (fbx) => {
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
@@ -1514,7 +1543,7 @@ export function isTouchscreenDevice() {
 window.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         if (_APP == null && sessionStorage.getItem('gender')) {
-
+            $("#namePeople").html(sessionStorage.getItem('name'))
             Ammo().then(start);
         }
 
