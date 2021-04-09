@@ -85,7 +85,7 @@ function cerrarAgenda() {
 
     $("canvas").show();
 }
-var hitSound;
+var hitSound, danceSound;
 
 function login() {
     let email = $('#emailLogin').val();
@@ -115,6 +115,11 @@ function login() {
             hitSound.volume = 0.5;
             hitSound.currentTime = 0;
             hitSound.play();
+            danceSound = new Audio('./assets/music.mp3');
+            danceSound.loop = true;
+            danceSound.volume = 0.5;
+            danceSound.currentTime = 0;
+            console.log('danceSound :>> ', danceSound);
         } else {
             alertify.error(data.message);
 
