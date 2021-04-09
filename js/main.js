@@ -24,7 +24,7 @@ setTimeout(() => {
 
 setTimeout(() => {
     $("#over").html('<img src="models/Instrucciones-Jugabilidad-FINAL-1.png" width="50%"></img>')
-}, 35000);
+}, 1000);
 setInterval(() => {
 
     let display = $("#agenda").css("display");
