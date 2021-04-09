@@ -22,7 +22,9 @@ setTimeout(() => {
 
 }, 1000);
 
-
+setTimeout(() => {
+    $("#over").html('<img src="models/Instrucciones-Jugabilidad-FINAL-1.png" width="50%"></img>')
+}, 35000);
 setInterval(() => {
 
     let display = $("#agenda").css("display");
@@ -149,7 +151,7 @@ class BasicCharacterController {
         const loader = new FBXLoader();
 
         loader.setPath('./models/');
-        loader.load('HSBC Entorno_10_CAPAS_BOTONES Bailar.fbx', (fbx) => {
+        loader.load('HSBC Entorno_10_CAPAS_BOTONES ENTER.fbx', (fbx) => {
             fbx.position.y = 3;
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
@@ -160,108 +162,8 @@ class BasicCharacterController {
             this._targetT1.receiveShadow = false;
             this._targetT1.castShadows = true;
             this._params.scene.add(this._targetT1);
-            this._mixerT1 = new THREE.AnimationMixer(this._targetT1);
-            const action = this._mixerT1.clipAction(this._targetT1.animations[0]);
-            action.play();
-        });
-        loader.load('HSBC Entorno_10_CAPAS_BOTONES Enter Balance.fbx', (fbx) => {
-            fbx.position.y = 3;
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._targetT2 = fbx;
-            this._targetT2.name = 't2';
-            this._targetT2.receiveShadow = false;
-            this._targetT2.castShadows = true;
-            this._params.scene.add(this._targetT2);
-            this._mixerT2 = new THREE.AnimationMixer(this._targetT2);
-            const action = this._mixerT2.clipAction(this._targetT2.animations[0]);
-            action.play();
-        });
-        loader.load('HSBC Entorno_10_CAPAS_BOTONES Enter Cultura.fbx', (fbx) => {
-            fbx.position.y = 3;
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._targetT3 = fbx;
-            this._targetT3.name = 't3';
-            this._targetT3.receiveShadow = false;
-            this._targetT3.castShadows = true;
-            this._params.scene.add(this._targetT3);
-            this._mixerT3 = new THREE.AnimationMixer(this._targetT3);
-            const action = this._mixerT3.clipAction(this._targetT3.animations[0]);
-            action.play();
         });
 
-
-        loader.load('HSBC Entorno_10_CAPAS_BOTONES Enter Desarrollo.fbx', (fbx) => {
-            fbx.position.y = 3;
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._targetT4 = fbx;
-            this._targetT4.name = 't4';
-            this._targetT4.receiveShadow = false;
-            this._targetT4.castShadows = true;
-            this._params.scene.add(this._targetT4);
-            this._mixerT4 = new THREE.AnimationMixer(this._targetT4);
-            const action = this._mixerT4.clipAction(this._targetT4.animations[0]);
-            action.play();
-        });
-
-
-        loader.load('HSBC Entorno_10_CAPAS_BOTONES Enter Salida.fbx', (fbx) => {
-            fbx.position.y = 3;
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._targetT5 = fbx;
-            this._targetT5.name = 't5';
-            this._targetT5.receiveShadow = false;
-            this._targetT5.castShadows = true;
-            this._params.scene.add(this._targetT5);
-            this._mixerT5 = new THREE.AnimationMixer(this._targetT5);
-            const action = this._mixerT5.clipAction(this._targetT5.animations[0]);
-            action.play();
-        });
-
-
-
-        loader.load('HSBC Entorno_10_CAPAS_BOTONES Enter Salud.fbx', (fbx) => {
-            fbx.position.y = 3;
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._targetT6 = fbx;
-            this._targetT6.name = 't6';
-            this._targetT6.receiveShadow = false;
-            this._targetT6.castShadows = true;
-            this._params.scene.add(this._targetT6);
-            this._mixerT6 = new THREE.AnimationMixer(this._targetT6);
-            const action = this._mixerT6.clipAction(this._targetT6.animations[0]);
-            action.play();
-        });
-
-        loader.load('HSBC Entorno_10_CAPAS_BOTONES Finanzas 2.fbx', (fbx) => {
-            fbx.position.y = 3;
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
-            });
-            this._targetT7 = fbx;
-            this._targetT7.name = 't7';
-            this._targetT7.receiveShadow = false;
-            this._targetT7.castShadows = true;
-            this._params.scene.add(this._targetT7);
-            this._mixerT7 = new THREE.AnimationMixer(this._targetT7);
-            const action = this._mixerT7.clipAction(this._targetT7.animations[0]);
-            action.play();
-        });
 
         loader.setPath('./models/leon/LEONCIO TEX/');
         loader.load('HSBC_Leon_Cheering_1.fbx', (fbx) => {
@@ -514,27 +416,7 @@ class BasicCharacterController {
         if (this._mixer) {
             this._mixer.update(timeInSeconds);
         }
-        if (this._mixerT1) {
-            this._mixerT1.update(timeInSeconds);
-        }
-        if (this._mixerT2) {
-            this._mixerT2.update(timeInSeconds);
-        }
-        if (this._mixerT3) {
-            this._mixerT3.update(timeInSeconds);
-        }
-        if (this._mixerT4) {
-            this._mixerT4.update(timeInSeconds);
-        }
-        if (this._mixerT5) {
-            this._mixerT5.update(timeInSeconds);
-        }
-        if (this._mixerT6) {
-            this._mixerT6.update(timeInSeconds);
-        }
-        if (this._mixerT7) {
-            this._mixerT7.update(timeInSeconds);
-        }
+
         if (this._mixerLeon) {
             this._mixerLeon.update(timeInSeconds);
         }
