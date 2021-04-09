@@ -305,8 +305,8 @@ class BasicCharacterController {
         });
 
         loader.load('HSBC_Leon_Hip Hop Dancing_1 (1).fbx', (fbx) => {
-            fbx.position.x = 400;
-            fbx.position.z = 35;
+            fbx.position.x = 460;
+            fbx.position.z = 37;
             fbx.position.y = 0.5;
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
