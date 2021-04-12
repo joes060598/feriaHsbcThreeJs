@@ -188,7 +188,7 @@ function enviarPregunta(type, caja) {
 
     }
 
-    $.ajax({
+    /*$.ajax({
         url: url + "questions/create",
         type: 'post',
         data: {
@@ -208,7 +208,7 @@ function enviarPregunta(type, caja) {
             alertify.error(err.message);
 
         }
-    });
+    });*/
 
 }
 
