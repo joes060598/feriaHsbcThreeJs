@@ -1609,7 +1609,7 @@ export class CharacterControllerDemo {
         let pos = { x: -200, y: 0, z: 140 };
         let radius = 2;
         let quat = { x: 0, y: 0, z: 0, w: 1 };
-        let mass = 3;
+        let mass = 1;
         let manager = new THREE.LoadingManager();
         var marble_loader = new THREE.TextureLoader(manager);
         /*var marbleTexture = marble_loader.load("./resources/earth.jpg");
@@ -1686,7 +1686,7 @@ export class CharacterControllerDemo {
         let pos = { x: -190, y: 0, z: -130 };
         let radius = 4;
         let quat = { x: 0, y: 0, z: 0, w: 1 };
-        let mass = 5;
+        let mass = 1;
         let manager = new THREE.LoadingManager();
         var marble_loader = new THREE.TextureLoader(manager);
         var marbleTexture = marble_loader.load("./resources/earth.jpg");
@@ -2249,7 +2249,7 @@ export class CharacterControllerDemo {
 
         let radius = 5;
         let quat = { x: 0, y: 0, z: 0, w: 1 };
-        let mass = 10;
+        let mass = 2;
 
         //import beach ball texture
         var texture_loader = new THREE.TextureLoader(this.manager);
