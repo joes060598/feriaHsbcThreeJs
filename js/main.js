@@ -7,6 +7,7 @@ import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
 import { Octree } from '../tools/jsm/math/Octree.js';
 import { Capsule } from '../tools/jsm/math/Capsule.js';
+import { XHRLoader } from '../build/three.module.js';
 
 
 
@@ -98,9 +99,12 @@ class BasicCharacterController {
         const loader = new FBXLoader();
         loader.setPath(`./models/${genderPath}/`);
         loader.load('idle.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
             fbx.position.x = 1740;
-            fbx.position.z = 35;
-            fbx.position.y = 0.5;
+
+            //fbx.position.x = 23;
+            fbx.position.z = 0;
+            fbx.position.y = 0;
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -133,6 +137,57 @@ class BasicCharacterController {
             loader.load('run.fbx', (a) => { _OnLoad('run', a); });
             loader.load('jump.fbx', (a) => { _OnLoad('jump', a); });
 
+
+            /**
+             * objeto rigfifo
+             */
+
+
+
+            let mass = 20;
+            let transform = new Ammo.btTransform();
+            const STATE = { DISABLE_DEACTIVATION: 4 };
+            let box_width = 3;
+            let box_height = 3;
+            let box_depth = 3;
+            transform.setIdentity();
+            transform.setOrigin(new Ammo.btVector3(fbx.position.x, fbx.position.y, fbx.position.z));
+            transform.setRotation(
+                new Ammo.btQuaternion(this._target.quaternion.x, this._target.quaternion.y, this._target.quaternion.z, this._target.quaternion.w)
+            );
+            let motionState = new Ammo.btDefaultMotionState(transform);
+
+            let colShape = new Ammo.btBoxShape(new Ammo.btVector3(box_width / 2, box_height / 2, box_depth / 2));
+            //colShape.setMargin(0.05);
+            console.log('colShape :>> ', colShape);
+            let localInertia = new Ammo.btVector3(0, 0, 0);
+            colShape.calculateLocalInertia(mass, localInertia);
+
+            let rbInfo = new Ammo.btRigidBodyConstructionInfo(
+                mass,
+                motionState,
+                colShape,
+                localInertia
+            );
+            let body = new Ammo.btRigidBody(rbInfo);
+            //body.setFriction(4);
+            body.setRollingFriction(4);
+
+            //set ball friction
+
+            //once state is set to disable, dynamic interaction no longer calculated
+            body.setActivationState(STATE.DISABLE_DEACTIVATION);
+
+            this._params.physicsWorld.addRigidBody(
+                body //collisionGroupRedBall, collisionGroupGreenBall | collisionGroupPlane
+            );
+            console.log('bodyPersoanje :>> ', body);
+            //this._target.userData.physicsBody = body;
+            //ballObject.userData.physicsBody = body;
+            //this._params.rigidBodies.push(this._target);
+            // this._params.rigidBodies.push(ballObject);
+
+
         })
     }
     get Position() {
@@ -146,7 +201,357 @@ class BasicCharacterController {
         return this._target.quaternion;
     }
 
+    Update(timeInSeconds) {
+        let scalingFactor = 20;
+        // let resultantImpulse;
+        if (!this._stateMachine._currentState) {
+            return;
+        }
 
+        this._stateMachine.Update(timeInSeconds, this._input);
+        const velocity = this._velocity;
+        const frameDecceleration = new THREE.Vector3(
+            velocity.x * this._decceleration.x,
+            velocity.y * this._decceleration.y,
+            velocity.z * this._decceleration.z
+        );
+        frameDecceleration.multiplyScalar(timeInSeconds);
+        frameDecceleration.z = Math.sign(frameDecceleration.z) * Math.min(
+            Math.abs(frameDecceleration.z), Math.abs(velocity.z));
+        velocity.add(frameDecceleration);
+        const controlObject = this._target;
+        const _Q = new THREE.Quaternion();
+        const _A = new THREE.Vector3();
+        const _R = controlObject.quaternion.clone();
+        const acc = this._acceleration.clone();
+        //acc=acceleration
+
+        if (this._input._keys.shift) {
+            acc.multiplyScalar(3.0);
+        }
+        if (this._stateMachine._currentState.Name == 'dance') {
+            acc.multiplyScalar(0.0);
+        }
+        if (this._stateMachine._currentState.Name == 'jump' && this._input._keys.shift) {
+            acc.multiplyScalar(1.0);
+        }
+        if (this._stateMachine._currentState.Name == 'jump' && (this._input._keys.backward || this._input._keys.forward)) {
+            acc.multiplyScalar(2.5);
+        }
+        if (this._input._keys.forward && this._stateMachine._currentState.Name != 'dance') {
+            velocity.z += acc.z * timeInSeconds + 3;
+
+            //velocity.z -= acc.z * timeInSeconds + 3;
+
+            // this._target.userData.physicsBody.applyCentralImpulse(new THREE.Vector3(0, 1000000, 0));
+        }
+        if (this._input._keys.backward && this._stateMachine._currentState.Name != 'dance') {
+            /* let vel = new Ammo.btVector3(1, 0, 0);
+             console.log('vel :>> ', vel);
+             vel.op_mul(10);
+             console.log('velafeter :>> ', vel);
+             this._target.userData.physicsBody.setLinearVelocity(vel);*/
+            velocity.z -= acc.z * timeInSeconds + 3;
+        }
+        /*if (this._input._keys.space) {
+            velocity.z += acc.z * timeInSeconds + 10;
+        }*/
+        if (this._input._keys.left) {
+            _A.set(0, 1, 0);
+            _Q.setFromAxisAngle(_A, 4.0 * Math.PI * timeInSeconds * this._acceleration.y);
+            _R.multiply(_Q);
+        }
+        if (this._input._keys.right) {
+            _A.set(0, 1, 0);
+            _Q.setFromAxisAngle(_A, 4.0 * -Math.PI * timeInSeconds * this._acceleration.y);
+            _R.multiply(_Q);
+        }
+        controlObject.quaternion.copy(_R);
+        const oldPosition = new THREE.Vector3();
+        oldPosition.copy(controlObject.position);
+        const forward = new THREE.Vector3(0, 0, 1);
+        forward.applyQuaternion(controlObject.quaternion);
+        forward.normalize();
+        const sideways = new THREE.Vector3(1, 0, 0);
+        sideways.applyQuaternion(controlObject.quaternion);
+        sideways.normalize();
+        sideways.multiplyScalar(velocity.x * timeInSeconds);
+        forward.multiplyScalar(velocity.z * timeInSeconds);
+        let colision = this.collisions();
+        if (!colision.val) {
+            controlObject.position.add(forward);
+            controlObject.position.add(sideways);
+            if (this._stateMachine._currentState.Name != 'jump') {
+                controlObject.position.y = 0;
+            }
+        } else {
+            if (colision.rampa) {
+                controlObject.position.add(forward);
+                controlObject.position.add(sideways);
+                controlObject.position.y = colision.y;
+            } else {
+                controlObject.position.x = colision.x;
+                controlObject.position.z = colision.z;
+            }
+
+            //controlObject.position.x=this.oldPosition.x;
+            //controlObject.position = this.oldPosition;
+        }
+
+        this._position.copy(controlObject.position);
+
+
+
+
+        if (this._mixer) {
+            this._mixer.update(timeInSeconds);
+        }
+
+        if (this._mixerLeon) {
+            this._mixerLeon.update(timeInSeconds);
+        }
+        if (this._mixerLeon1) {
+            this._mixerLeon1.update(timeInSeconds);
+        }
+        if (this._mixerLeon2) {
+            this._mixerLeon2.update(timeInSeconds);
+        }
+        if (this._mixerLeon3) {
+            this._mixerLeon3.update(timeInSeconds);
+        }
+        if (this._mixerLeon4) {
+            this._mixerLeon4.update(timeInSeconds);
+        }
+        if (this._mixerLeon5) {
+            this._mixerLeon5.update(timeInSeconds);
+        }
+
+        if (this._mixerLeon6) {
+            this._mixerLeon6.update(timeInSeconds);
+        }
+        if (this._mixerLeon7) {
+            this._mixerLeon7.update(timeInSeconds);
+        }
+        if (this._mixerh) {
+            this._mixerh.update(timeInSeconds);
+        }
+        if (this._mixerh1) {
+            this._mixerh1.update(timeInSeconds);
+        }
+        if (this._mixerh2) {
+            this._mixerh2.update(timeInSeconds);
+        }
+        if (this._mixerh3) {
+            this._mixerh3.update(timeInSeconds);
+        }
+
+    }
+
+    /**
+     * 
+     * @returns retrna true si existe una collision
+     */
+    collisions() {
+        let position = this._target.position;
+        const response = {
+            val: false,
+            x: 0,
+            y: 0,
+            z: 0,
+            rampa: false
+        }
+        let paredRoja = {
+                xn: 860,
+                xm: 893,
+                zn: -21,
+                zm: 94
+            }
+            //Collision con pared Roja
+
+        if ((position.x >= paredRoja.xn && position.x <= paredRoja.xm) && (position.z >= paredRoja.zn && position.z <= paredRoja.zm)) {
+            this.oldPosition = position;
+            response.val = true;
+            response.y = 0;
+            let mitad = (paredRoja.xm - paredRoja.xn) / 2;
+            if (position.x < paredRoja.xn + mitad) {
+
+                response.x = position.x - 1;
+                response.z = position.z;
+                return response;
+
+            }
+            if (position.x > paredRoja.xm - mitad) {
+                response.x = position.x + 1;
+                response.z = position.z;
+                return response;
+            }
+            return response;
+
+
+        }
+
+
+        //WellBeing
+        let wellBeing = {
+            xn: 680,
+            xm: 695,
+            zn: -48,
+            zm: 85
+        }
+        if ((position.x >= wellBeing.xn && position.x <= wellBeing.xm) && (position.z >= wellBeing.zn && position.z <= wellBeing.zm)) {
+            this.oldPosition = position;
+            response.val = true;
+            response.y = 0;
+            let mitad = (wellBeing.xm - wellBeing.xn) / 2;
+            if (position.x < wellBeing.xn + mitad) {
+
+                response.x = position.x - 1;
+                response.z = position.z;
+                return response;
+
+            }
+            if (position.x > wellBeing.xm - mitad) {
+                response.x = position.x + 1;
+                response.z = position.z;
+                return response;
+            }
+            return response;
+
+
+        }
+
+        //Tarima1Subir
+        let tarima1Rampa = {
+            xn: -42,
+            xm: -17,
+            zn: -7,
+            zm: 18
+        }
+        if ((position.x >= tarima1Rampa.xn && position.x <= tarima1Rampa.xm) && (position.z >= tarima1Rampa.zn && position.z < tarima1Rampa.zm)) {
+            response.val = true;
+            response.x = position.x;
+            response.z = position.z;
+            response.rampa = true;
+            response.y = this.calculateY(position.z, tarima1Rampa);
+            return response;
+        }
+
+        //Tarima1Atras
+        let rampa1Atras = {
+            xn: -42,
+            xm: -17,
+            zn: 18.1,
+            zm: 22
+        }
+        if ((position.x >= rampa1Atras.xn && position.x <= rampa1Atras.xm) && (position.z >= rampa1Atras.zn && position.z < rampa1Atras.zm) && (position.y == 0)) {
+            response.val = true;
+            response.y = 0;
+            response.x = position.x;
+            if (position.x > rampa1Atras.zn && position.x < rampa1Atras.zm - 1) {
+                response.z = position.z + 2;
+            } else {
+                response.z = position.z + 1;
+            }
+
+            return response;
+        }
+
+
+        /**
+         * ObstaculoRampa
+         */
+        let obRampa = {
+            xn: -43,
+            xm: -18,
+            zn: 27,
+            zm: 35
+        }
+
+        if ((position.x >= obRampa.xn && position.x <= obRampa.xm) && (position.z >= obRampa.zn && position.z <= obRampa.zm) && (position.y == 0)) {
+            this.oldPosition = position;
+            response.val = true;
+            response.y = 0;
+            console.log('positionmm :>> ', position.z);
+            let mitad = (obRampa.zm - obRampa.zn) / 2; //4
+            if (position.z < obRampa.zn + mitad) { //31
+                console.log('resta :>> ');
+                response.x = position.x;
+                response.z = position.z - 1;
+                return response;
+            }
+            if (position.z > obRampa.zm - mitad) {
+                response.x = position.x;
+                response.z = position.z + 1;
+                console.log('suma :>> ');
+                return response;
+            }
+            return response;
+
+
+        }
+
+        //Tarima2Subir
+        let tarima2Rampa = {
+            xn: -42,
+            xm: -17,
+            zn: 57,
+            zm: 78
+        }
+        if ((position.x >= tarima2Rampa.xn && position.x <= tarima2Rampa.xm) && (position.z >= tarima2Rampa.zn && position.z < tarima2Rampa.zm)) {
+            response.val = true;
+            response.x = position.x;
+            response.z = position.z;
+            response.rampa = true;
+            response.y = 10 //this.calculateY(position.z, tarima2Rampa);
+            return response;
+        }
+        //Tarima2Atras
+        let rampa2Atras = {
+            xn: -42,
+            xm: -17,
+            zn: 45,
+            zm: 55
+        }
+        if ((position.x >= rampa2Atras.xn && position.x <= rampa2Atras.xm) && (position.z >= rampa2Atras.zn && position.z < rampa2Atras.zm) && (position.y == 0)) {
+            response.val = true;
+            response.y = 0;
+            response.x = position.x;
+            if (position.x > rampa2Atras.zn && position.x < rampa2Atras.zm - 1) {
+                response.z = position.z - 2;
+            } else {
+                response.z = position.z - 1;
+            }
+
+            return response;
+        }
+
+
+        //IGLUS
+
+        let igluBp1 = {
+                xn: 401,
+                xm: 465,
+                zn: 394,
+                zm: 420
+            }
+            //Collision con pared Roja
+
+        if ((position.x >= igluBp1.xn && position.x <= igluBp1.xm) && (position.z >= igluBp1.zn && position.z <= igluBp1.zm)) {
+            response.val = true;
+            response.y = 0;
+            response.x = position.x - 2;
+            response.z = position.z + 2;
+            return response;
+
+        }
+        return response
+    }
+
+
+    calculateY(z, tarima) {
+        let y = ((z * 0.396) + 2.872)
+        return 10;
+    }
     _LoadModelsLeon() {
         const loader = new FBXLoader();
 
@@ -344,106 +749,94 @@ class BasicCharacterController {
             action.play();
         });
 
+        loader.setPath('./models/grises/');
+        /*loader.load('HSBC_Chicas Grises_iDLE Quieto.fbx', (fbx) => {
+
+            fbx.scale.setScalar(0.1);
+            fbx.position.x = -38.23;
+            fbx.position.y = 1;
+            fbx.position.z = 521;
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._targeth = fbx;
+            this._targeth.name = 'gris2';
+            this._targeth.receiveShadow = false;
+            this._targeth.castShadows = true;
+            this._params.scene.add(this._targeth);
+            this._mixerh = new THREE.AnimationMixer(this._targeth);
+            const action = this._mixerh.clipAction(this._targeth.animations[0]);
+            action.play();
+        });*/
+
+
+
+        loader.load('HSBC_Hombres Grises_Sentado idle.fbx', (fbx) => {
+
+            fbx.scale.setScalar(0.1);
+
+            fbx.position.x = 498.995;
+            fbx.position.y = 1;
+            fbx.position.z = -441.66;
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._targeth1 = fbx;
+            this._targeth1.name = 'gris3';
+            this._targeth1.receiveShadow = false;
+            this._targeth1.castShadows = true;
+            this._params.scene.add(this._targeth1);
+            this._mixerh1 = new THREE.AnimationMixer(this._targeth1);
+            const action = this._mixerh1.clipAction(this._targeth1.animations[0]);
+            action.play();
+        });
+
+        loader.load('HSBC_Hombres Grises_Hablando 1.fbx', (fbx) => {
+
+            fbx.scale.setScalar(0.1);
+
+            fbx.position.x = 470;
+            fbx.position.y = 0.5;
+            fbx.position.z = 523.5;
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._targeth2 = fbx;
+            this._targeth2.name = 'gris3';
+            this._targeth2.receiveShadow = false;
+            this._targeth2.castShadows = true;
+            this._params.scene.add(this._targeth2);
+            this._mixerh2 = new THREE.AnimationMixer(this._targeth2);
+            const action = this._mixerh2.clipAction(this._targeth2.animations[0]);
+            action.play();
+        });
+
+
+        loader.load('HSBC_Chicas Grises_iDLE Quieto.fbx', (fbx) => {
+
+            fbx.scale.setScalar(0.1);
+
+            fbx.position.x = -423.66;
+            fbx.position.y = 0.5;
+            fbx.position.z = 7.5;
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._targeth3 = fbx;
+            this._targeth3.name = 'gris3';
+            this._targeth3.receiveShadow = false;
+            this._targeth3.castShadows = true;
+            this._params.scene.add(this._targeth3);
+            this._mixerh3 = new THREE.AnimationMixer(this._targeth3);
+            const action = this._mixerh3.clipAction(this._targeth3.animations[0]);
+            action.play();
+        });
+
 
     }
 
 
-    Update(timeInSeconds) {
-        if (!this._stateMachine._currentState) {
-            return;
-        }
-        this._stateMachine.Update(timeInSeconds, this._input);
-        const velocity = this._velocity;
-        const frameDecceleration = new THREE.Vector3(
-            velocity.x * this._decceleration.x,
-            velocity.y * this._decceleration.y,
-            velocity.z * this._decceleration.z
-        );
-        frameDecceleration.multiplyScalar(timeInSeconds);
-        frameDecceleration.z = Math.sign(frameDecceleration.z) * Math.min(
-            Math.abs(frameDecceleration.z), Math.abs(velocity.z));
-        velocity.add(frameDecceleration);
-        const controlObject = this._target;
-        const _Q = new THREE.Quaternion();
-        const _A = new THREE.Vector3();
-        const _R = controlObject.quaternion.clone();
-        const acc = this._acceleration.clone();
-        if (this._input._keys.shift) {
-            acc.multiplyScalar(3.0);
-        }
-        if (this._stateMachine._currentState.Name == 'dance') {
-            acc.multiplyScalar(0.0);
-        }
-        if (this._stateMachine._currentState.Name == 'jump' && this._input._keys.shift) {
-            acc.multiplyScalar(1.0);
-        }
-        if (this._stateMachine._currentState.Name == 'jump' && (this._input._keys.backward || this._input._keys.forward)) {
-            acc.multiplyScalar(2.5);
-        }
-        if (this._input._keys.forward && this._stateMachine._currentState.Name != 'dance') {
-            velocity.z += acc.z * timeInSeconds + 3;
-        }
-        if (this._input._keys.backward && this._stateMachine._currentState.Name != 'dance') {
-            velocity.z -= acc.z * timeInSeconds + 3;
-        }
-        /*if (this._input._keys.space) {
-            velocity.z += acc.z * timeInSeconds + 10;
-        }*/
-        if (this._input._keys.left) {
-            _A.set(0, 1, 0);
-            _Q.setFromAxisAngle(_A, 4.0 * Math.PI * timeInSeconds * this._acceleration.y);
-            _R.multiply(_Q);
-        }
-        if (this._input._keys.right) {
-            _A.set(0, 1, 0);
-            _Q.setFromAxisAngle(_A, 4.0 * -Math.PI * timeInSeconds * this._acceleration.y);
-            _R.multiply(_Q);
-        }
-        controlObject.quaternion.copy(_R);
-        const oldPosition = new THREE.Vector3();
-        oldPosition.copy(controlObject.position);
-        const forward = new THREE.Vector3(0, 0, 1);
-        forward.applyQuaternion(controlObject.quaternion);
-        forward.normalize();
-        const sideways = new THREE.Vector3(1, 0, 0);
-        sideways.applyQuaternion(controlObject.quaternion);
-        sideways.normalize();
-        sideways.multiplyScalar(velocity.x * timeInSeconds);
-        forward.multiplyScalar(velocity.z * timeInSeconds);
-        controlObject.position.add(forward);
-        controlObject.position.add(sideways);
-        this._position.copy(controlObject.position);
-        if (this._mixer) {
-            this._mixer.update(timeInSeconds);
-        }
 
-        if (this._mixerLeon) {
-            this._mixerLeon.update(timeInSeconds);
-        }
-        if (this._mixerLeon1) {
-            this._mixerLeon1.update(timeInSeconds);
-        }
-        if (this._mixerLeon2) {
-            this._mixerLeon2.update(timeInSeconds);
-        }
-        if (this._mixerLeon3) {
-            this._mixerLeon3.update(timeInSeconds);
-        }
-        if (this._mixerLeon4) {
-            this._mixerLeon4.update(timeInSeconds);
-        }
-        if (this._mixerLeon5) {
-            this._mixerLeon5.update(timeInSeconds);
-        }
-
-        if (this._mixerLeon6) {
-            this._mixerLeon6.update(timeInSeconds);
-        }
-        if (this._mixerLeon7) {
-            this._mixerLeon7.update(timeInSeconds);
-        }
-
-    }
 };
 class BasicCharacterControllerInput {
     constructor(params) {
@@ -465,36 +858,58 @@ class BasicCharacterControllerInput {
         document.addEventListener('keyup', (e) => { this._onKeyUp(e), false });
     }
     _onKeyDown(event) {
+
         switch (event.keyCode) {
             //case 87: //W: FORWARD
             case 38: //up arrow
+                if (!botones) {
+                    return;
+                }
                 this._keys.forward = true;
                 break;
                 //case 65: //A: LEFT
             case 37: //left arrow
+                if (!botones) {
+                    return;
+                }
                 this._keys.left = true;
                 break;
 
                 //case 83: //S: BACK
             case 40: //down arrow
+                if (!botones) {
+                    return;
+                }
                 this._keys.backward = true;
                 break;
                 //case 68: //D: RIGHT
             case 39: //right arrow
+                if (!botones) {
+                    return;
+                }
                 this._keys.right = true;
                 break;
             case 32: //space
+                if (!botones) {
+                    return;
+                }
                 this._keys.space = true;
                 break;
+
             case 66: //b
+                if (!botones) {
+                    return;
+                }
                 this._keys.b = true;
-
-
                 break;
             case 16: //shift
+                if (!botones) {
+                    return;
+                }
                 this._keys.shift = true;
                 break;
             case 13: //enter
+
                 this._keys.enter = true;
 
                 let balance = {
@@ -530,10 +945,79 @@ class BasicCharacterControllerInput {
                     zn: 454.5
 
                 }
+                let juegoLadrillosJson = {
+                    xm: -174,
+                    xn: -209,
+                    zm: 111,
+                    zn: 82
+                }
+                let juegoFutJson = {
+                    xm: -188,
+                    xn: -216,
+                    zm: -70.6,
+                    zn: -94
+                }
 
                 let character = this._params.scene.children.find((a) => { return a.name == 'personaje' });
                 let position = character.position;
+                if ((position.x >= juegoFutJson.xn && position.x <= juegoFutJson.xm) && (position.z >= juegoFutJson.zn && position.z <= juegoFutJson.zm)) {
+                    if (!juegoFut) {
+                        juegoFut = true;
+                        botones = false;
+                        camara.third = false;
+                        console.log('this._params.camera :>> ', this._params.camera);
+                        this._params.camera.position.y = 50;
+                        this._params.camera.position.x = -150;
+                        this._params.camera.position.z = -50;
+                        this._params.camera.rotation._x = -2.973;
+                        this._params.camera.rotation._y = 1.1893;
+                        this._params.camera.rotation._z = 2.985;
+                        this._params.camera.quaternion._w = 0.3162136738971042
+                        this._params.camera.quaternion._x = -0.016136448217947852
+                        this._params.camera.quaternion._y = 0.355889745548271
+                        this._params.camera.quaternion._z = 0.026754464784025
+                            //aspect1.3668188
+                            //fov60
+                            //focus 10
+                            //far 2600
+                    } else {
+                        juegoFut = false;
+                        botones = true;
+                        camara.third = true;
 
+                    }
+
+                    console.log('this._params :>> ', this._params);
+                }
+                if ((position.x >= juegoLadrillosJson.xn && position.x <= juegoLadrillosJson.xm) && (position.z >= juegoLadrillosJson.zn && position.z <= juegoLadrillosJson.zm)) {
+                    if (!juegoLadrillos) {
+                        juegoLadrillos = true;
+                        botones = false;
+                        camara.third = false;
+                        console.log('this._params.camera :>> ', this._params.camera);
+                        this._params.camera.position.y = 50;
+                        this._params.camera.position.x = -100;
+                        this._params.camera.position.z = 150;
+                        this._params.camera.rotation._x = -2.973;
+                        this._params.camera.rotation._y = 1.1893;
+                        this._params.camera.rotation._z = 2.985;
+                        this._params.camera.quaternion._w = 0.5162136738971042
+                        this._params.camera.quaternion._x = -0.016136448217947852
+                        this._params.camera.quaternion._y = 0.855889745548271
+                        this._params.camera.quaternion._z = 0.026754464784025
+                            //aspect1.3668188
+                            //fov60
+                            //focus 10
+                            //far 2600
+                    } else {
+                        juegoLadrillos = false;
+                        botones = true;
+                        camara.third = true;
+
+                    }
+
+                    console.log('this._params :>> ', this._params);
+                }
                 if ((position.x >= balance.xn && position.x <= balance.xm) && (position.z >= balance.zn && position.z <= balance.zm)) {
                     $('#agenda').show();
                     $("#nameGral").hide();
@@ -649,34 +1133,62 @@ class BasicCharacterControllerInput {
     }
 
     _onKeyUp(event) {
+        if (!botones) {
+            return;
+        }
         switch (event.keyCode) {
             //case 87: //W: FORWARD
             case 38: //up arrow
+                if (!botones) {
+                    return;
+                }
                 this._keys.forward = false;
                 break;
                 //case 65: //A: LEFT
             case 37: //left arrow
+                if (!botones) {
+                    return;
+                }
                 this._keys.left = false;
                 break;
 
                 //case 83: //S: BACK
             case 40: //down arrow
+                if (!botones) {
+                    return;
+                }
                 this._keys.backward = false;
                 break;
                 //case 68: //D: RIGHT
             case 39: //right arrow
+                if (!botones) {
+                    return;
+                }
                 this._keys.right = false;
                 break;
             case 32: //space
+                if (!botones) {
+                    return;
+                }
                 this._keys.space = false;
                 break;
             case 16: //shift
+                if (!botones) {
+                    return;
+                }
                 this._keys.shift = false;
                 break;
+
             case 13: //shift
+                if (!botones) {
+                    return;
+                }
                 this._keys.enter = false;
                 break;
             case 66: //b
+                if (!botones) {
+                    return;
+                }
                 this._keys.b = false;
                 break;
         }
@@ -825,6 +1337,8 @@ class JumpState extends State {
 
         const curAction = this._parent._proxy._animations['jump'].action;
         const mixer = curAction.getMixer();
+        let pos = this._parent._camera.scene.children.find((a) => { return a.name == 'personaje' });
+        console.log('posichionsJmp :>> ', pos.position);
         mixer.addEventListener('finished', this._FinishedCallback);
         if (prevState) {
             const prevAction = this._parent._proxy._animations[prevState.Name].action;
@@ -1018,7 +1532,8 @@ class WalkState extends State {
     }
     Enter(prevState) {
         const curAction = this._parent._proxy._animations['walk'].action;
-
+        let pos = this._parent._camera.scene.children.find((a) => { return a.name == 'personaje' });
+        console.log('pox :>> ', pos.position.x, 'poy :>> ', pos.position.y, 'poz :>> ', pos.position.z);
         if (prevState) {
             const prevAction = this._parent._proxy._animations[prevState.Name].action;
             curAction.time = 0.0;
@@ -1053,13 +1568,26 @@ class WalkState extends State {
         this._parent.SetState('pose');
     }
 }
+export let moveDirection = { left: 0, right: 0, forward: 0, back: 0, enter: 0 };
+export let moveDirectionFut = { left: 0, right: 0, forward: 0, back: 0, enter: 0 };
 
+let ballObject = null;
+let ballObjectFut = null;
+let juegoLadrillos = false;
+let juegoFut = false;
+let botones = true;
+let camara = {
+    third: true,
+    ladrillos: false,
+    fut: false
+}
 export class CharacterControllerDemo {
     constructor(gender) {
         this.gender = gender;
         this.rigidBodies = [];
-        this.tmpTrans = new Ammo.btTransform();
 
+        this.tmpTrans = new Ammo.btTransform();
+        this.manager = new THREE.LoadingManager();
         this.setupPhysicsWorld();
         this._Initialize();
 
@@ -1074,6 +1602,362 @@ export class CharacterControllerDemo {
 
         this.physicsWorld = new Ammo.btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
         this.physicsWorld.setGravity(new Ammo.btVector3(0, -10, 0));
+    }
+    createBall() {
+
+
+        let pos = { x: -200, y: 0, z: 140 };
+        let radius = 2;
+        let quat = { x: 0, y: 0, z: 0, w: 1 };
+        let mass = 3;
+        let manager = new THREE.LoadingManager();
+        var marble_loader = new THREE.TextureLoader(manager);
+        /*var marbleTexture = marble_loader.load("./resources/earth.jpg");
+        marbleTexture.wrapS = marbleTexture.wrapT = THREE.RepeatWrapping;
+        marbleTexture.repeat.set(1, 1);
+        marbleTexture.anisotropy = 1;
+        marbleTexture.encoding = THREE.sRGBEncoding;*/
+
+        //threeJS Section
+        let ball = (ballObject = new THREE.Mesh(
+            new THREE.SphereGeometry(radius, 32, 32),
+            //new THREE.MeshLambertMaterial({ map: marbleTexture })
+            new THREE.MeshLambertMaterial()
+        ));
+
+
+
+        ball.geometry.computeBoundingSphere();
+        ball.geometry.computeBoundingBox();
+
+        ball.position.set(pos.x, pos.y, pos.z);
+        ball.castShadow = true;
+        ball.receiveShadow = true;
+
+        this._scene.add(ball);
+
+        //Ammojs Section
+        let transform = new Ammo.btTransform();
+        transform.setIdentity();
+        transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
+        transform.setRotation(
+            new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w)
+        );
+        let motionState = new Ammo.btDefaultMotionState(transform);
+
+        let colShape = new Ammo.btSphereShape(radius);
+        colShape.setMargin(0.05);
+
+        let localInertia = new Ammo.btVector3(0, 0, 0);
+        colShape.calculateLocalInertia(mass, localInertia);
+
+        let rbInfo = new Ammo.btRigidBodyConstructionInfo(
+            mass,
+            motionState,
+            colShape,
+            localInertia
+        );
+        let body = new Ammo.btRigidBody(rbInfo);
+        //body.setFriction(4);
+        body.setRollingFriction(10);
+
+        //set ball friction
+
+        //once state is set to disable, dynamic interaction no longer calculated
+        body.setActivationState(4);
+
+        this.physicsWorld.addRigidBody(
+            body //collisionGroupRedBall, collisionGroupGreenBall | collisionGroupPlane
+        );
+
+        ball.userData.physicsBody = body;
+        ballObject.userData.physicsBody = body;
+
+
+        this.rigidBodies.push(ballObject);
+        this.rigidBodies.push(ball);
+
+    }
+
+
+    createBallFut() {
+
+
+        let pos = { x: -190, y: 0, z: -130 };
+        let radius = 4;
+        let quat = { x: 0, y: 0, z: 0, w: 1 };
+        let mass = 5;
+        let manager = new THREE.LoadingManager();
+        var marble_loader = new THREE.TextureLoader(manager);
+        var marbleTexture = marble_loader.load("./resources/earth.jpg");
+        marbleTexture.wrapS = marbleTexture.wrapT = THREE.RepeatWrapping;
+        marbleTexture.repeat.set(1, 1);
+        marbleTexture.anisotropy = 1;
+        marbleTexture.encoding = THREE.sRGBEncoding;
+
+        //threeJS Section
+        let ball = (ballObjectFut = new THREE.Mesh(
+            new THREE.SphereGeometry(radius, 32, 32),
+            //new THREE.MeshLambertMaterial({ map: marbleTexture })
+            new THREE.MeshLambertMaterial()
+        ));
+
+
+
+        ball.geometry.computeBoundingSphere();
+        ball.geometry.computeBoundingBox();
+
+        ball.position.set(pos.x, pos.y, pos.z);
+        ball.castShadow = true;
+        ball.receiveShadow = true;
+
+        this._scene.add(ball);
+
+        //Ammojs Section
+        let transform = new Ammo.btTransform();
+        transform.setIdentity();
+        transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
+        transform.setRotation(
+            new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w)
+        );
+        let motionState = new Ammo.btDefaultMotionState(transform);
+
+        let colShape = new Ammo.btSphereShape(radius);
+        colShape.setMargin(0.05);
+
+        let localInertia = new Ammo.btVector3(0, 0, 0);
+        colShape.calculateLocalInertia(mass, localInertia);
+
+        let rbInfo = new Ammo.btRigidBodyConstructionInfo(
+            mass,
+            motionState,
+            colShape,
+            localInertia
+        );
+        let body = new Ammo.btRigidBody(rbInfo);
+        //body.setFriction(4);
+        body.setRollingFriction(10);
+
+        //set ball friction
+
+        //once state is set to disable, dynamic interaction no longer calculated
+        body.setActivationState(4);
+
+        this.physicsWorld.addRigidBody(
+            body //collisionGroupRedBall, collisionGroupGreenBall | collisionGroupPlane
+        );
+
+        ball.userData.physicsBody = body;
+        ballObjectFut.userData.physicsBody = body;
+
+
+        this.rigidBodies.push(ballObjectFut);
+        this.rigidBodies.push(ball);
+
+    }
+    createGridPlane() {
+        // block properties
+        let pos = { x: -194, y: -0.25, z: 263 };
+        let scale = { x: 28, y: 0.5, z: 280 };
+        let quat = { x: 0, y: 0, z: 0, w: 1 };
+        let mass = 0; //mass of zero = infinite mass
+
+        //create grid overlay on plane
+        var grid = new THREE.GridHelper(175, 20, 0xffffff, 0xffffff);
+        grid.material.opacity = 0.15;
+        grid.material.transparent = true;
+        grid.position.y = 0.005;
+        //this._scene.add(grid);
+
+        //Create Threejs Plane
+        let blockPlane = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(),
+            new THREE.MeshPhongMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0.1,
+            })
+        );
+        blockPlane.position.set(pos.x, pos.y, pos.z);
+        blockPlane.scale.set(scale.x, scale.y, scale.z);
+        blockPlane.receiveShadow = true;
+        this._scene.add(blockPlane);
+
+
+
+        //Ammo.js Physics
+        let transform = new Ammo.btTransform();
+        transform.setIdentity(); // sets safe default values
+        transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
+        transform.setRotation(
+            new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w)
+        );
+        let motionState = new Ammo.btDefaultMotionState(transform);
+
+        //setup collision box
+        let colShape = new Ammo.btBoxShape(
+            new Ammo.btVector3(scale.x * 0.5, scale.y * 0.5, scale.z * 0.5)
+        );
+        colShape.setMargin(0.05);
+
+        let localInertia = new Ammo.btVector3(0, 0, 0);
+        colShape.calculateLocalInertia(mass, localInertia);
+
+        //  provides information to create a rigid body
+        let rigidBodyStruct = new Ammo.btRigidBodyConstructionInfo(
+            mass,
+            motionState,
+            colShape,
+            localInertia
+        );
+        let body = new Ammo.btRigidBody(rigidBodyStruct);
+        body.setFriction(10);
+        body.setRollingFriction(10);
+
+        // add to world
+        this.physicsWorld.addRigidBody(body);
+    }
+
+    createGridPlaneFut() {
+            // block properties
+            let pos = { x: -194, y: -0.25, z: -240 };
+            let scale = { x: 63, y: 0.5, z: 270 };
+            let quat = { x: 0, y: 0, z: 0, w: 1 };
+            let mass = 0; //mass of zero = infinite mass
+
+            //create grid overlay on plane
+            var grid = new THREE.GridHelper(175, 20, 0xffffff, 0xffffff);
+            grid.material.opacity = 0.15;
+            grid.material.transparent = true;
+            grid.position.y = 0.005;
+            //this._scene.add(grid);
+
+            //Create Threejs Plane
+            let blockPlane = new THREE.Mesh(
+                new THREE.BoxBufferGeometry(),
+                new THREE.MeshPhongMaterial({
+                    color: 0xffffff,
+                    transparent: true,
+                    opacity: 0.1,
+                })
+            );
+            blockPlane.position.set(pos.x, pos.y, pos.z);
+            blockPlane.scale.set(scale.x, scale.y, scale.z);
+            blockPlane.receiveShadow = true;
+            this._scene.add(blockPlane);
+
+
+
+            //Ammo.js Physics
+            let transform = new Ammo.btTransform();
+            transform.setIdentity(); // sets safe default values
+            transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
+            transform.setRotation(
+                new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w)
+            );
+            let motionState = new Ammo.btDefaultMotionState(transform);
+
+            //setup collision box
+            let colShape = new Ammo.btBoxShape(
+                new Ammo.btVector3(scale.x * 0.5, scale.y * 0.5, scale.z * 0.5)
+            );
+            colShape.setMargin(0.05);
+
+            let localInertia = new Ammo.btVector3(0, 0, 0);
+            colShape.calculateLocalInertia(mass, localInertia);
+
+            //  provides information to create a rigid body
+            let rigidBodyStruct = new Ammo.btRigidBodyConstructionInfo(
+                mass,
+                motionState,
+                colShape,
+                localInertia
+            );
+            let body = new Ammo.btRigidBody(rigidBodyStruct);
+            body.setFriction(10);
+            body.setRollingFriction(10);
+
+            // add to world
+            this.physicsWorld.addRigidBody(body);
+        }
+        //create X axis wall around entire plane
+    createWallX(x, y, z, size) {
+
+        const wallScale = { x: 0.125, y: 9, z: size };
+
+        const wall = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(wallScale.x, wallScale.y, wallScale.z),
+            new THREE.MeshStandardMaterial({
+                color: 0xffffff,
+                opacity: 0.1,
+                transparent: true,
+            })
+        );
+
+        wall.position.x = x;
+        wall.position.y = y;
+        wall.position.z = z;
+
+        wall.receiveShadow = true;
+
+        this._scene.add(wall);
+
+        this.addRigidPhysics(wall, wallScale);
+    }
+
+    //create Z axis wall around entire plane
+    createWallZ(x, y, z, size) {
+        const wallScale = { x: size, y: 9, z: 0.125 };
+
+        const wall = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(wallScale.x, wallScale.y, wallScale.z),
+            new THREE.MeshStandardMaterial({
+                color: 0xffffff,
+                opacity: 0.1,
+                transparent: true,
+            })
+        );
+
+        wall.position.x = x;
+        wall.position.y = y;
+        wall.position.z = z;
+
+        wall.receiveShadow = true;
+
+        this._scene.add(wall);
+
+        this.addRigidPhysics(wall, wallScale);
+    }
+
+    addRigidPhysics(item, itemScale) {
+        let pos = { x: item.position.x, y: item.position.y, z: item.position.z };
+        let scale = { x: itemScale.x, y: itemScale.y, z: itemScale.z };
+        let quat = { x: 0, y: 0, z: 0, w: 1 };
+        let mass = 0;
+        var transform = new Ammo.btTransform();
+        transform.setIdentity();
+        transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
+        transform.setRotation(
+            new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w)
+        );
+
+        var localInertia = new Ammo.btVector3(0, 0, 0);
+        var motionState = new Ammo.btDefaultMotionState(transform);
+        let colShape = new Ammo.btBoxShape(
+            new Ammo.btVector3(scale.x * 0.5, scale.y * 0.5, scale.z * 0.5)
+        );
+        colShape.setMargin(0.05);
+        colShape.calculateLocalInertia(mass, localInertia);
+        let rbInfo = new Ammo.btRigidBodyConstructionInfo(
+            mass,
+            motionState,
+            colShape,
+            localInertia
+        );
+        let body = new Ammo.btRigidBody(rbInfo);
+        body.setActivationState(4);
+        body.setCollisionFlags(2);
+        this.physicsWorld.addRigidBody(body);
     }
     _Initialize() {
 
@@ -1102,7 +1986,7 @@ export class CharacterControllerDemo {
             $("canvas").show();
             $("#over").show();
 
-        }, 20000);
+        }, 10000);
         window.addEventListener('resize', () => {
             this._OnWindowResize();
         }, false);
@@ -1158,10 +2042,75 @@ export class CharacterControllerDemo {
             //
         });
 
+
+
+        /**planoFisico
+         * 
+         * 
+         */
+        //Ammo.js Physics
+
+        let scale = { x: 5000, y: 0.5, z: 5000 };
+        let quat = { x: 0, y: 0, z: 0, w: 1 };
+        let transform = new Ammo.btTransform();
+        let pos = { x: 0, y: -0.25, z: 0 };
+        let mass = 0; //mass of zero = infinite mass
+
+        transform.setIdentity(); // sets safe default values
+        transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
+        transform.setRotation(
+            new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w)
+        );
+        let motionState = new Ammo.btDefaultMotionState(transform);
+
+        //setup collision box
+        let colShape = new Ammo.btBoxShape(
+            new Ammo.btVector3(scale.x * 0.5, scale.y * 0.5, scale.z * 0.5)
+        );
+        colShape.setMargin(0.05);
+
+        let localInertia = new Ammo.btVector3(0, 0, 0);
+        colShape.calculateLocalInertia(mass, localInertia);
+
+        //  provides information to create a rigid body
+        let rigidBodyStruct = new Ammo.btRigidBodyConstructionInfo(
+            mass,
+            motionState,
+            colShape,
+            localInertia
+        );
+        let body = new Ammo.btRigidBody(rigidBodyStruct);
+        body.setFriction(10);
+        body.setRollingFriction(10);
+
+        // add to world
+        this.physicsWorld.addRigidBody(body);
+
+        this.createGridPlane();
         this._LoadAnimatedModel();
+        this.createBall();
+        this.createWallX(-179, 1.75, 263, 280);
+        this.createWallX(-207, 1.75, 263, 280);
+        this.createWallZ(-193, 1.75, 123, 28);
+        this.createWallZ(-193, 1.75, 402, 28);
+        this.wallOfBricks(200);
+        this.wallOfBricks(250);
+
+        this.wallOfBricks(300);
+
+
+
+        this.createGridPlaneFut();
+        this.createWallX(-162, 1.75, -240, 270);
+        this.createWallX(-225, 1.75, -240, 270);
+        this.createWallZ(-194, 1.75, -105, 64);
+        this.createWallZ(-194, 1.75, -375, 64);
+        this.createBallFut();
+
+
         this._LoadModel();
-
-
+        this.createBeachBall();
+        this.setupEventHandlers();
         const controls = new OrbitControls(
             this._camera, this._threejs.domElement);
         this._camera.position.set(1770, 18, 40);
@@ -1176,12 +2125,295 @@ export class CharacterControllerDemo {
         controls.update();
         this._RAF();
     }
+    setupEventHandlers() {
+        window.addEventListener("keydown", this.handleKeyDown, false);
+        window.addEventListener("keyup", this.handleKeyUp, false);
+    }
 
+    handleKeyDown(event) {
+        let keyCode = event.keyCode;
+        switch (keyCode) {
+            case 87: //W: FORWARD
+            case 38: //up arrow
+                moveDirection.forward = 1;
+                moveDirectionFut.forward = 1;
+                break;
+
+            case 83: //S: BACK
+            case 40: //down arrow
+                moveDirection.back = 1;
+                moveDirectionFut.back = 1;
+                break;
+
+            case 65: //A: LEFT
+            case 37: //left arrow
+                moveDirection.left = 1;
+                moveDirectionFut.left = 1;
+
+                break;
+
+            case 68: //D: RIGHT
+            case 39: //right arrow
+                moveDirection.right = 1;
+                moveDirectionFut.right = 1;
+
+                break;
+        }
+    }
+
+    handleKeyUp(event) {
+        let keyCode = event.keyCode;
+
+        switch (keyCode) {
+
+
+            case 13: //shift
+                moveDirection.enter = 0;
+                break;
+            case 87: //FORWARD
+            case 38:
+                moveDirectionFut.forward = 0;
+                moveDirection.forward = 0;
+                break;
+
+            case 83: //BACK
+            case 40:
+                moveDirection.back = 0;
+                moveDirectionFut.back = 0;
+                break;
+
+            case 65: //LEFT
+            case 37:
+                moveDirection.left = 0;
+                moveDirectionFut.left = 0;
+                break;
+
+            case 68: //RIGHT
+            case 39:
+                moveDirectionFut.right = 0;
+                moveDirection.right = 0;
+                break;
+        }
+    }
+
+    moveBall() {
+        let scalingFactor = 20;
+        let moveX = moveDirection.left - moveDirection.right; //1
+        let moveZ = moveDirection.forward - moveDirection.back;
+        let moveY = 0;
+
+        if (ballObject.position.y < 2.01) {
+            moveX = moveDirection.left - moveDirection.right;
+            moveZ = moveDirection.forward - moveDirection.back;
+            moveY = 0;
+        } else {
+            moveX = moveDirection.left - moveDirection.right;
+            moveZ = moveDirection.forward - moveDirection.back;
+            moveY = -0.25;
+        }
+
+        // no movement
+        if (moveX == 0 && moveY == 0 && moveZ == 0) return;
+        let resultantImpulse = new Ammo.btVector3(moveX, moveY, moveZ);
+        resultantImpulse.op_mul(scalingFactor);
+        let physicsBody = ballObject.userData.physicsBody;
+        physicsBody.setLinearVelocity(resultantImpulse);
+    }
+
+
+    moveBallFut() {
+        let scalingFactor = 20;
+        let moveX = moveDirection.right - moveDirection.left; //1
+        let moveZ = moveDirection.back - moveDirection.forward;
+        let moveY = 0;
+
+        if (ballObjectFut.position.y < 2.01) {
+            moveX = moveDirection.right - moveDirection.left;
+            moveZ = moveDirection.back - moveDirection.forward;
+            moveY = 0;
+        } else {
+            moveX = moveDirection.right - moveDirection.left;
+            moveZ = moveDirection.back - moveDirection.forward;
+            moveY = -0.25;
+        }
+
+        // no movement
+        if (moveX == 0 && moveY == 0 && moveZ == 0) return;
+        let resultantImpulse = new Ammo.btVector3(moveX, moveY, moveZ);
+        resultantImpulse.op_mul(scalingFactor);
+        let physicsBody = ballObjectFut.userData.physicsBody;
+        physicsBody.setLinearVelocity(resultantImpulse);
+    }
+    createBeachBall() {
+        let pos = { x: -190, y: 0, z: -200 };
+
+        let radius = 5;
+        let quat = { x: 0, y: 0, z: 0, w: 1 };
+        let mass = 10;
+
+        //import beach ball texture
+        var texture_loader = new THREE.TextureLoader(this.manager);
+        var beachTexture = texture_loader.load("./assets/img/BeachBallColor.jpg");
+        beachTexture.wrapS = beachTexture.wrapT = THREE.RepeatWrapping;
+        beachTexture.repeat.set(1, 1);
+        beachTexture.anisotropy = 1;
+        beachTexture.encoding = THREE.sRGBEncoding;
+
+        //threeJS Section
+        let ball = new THREE.Mesh(
+            new THREE.SphereGeometry(radius, 32, 32),
+            new THREE.MeshLambertMaterial({ map: beachTexture })
+        );
+
+        ball.position.set(pos.x, pos.y, pos.z);
+        ball.castShadow = true;
+        ball.receiveShadow = true;
+        this._scene.add(ball);
+
+        //Ammojs Section
+        let transform = new Ammo.btTransform();
+        transform.setIdentity();
+        transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
+        transform.setRotation(
+            new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w)
+        );
+        let motionState = new Ammo.btDefaultMotionState(transform);
+
+        let colShape = new Ammo.btSphereShape(radius);
+        colShape.setMargin(0.05);
+
+        let localInertia = new Ammo.btVector3(0, 0, 0);
+        colShape.calculateLocalInertia(mass, localInertia);
+
+        let rbInfo = new Ammo.btRigidBodyConstructionInfo(
+            mass,
+            motionState,
+            colShape,
+            localInertia
+        );
+        let body = new Ammo.btRigidBody(rbInfo);
+
+        body.setRollingFriction(1);
+        this.physicsWorld.addRigidBody(body);
+
+        ball.userData.physicsBody = body;
+        this.rigidBodies.push(ball);
+    }
+
+
+    wallOfBricks(distance) {
+        var pos = new THREE.Vector3();
+        var quat = new THREE.Quaternion();
+        var brickMass = 0.1;
+        var brickLength = 3;
+        var brickDepth = 3;
+        var brickHeight = 1.5;
+        var numberOfBricksAcross = 6;
+        var numberOfRowsHigh = 6;
+
+        pos.set(-70, brickHeight * 0.5, distance);
+        quat.set(0, 0, 0, 1);
+
+        for (var j = 0; j < numberOfRowsHigh; j++) {
+            var oddRow = j % 2 == 1;
+
+            pos.x = -200;
+
+            if (oddRow) {
+                pos.x += 0.25 * brickLength;
+            }
+
+            var currentRow = oddRow ? numberOfBricksAcross + 1 : numberOfBricksAcross;
+            for (let i = 0; i < currentRow; i++) {
+                var brickLengthCurrent = brickLength;
+                var brickMassCurrent = brickMass;
+                if (oddRow && (i == 0 || i == currentRow - 1)) {
+                    //first or last brick
+                    brickLengthCurrent *= 0.5;
+                    brickMassCurrent *= 0.5;
+                }
+                var brick = this.createBrick(
+                    brickLengthCurrent,
+                    brickHeight,
+                    brickDepth,
+                    brickMassCurrent,
+                    pos,
+                    quat,
+                    new THREE.MeshLambertMaterial({
+                        color: 0xffffff,
+                    })
+                );
+                brick.castShadow = true;
+                brick.receiveShadow = true;
+
+                if (oddRow && (i == 0 || i == currentRow - 2)) {
+                    //first or last brick
+                    pos.x += brickLength * 0.25;
+                } else {
+                    pos.x += brickLength;
+                }
+                pos.z += 0.0001;
+            }
+            pos.y += brickHeight;
+        }
+    }
+    createBrick(sx, sy, sz, mass, pos, quat, material) {
+        var threeObject = new THREE.Mesh(
+            new THREE.BoxBufferGeometry(sx, sy, sz, 1, 1, 1),
+            material
+        );
+        var shape = new Ammo.btBoxShape(
+            new Ammo.btVector3(sx * 0.5, sy * 0.5, sz * 0.5)
+        );
+        shape.setMargin(0.05);
+
+        this.createBrickBody(threeObject, shape, mass, pos, quat);
+
+        return threeObject;
+    }
+    createBrickBody(threeObject, physicsShape, mass, pos, quat) {
+        threeObject.position.copy(pos);
+        threeObject.quaternion.copy(quat);
+
+        var transform = new Ammo.btTransform();
+        transform.setIdentity();
+        transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
+        transform.setRotation(
+            new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w)
+        );
+        var motionState = new Ammo.btDefaultMotionState(transform);
+
+        var localInertia = new Ammo.btVector3(0, 0, 0);
+        physicsShape.calculateLocalInertia(mass, localInertia);
+
+        var rbInfo = new Ammo.btRigidBodyConstructionInfo(
+            mass,
+            motionState,
+            physicsShape,
+            localInertia
+        );
+        var body = new Ammo.btRigidBody(rbInfo);
+
+        threeObject.userData.physicsBody = body;
+
+        this._scene.add(threeObject);
+
+        if (mass > 0) {
+            this.rigidBodies.push(threeObject);
+
+            // Disable deactivation
+            body.setActivationState(4);
+        }
+
+        this.physicsWorld.addRigidBody(body);
+    }
     _LoadAnimatedModel() {
         const params = {
             camera: this._camera,
             scene: this._scene,
-            gender: this.gender
+            gender: this.gender,
+            rigidBodies: this.rigidBodies,
+            physicsWorld: this.physicsWorld
         }
         this.sound.play();
         this._controls = new BasicCharacterController(params);
@@ -1203,8 +2435,6 @@ export class CharacterControllerDemo {
 
         const loader = new FBXLoader();
         loader.setPath('./models/');
-
-
         /*loader.load('HSBC Entorno_MASTER 9 (ConP).fbx', (fbx) => {
             console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
@@ -1217,6 +2447,7 @@ export class CharacterControllerDemo {
             this._target.castShadows = true;
             this._scene.add(this._target);
         })*/
+
         loader.load('HSBC Entorno_10_CAPAS_EXTRAS.fbx', (fbx) => {
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
@@ -1335,6 +2566,7 @@ export class CharacterControllerDemo {
             this._target.castShadows = true;
             this._scene.add(this._target);
         });
+
         loader.load('HSBC Entorno_10_CAPAS_porteRIA fUTBOL.fbx', (fbx) => {
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
@@ -1346,7 +2578,20 @@ export class CharacterControllerDemo {
             this._target.castShadows = true;
             this._scene.add(this._target);
         });
+
         loader.load('HSBC Entorno_10_CAPAS_BOTONES ROJOS.fbx', (fbx) => {
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'entorno';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+        });
+
+        loader.load('HSBC Entorno_10_CAPAS_BOTONES Nuevos.fbx', (fbx) => {
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;
@@ -1442,16 +2687,26 @@ export class CharacterControllerDemo {
             this._scene.add(this._target);
 
         });
+        loader.setPath('./models/grises/');
+
+        loader.load('HSBC_Chicas Grises_Sentada Idle.fbx', (fbx) => {
+
+            fbx.scale.setScalar(0.1);
+            fbx.position.x = -38.23;
+            fbx.position.y = 1;
+            fbx.position.z = 521;
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._target = fbx;
+            this._target.name = 'gris1';
+            this._target.receiveShadow = false;
+            this._target.castShadows = true;
+            this._scene.add(this._target);
+
+        });
 
 
-
-
-
-
-
-        /**space
-         * 
-         */
 
 
     }
@@ -1462,7 +2717,28 @@ export class CharacterControllerDemo {
         this._threejs.setSize(window.innerWidth, window.innerHeight);
     }
 
+    updatePhysics(deltaTime) {
+        // Step world
+        this.physicsWorld.stepSimulation(deltaTime, 10);
 
+        // Update rigid bodies
+        for (let i = 0; i < this.rigidBodies.length; i++) {
+            let objThree = this.rigidBodies[i];
+            let objAmmo = objThree.userData.physicsBody;
+            let ms = objAmmo.getMotionState();
+            if (ms) {
+                ms.getWorldTransform(this.tmpTrans);
+                let p = this.tmpTrans.getOrigin();
+                let q = this.tmpTrans.getRotation();
+                objThree.position.set(p.x(), p.y(), p.z());
+                objThree.quaternion.set(q.x(), q.y(), q.z(), q.w());
+            }
+        }
+        if (ballObject.position.y < -50) {
+            this._scene.remove(ballObject);
+            this.createBall();
+        }
+    }
 
 
     _RAF() {
@@ -1474,9 +2750,15 @@ export class CharacterControllerDemo {
 
 
             this._RAF();
-            //let deltaTime = this.clock.getDelta();
+            let deltaTime = this.clock.getDelta();
+            if (juegoLadrillos) {
+                this.moveBall();
+            }
+            if (juegoFut) {
+                this.moveBallFut();
+            }
 
-            //this.updatePhysics(deltaTime);
+            this.updatePhysics(deltaTime);
             this._threejs.render(this._scene, this._camera);
             this._Step(t - this._previousRAF);
             this._previousRAF = t;
@@ -1492,7 +2774,10 @@ export class CharacterControllerDemo {
         if (this._controls) {
             this._controls.Update(timeElapsedS);
         }
-        this._thirdPersonCamera.Update(timeElapsedS);
+        if (camara.third) {
+            this._thirdPersonCamera.Update(timeElapsedS);
+        }
+
 
     }
 }
@@ -1564,7 +2849,6 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function start() {
-    console.log('hitSoundINMAIIIIN :>> ', hitSound);
     _APP = new CharacterControllerDemo(sessionStorage.getItem('gender'));
 
 }
