@@ -1,5 +1,5 @@
  //let url = 'http://173.231.203.133:4000/';
- let url = 'https://api.feriaswbhsbc.com';
+ let url = 'https://api.feriaswbhsbc.com/';
  let _APP = null;
 
  $(document).ready(function() {
