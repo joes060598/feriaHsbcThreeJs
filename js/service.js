@@ -1,5 +1,5 @@
 //let url = 'http://173.231.203.133:4000/';
-let url = 'https://ded5113.inmotionhosting.com:4000/';
+let url = 'https://feriaswbhsbc.com:4000/';
 let _APP = null;
 
 $(document).ready(function() {
