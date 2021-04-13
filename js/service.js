@@ -1,4 +1,5 @@
-let url = 'http://173.231.203.133:4000/';
+//let url = 'http://173.231.203.133:4000/';
+let url = 'http://ded5113.inmotionhosting.com:4000/';
 let _APP = null;
 
 $(document).ready(function() {
@@ -19,7 +20,6 @@ function registro() {
 function loginDiv() {
     $("#registro").hide();
     $("#login").fadeIn('slow');
-
 }
 
 function agenda(type) {
