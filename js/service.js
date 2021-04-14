@@ -1,5 +1,6 @@
  //let url = 'http://173.231.203.133:4000/';
- let url = 'https://api.feriaswbhsbc.com/';
+ //let url = 'https://api.feriaswbhsbc.com/';
+ let url = 'http://localhost:4000/';
  let _APP = null;
 
  $(document).ready(function() {
@@ -188,11 +189,12 @@
 
      }
 
-     /*$.ajax({
+     $.ajax({
          url: url + "questions/create",
          type: 'post',
          data: {
-             question: pregunta.val()
+             question: pregunta.val(),
+             cluster: 'default'
          },
          headers: {
              token: sessionStorage.getItem('token'), //If your header name has spaces or any other char not appropriate
@@ -200,15 +202,16 @@
          },
          dataType: 'json',
          success: function(data) {
-             alertify.success('Se ha enviado correctamente tu duda, espera a que el equipo de soporte te contacte.');
+             alertify.success('Sssss');
              pregunta.val('');
              cajaHide.hide();
          },
          error: function(err) {
+             console.log('err :>> ', err);
              alertify.error(err.message);
 
          }
-     });*/
+     });
 
  }
 
