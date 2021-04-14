@@ -132,9 +132,9 @@
     background-color: rgba(0, 0, 0, 0.25);
     border-radius: 100%;
     cursor: pointer;
-    height: 45%;
+    height: 70%;
     user-select: none;
-    width: 45%;
+    width: 70%;
     margin: 0 auto;
     visibility: hidden;
     opacity: 1;
