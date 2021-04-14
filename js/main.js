@@ -1966,7 +1966,7 @@ export class CharacterControllerDemo {
         this.clock = new THREE.Clock();
         this._threejs = new THREE.WebGLRenderer({
             antialias: true,
-            powerPreference: 'high-performance',
+            powerPreference: 'low-power',
             precision: 'highp',
             premultipliedAlpha: false,
             logarithmicDepthBuffer: true,
@@ -1986,7 +1986,7 @@ export class CharacterControllerDemo {
             $("canvas").show();
             $("#over").show();
 
-        }, 10000);
+        }, 20000);
         window.addEventListener('resize', () => {
             this._OnWindowResize();
         }, false);
