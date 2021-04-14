@@ -1947,7 +1947,7 @@ export class CharacterControllerDemo {
         this._threejs = new THREE.WebGLRenderer({
             antialias: true,
             powerPreference: 'low-power',
-            precision: 'mediump',
+            precision: 'highp',
             premultipliedAlpha: false,
             logarithmicDepthBuffer: true,
 

@@ -189,29 +189,28 @@
 
      }
 
-     $.ajax({
-         url: url + "questions/create",
-         type: 'post',
-         data: {
-             question: pregunta.val(),
-             cluster: 'default'
-         },
-         headers: {
-             token: sessionStorage.getItem('token'), //If your header name has spaces or any other char not appropriate
-             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-         },
-         dataType: 'json',
-         success: function(data) {
-             alertify.success('Sssss');
-             pregunta.val('');
-             cajaHide.hide();
-         },
-         error: function(err) {
-             console.log('err :>> ', err);
-             alertify.error(err.message);
+     /* $.ajax({
+          url: url + "questions/create",
+          type: 'post',
+          data: {
+              question: pregunta.val(),
+              cluster: 'default'
+          },
+          beforeSend: function(jqXHR, settings) {
+              jqXHR.setRequestHeader('token', String(sessionStorage.getItem('token')));
+          },
+          dataType: 'json',
+          success: function(data) {
+              alertify.success('Sssss');
+              pregunta.val('');
+              cajaHide.hide();
+          },
+          error: function(err) {
+              console.log('err :>> ', err);
+              alertify.error(err.message);
 
-         }
-     });
+          }
+      });*/
 
  }
 
