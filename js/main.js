@@ -2933,6 +2933,8 @@ export function createJoystick(parent) {
     let currentPos = { x: 0, y: 0 };
 
     function handleMouseDown(event) {
+        console.log('entrooooooooo :>> ', event);
+
         event.preventDefault();
         stick.style.transition = "0s";
 
