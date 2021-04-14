@@ -456,7 +456,7 @@ class BasicCharacterController {
             response.x = position.x;
             response.z = position.z;
             response.rampa = true;
-            response.y = this.calculateY2(position.z, tarima2Rampa);
+            response.y = 10 // this.calculateY2(position.z, tarima2Rampa);
             return response;
         }
         //Tarima2Atras
@@ -1944,14 +1944,17 @@ export class CharacterControllerDemo {
         //Physijs.scripts.worker = '../physijs_worker.js';
         //|Physijs.scripts.ammo = 'examples/js/ammo.js';
         this.clock = new THREE.Clock();
+
         this._threejs = new THREE.WebGLRenderer({
             antialias: true,
             powerPreference: 'low-power',
-            precision: 'highp',
+            precision: 'lowp',
             premultipliedAlpha: false,
             logarithmicDepthBuffer: true,
 
         });
+
+
         this._threejs.outputEncoding = THREE.sRGBEncoding;
         this._threejs.shadowMap.enabled = true;
         this._threejs.shadowMap.type = new THREE.SpotLight();
