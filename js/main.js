@@ -3,13 +3,17 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
 
 import { FBXLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/FBXLoader.js';
-import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
-import { Octree } from '../tools/jsm/math/Octree.js';
-import { Capsule } from '../tools/jsm/math/Capsule.js';
-import { XHRLoader } from '../build/three.module.js';
-
-
+let _keys = {
+    forward: false,
+    backward: false,
+    left: false,
+    right: false,
+    space: false,
+    shift: false,
+    enter: false,
+    b: false
+};
 
 setTimeout(() => {
 
@@ -226,26 +230,26 @@ class BasicCharacterController {
         const acc = this._acceleration.clone();
         //acc=acceleration
 
-        if (this._input._keys.shift) {
+        if (_keys.shift) {
             acc.multiplyScalar(3.0);
         }
         if (this._stateMachine._currentState.Name == 'dance') {
             acc.multiplyScalar(0.0);
         }
-        if (this._stateMachine._currentState.Name == 'jump' && this._input._keys.shift) {
+        if (this._stateMachine._currentState.Name == 'jump' && _keys.shift) {
             acc.multiplyScalar(1.0);
         }
-        if (this._stateMachine._currentState.Name == 'jump' && (this._input._keys.backward || this._input._keys.forward)) {
+        if (this._stateMachine._currentState.Name == 'jump' && (_keys.backward || _keys.forward)) {
             acc.multiplyScalar(2.5);
         }
-        if (this._input._keys.forward && this._stateMachine._currentState.Name != 'dance') {
+        if (_keys.forward && this._stateMachine._currentState.Name != 'dance') {
             velocity.z += acc.z * timeInSeconds + 3;
 
             //velocity.z -= acc.z * timeInSeconds + 3;
 
             // this._target.userData.physicsBody.applyCentralImpulse(new THREE.Vector3(0, 1000000, 0));
         }
-        if (this._input._keys.backward && this._stateMachine._currentState.Name != 'dance') {
+        if (_keys.backward && this._stateMachine._currentState.Name != 'dance') {
             /* let vel = new Ammo.btVector3(1, 0, 0);
              console.log('vel :>> ', vel);
              vel.op_mul(10);
@@ -253,17 +257,17 @@ class BasicCharacterController {
              this._target.userData.physicsBody.setLinearVelocity(vel);*/
             velocity.z -= acc.z * timeInSeconds + 3;
         }
-        /*if (this._input._keys.space) {
+        /*if (_keys.space) {
             velocity.z += acc.z * timeInSeconds + 10;
         }*/
-        if (this._input._keys.left) {
+        if (_keys.left) {
             _A.set(0, 1, 0);
-            _Q.setFromAxisAngle(_A, 4.0 * Math.PI * timeInSeconds * this._acceleration.y);
+            _Q.setFromAxisAngle(_A, 1.1 * Math.PI * timeInSeconds * this._acceleration.y);
             _R.multiply(_Q);
         }
-        if (this._input._keys.right) {
+        if (_keys.right) {
             _A.set(0, 1, 0);
-            _Q.setFromAxisAngle(_A, 4.0 * -Math.PI * timeInSeconds * this._acceleration.y);
+            _Q.setFromAxisAngle(_A, 1.1 * -Math.PI * timeInSeconds * this._acceleration.y);
             _R.multiply(_Q);
         }
         controlObject.quaternion.copy(_R);
@@ -502,7 +506,7 @@ class BasicCharacterController {
             response.x = position.x;
             response.z = position.z;
             response.rampa = true;
-            response.y = 10 //this.calculateY(position.z, tarima2Rampa);
+            response.y = this.calculateY2(position.z, tarima2Rampa);
             return response;
         }
         //Tarima2Atras
@@ -550,7 +554,11 @@ class BasicCharacterController {
 
     calculateY(z, tarima) {
         let y = ((z * 0.396) + 2.872)
-        return 10;
+        return y;
+    }
+    calculateY2(z, tarima) {
+        let y = (((10 / 21) * z) - (190 / 7))
+        return y;
     }
     _LoadModelsLeon() {
         const loader = new FBXLoader();
@@ -838,22 +846,14 @@ class BasicCharacterController {
 
 
 };
+
 class BasicCharacterControllerInput {
     constructor(params) {
         this._params = params;
         this._Init();
     }
     _Init() {
-        this._keys = {
-            forward: false,
-            backward: false,
-            left: false,
-            right: false,
-            space: false,
-            shift: false,
-            enter: false,
-            b: false
-        }
+
         document.addEventListener('keydown', (e) => { this._onKeyDown(e), false });
         document.addEventListener('keyup', (e) => { this._onKeyUp(e), false });
     }
@@ -865,14 +865,14 @@ class BasicCharacterControllerInput {
                 if (!botones) {
                     return;
                 }
-                this._keys.forward = true;
+                _keys.forward = true;
                 break;
                 //case 65: //A: LEFT
             case 37: //left arrow
                 if (!botones) {
                     return;
                 }
-                this._keys.left = true;
+                _keys.left = true;
                 break;
 
                 //case 83: //S: BACK
@@ -880,37 +880,37 @@ class BasicCharacterControllerInput {
                 if (!botones) {
                     return;
                 }
-                this._keys.backward = true;
+                _keys.backward = true;
                 break;
                 //case 68: //D: RIGHT
             case 39: //right arrow
                 if (!botones) {
                     return;
                 }
-                this._keys.right = true;
+                _keys.right = true;
                 break;
             case 32: //space
                 if (!botones) {
                     return;
                 }
-                this._keys.space = true;
+                _keys.space = true;
                 break;
 
             case 66: //b
                 if (!botones) {
                     return;
                 }
-                this._keys.b = true;
+                _keys.b = true;
                 break;
             case 16: //shift
                 if (!botones) {
                     return;
                 }
-                this._keys.shift = true;
+                _keys.shift = true;
                 break;
             case 13: //enter
 
-                this._keys.enter = true;
+                _keys.enter = true;
 
                 let balance = {
                     xn: 474,
@@ -1142,14 +1142,14 @@ class BasicCharacterControllerInput {
                 if (!botones) {
                     return;
                 }
-                this._keys.forward = false;
+                _keys.forward = false;
                 break;
                 //case 65: //A: LEFT
             case 37: //left arrow
                 if (!botones) {
                     return;
                 }
-                this._keys.left = false;
+                _keys.left = false;
                 break;
 
                 //case 83: //S: BACK
@@ -1157,39 +1157,39 @@ class BasicCharacterControllerInput {
                 if (!botones) {
                     return;
                 }
-                this._keys.backward = false;
+                _keys.backward = false;
                 break;
                 //case 68: //D: RIGHT
             case 39: //right arrow
                 if (!botones) {
                     return;
                 }
-                this._keys.right = false;
+                _keys.right = false;
                 break;
             case 32: //space
                 if (!botones) {
                     return;
                 }
-                this._keys.space = false;
+                _keys.space = false;
                 break;
             case 16: //shift
                 if (!botones) {
                     return;
                 }
-                this._keys.shift = false;
+                _keys.shift = false;
                 break;
 
             case 13: //shift
                 if (!botones) {
                     return;
                 }
-                this._keys.enter = false;
+                _keys.enter = false;
                 break;
             case 66: //b
                 if (!botones) {
                     return;
                 }
-                this._keys.b = false;
+                _keys.b = false;
                 break;
         }
     }
@@ -1304,11 +1304,11 @@ class RunState extends State {
     Exit() {}
 
     Update(timeElapsed, input) {
-        if (input._keys.forward || input._keys.backward) {
-            if (!input._keys.shift) {
+        if (_keys.forward || _keys.backward) {
+            if (!_keys.shift) {
                 this._parent.SetState('walk');
             }
-            if (input._keys.space) {
+            if (_keys.space) {
                 this._parent.SetState('jump');
             }
             return;
@@ -1511,11 +1511,11 @@ class PoseState extends State {
 
     }
     Update(_, input) {
-        if (input._keys.forward || input._keys.backward) {
+        if (_keys.forward || _keys.backward) {
             this._parent.SetState('walk');
-        } else if (input._keys.b) {
+        } else if (_keys.b) {
             this._parent.SetState('dance');
-        } else if (input._keys.space) {
+        } else if (_keys.space) {
             this._parent.SetState('jump');
         }
 
@@ -1556,11 +1556,11 @@ class WalkState extends State {
 
     }
     Update(_, input) {
-        if (input._keys.forward || input._keys.backward) {
-            if (input._keys.shift) {
+        if (_keys.forward || _keys.backward) {
+            if (_keys.shift) {
                 this._parent.SetState('run');
             }
-            if (input._keys.space) {
+            if (_keys.space) {
                 this._parent.SetState('jump');
             }
             return;
@@ -2010,7 +2010,7 @@ export class CharacterControllerDemo {
 
         //spotLight.receiveShadow = true;
         spotLight.shadow.bias = 1;
-        spotLight.position.set(2500, 5000, 800);
+        spotLight.position.set(2500, 5000, 400);
         this._scene.add(spotLight);
         const loader = new THREE.CubeTextureLoader();
         const texture = loader.load([
@@ -2108,8 +2108,9 @@ export class CharacterControllerDemo {
         this.createBallFut();
 
 
-        this._LoadModel();
+
         this.createBeachBall();
+        this._LoadModel();
         this.setupEventHandlers();
         const controls = new OrbitControls(
             this._camera, this._threejs.domElement);
@@ -2418,9 +2419,11 @@ export class CharacterControllerDemo {
         this.sound.play();
         this._controls = new BasicCharacterController(params);
         if (isTouchscreenDevice()) {
+            console.log('touch :>> ');
             createJoystick(document.getElementById("joystick-wrapper"));
             document.getElementById("joystick-wrapper").style.visibility = "visible";
             document.getElementById("joystick").style.visibility = "visible";
+            document.getElementById("joystick").style.position = "absolut";
         }
         this._thirdPersonCamera = new ThirdPersonCamera({
             camera: this._camera,
@@ -2751,6 +2754,33 @@ export class CharacterControllerDemo {
 
             this._RAF();
             let deltaTime = this.clock.getDelta();
+            if (!isTouchscreenDevice())
+                if (document.hasFocus()) {
+                    if (juegoLadrillos) {
+                        this.moveBall();
+                    }
+                    if (juegoFut) {
+                        this.moveBallFut();
+                    }
+
+                } else {
+                    moveDirection.forward = 0;
+                    moveDirection.back = 0;
+                    moveDirection.left = 0;
+                    moveDirection.right = 0;
+                    moveDirectionFut.forward = 0;
+                    moveDirectionFut.back = 0;
+                    moveDirectionFut.left = 0;
+                    moveDirectionFut.right = 0;
+                }
+            else {
+                if (juegoLadrillos) {
+                    this.moveBall();
+                }
+                if (juegoFut) {
+                    this.moveBallFut();
+                }
+            }
             if (juegoLadrillos) {
                 this.moveBall();
             }
@@ -2823,6 +2853,7 @@ class ThirdPersonCamera {
 }
 let _APP = null;
 export function isTouchscreenDevice() {
+    console.log('checkin :>> ');
     let supportsTouch = false;
     if ("ontouchstart" in window)
     // iOS & android
@@ -2848,12 +2879,43 @@ window.addEventListener('DOMContentLoaded', () => {
 
 });
 
-function start() {
-    _APP = new CharacterControllerDemo(sessionStorage.getItem('gender'));
 
+export function touchEvent(coordinates) {
+    if (coordinates.x > 30) {
+        _keys.left = false;
+        _keys.right = true;
+        moveDirection.right = 1;
+        moveDirection.left = 0;
+    } else if (coordinates.x < -30) {
+        moveDirection.left = 1;
+        moveDirection.right = 0;
+        _keys.left = true;
+        _keys.right = false;
+    } else {
+        _keys.left = false;
+        _keys.right = false;
+
+        moveDirection.right = 0;
+        moveDirection.left = 0;
+    }
+
+    if (coordinates.y > 30) {
+        _keys.forward = false;
+        _keys.backward = true;
+        moveDirection.back = 1;
+        moveDirection.forward = 0;
+    } else if (coordinates.y < -30) {
+        _keys.forward = true;
+        _keys.backward = false;
+        moveDirection.forward = 1;
+        moveDirection.back = 0;
+    } else {
+        _keys.forward = false;
+        _keys.backward = false;
+        moveDirection.forward = 0;
+        moveDirection.back = 0;
+    }
 }
-
-
 export function createJoystick(parent) {
     const maxDiff = 62; //how far drag can go
     const stick = document.createElement("div");
@@ -2919,6 +2981,10 @@ export function createJoystick(parent) {
         moveDirection.left = 0;
         moveDirection.right = 0;
         moveDirection.back = 0;
+        _keys.forward = false;
+        _keys.left = false;
+        _keys.right = false;
+        _keys.backward = false;
     }
 
     parent.appendChild(stick);
@@ -2927,26 +2993,7 @@ export function createJoystick(parent) {
     };
 }
 
-export function touchEvent(coordinates) {
-    if (coordinates.x > 30) {
-        moveDirection.right = 1;
-        moveDirection.left = 0;
-    } else if (coordinates.x < -30) {
-        moveDirection.left = 1;
-        moveDirection.right = 0;
-    } else {
-        moveDirection.right = 0;
-        moveDirection.left = 0;
-    }
+function start() {
+    _APP = new CharacterControllerDemo(sessionStorage.getItem('gender'));
 
-    if (coordinates.y > 30) {
-        moveDirection.back = 1;
-        moveDirection.forward = 0;
-    } else if (coordinates.y < -30) {
-        moveDirection.forward = 1;
-        moveDirection.back = 0;
-    } else {
-        moveDirection.forward = 0;
-        moveDirection.back = 0;
-    }
 }
