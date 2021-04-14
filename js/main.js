@@ -2366,18 +2366,33 @@ export class CharacterControllerDemo {
         const loader = new FBXLoader();
         loader.setPath('./models/');
 
-
-        loader.load('HSBC Entorno_MASTER 11.fbx', (fbx) => {
-            fbx.scale.setScalar(0.1);
-            fbx.traverse((c) => {
-                c.castShadow = true;
+        if (!isTouchscreenDevice) {
+            loader.load('HSBC Entorno_MASTER 11.fbx', (fbx) => {
+                fbx.scale.setScalar(0.1);
+                fbx.traverse((c) => {
+                    c.castShadow = true;
+                });
+                this._target = fbx;
+                this._target.name = 'entorno';
+                this._target.receiveShadow = false;
+                this._target.castShadows = true;
+                this._scene.add(this._target);
             });
-            this._target = fbx;
-            this._target.name = 'entorno';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
-        });
+        } else {
+            loader.load('HSBC Entorno_MASTER 11_movil.fbx', (fbx) => {
+                fbx.scale.setScalar(0.1);
+                fbx.traverse((c) => {
+                    c.castShadow = true;
+                });
+                this._target = fbx;
+                this._target.name = 'entorno';
+                this._target.receiveShadow = false;
+                this._target.castShadows = true;
+                this._scene.add(this._target);
+            });
+        }
+
+
         /*loader.load('HSBC Entorno_MASTER 9 (ConP).fbx', (fbx) => {
             console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
