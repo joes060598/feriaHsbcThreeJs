@@ -1,9 +1,9 @@
 'use strict';
 
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
+import * as THREE from '../build/threeBuild.js';
 
-import { FBXLoader } from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/FBXLoader.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
+import { FBXLoader } from '../build/fbxLoader.js';
+import { OrbitControls } from '../build/orbitControls.js';
 let _keys = {
     forward: false,
     backward: false,
@@ -2933,7 +2933,6 @@ export function createJoystick(parent) {
     let currentPos = { x: 0, y: 0 };
 
     function handleMouseDown(event) {
-        console.log('entrooooooooo :>> ', event);
 
         event.preventDefault();
         stick.style.transition = "0s";
