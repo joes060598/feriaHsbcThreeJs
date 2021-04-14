@@ -1966,8 +1966,8 @@ export class CharacterControllerDemo {
         this.clock = new THREE.Clock();
         this._threejs = new THREE.WebGLRenderer({
             antialias: true,
-            powerPreference: 'low-power',
-            precision: 'lowp',
+            powerPreference: 'high-performance',
+            precision: 'highp',
             premultipliedAlpha: false,
             logarithmicDepthBuffer: true,
 
