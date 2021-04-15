@@ -86,7 +86,7 @@
 
      $("canvas").show();
  }
- var hitSound, danceSound;
+
 
  function login() {
      let email = $('#emailLogin').val();
@@ -110,17 +110,7 @@
              sessionStorage.setItem('gender', data.data.gender);
 
              $('#pasoLogin').hide();
-             hitSound = new Audio('./assets/music2.mp3');
-             console.log('hitSound :>> ', hitSound);
-             hitSound.loop = true;
-             hitSound.volume = 0.5;
-             hitSound.currentTime = 0;
-             hitSound.play();
-             danceSound = new Audio('./assets/music.mp3');
-             danceSound.loop = true;
-             danceSound.volume = 0.5;
-             danceSound.currentTime = 0;
-             console.log('danceSound :>> ', danceSound);
+
          } else {
              alertify.error(data.message);
 

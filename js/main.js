@@ -4,7 +4,7 @@ import * as THREE from '../build/threeBuild.js';
 
 import { FBXLoader } from '../build/fbxLoader.js';
 import { OrbitControls } from '../build/orbitControls.js';
-let _keys = {
+var _keys = {
     forward: false,
     backward: false,
     left: false,
@@ -15,7 +15,19 @@ let _keys = {
     b: false,
     p: false
 };
-
+var playSound = false;
+var hitSound, danceSound;
+var pause_music = false;
+var mensaje = false;
+hitSound = new Audio('./assets/music2.mp3');
+console.log('hitSound :>> ', hitSound);
+hitSound.loop = true;
+hitSound.volume = 0.5;
+hitSound.currentTime = 0;
+danceSound = new Audio('./assets/music.mp3');
+danceSound.loop = true;
+danceSound.volume = 0.5;
+danceSound.currentTime = 0;
 setTimeout(() => {
 
     if (!sessionStorage.getItem('token')) {
@@ -32,12 +44,10 @@ setTimeout(() => {
     $("#over").html('<img src="models/Instrucciones-Jugabilidad-FINAL-1.png" width="50%"></img>')
 }, 1000);
 setInterval(() => {
-    let display = $("#agenda").css("display");
-    if (display == 'none') {
+    if (mensaje) {
         alertify.alert('Aviso', 'Te invitamos asistir a los clusters.', function() { alertify.success('Disfruta tu experiencía.'); });
     }
-
-}, 300000);
+}, 240000);
 
 
 
@@ -314,6 +324,26 @@ class BasicCharacterController {
             z: 0,
             rampa: false
         }
+
+        let juegoDisco = {
+            xn: 380,
+            xm: 471,
+            zn: -15,
+            zm: 79
+        }
+        let juegoRampa = {
+            xn: -110,
+            xm: 29,
+            zn: -92,
+            zm: 193
+        }
+        if (((position.x >= juegoDisco.xn && position.x <= juegoDisco.xm) && (position.z >= juegoDisco.zn && position.z <= juegoDisco.zm)) ||
+            ((position.x >= juegoRampa.xn && position.x <= juegoRampa.xm) && (position.z >= juegoRampa.zn && position.z <= juegoRampa.zm))) {
+            mensaje = true;
+        } else {
+            mensaje = false;
+        }
+
         let paredRoja = {
                 xn: 860,
                 xm: 893,
@@ -796,7 +826,7 @@ class BasicCharacterController {
 
 
 };
-var pause_music;
+
 class BasicCharacterControllerInput {
     constructor(params) {
         this._params = params;
@@ -815,7 +845,13 @@ class BasicCharacterControllerInput {
                 if (!botones) {
                     return;
                 }
+                console.log('playSound :>> ', playSound);
+                if (!playSound && pause_music == false) {
+                    playSound = true;
+                    hitSound.play();
+                }
                 _keys.forward = true;
+
                 break;
             case 65: //A: LEFT
             case 37: //left arrow
@@ -863,7 +899,6 @@ class BasicCharacterControllerInput {
                 _keys.shift = true;
                 break;
             case 80: //shift
-                console.log('hitSound :>> ', hitSound);
                 if (pause_music) {
                     if (hitSound) {
                         hitSound.play();
@@ -1115,6 +1150,7 @@ class BasicCharacterControllerInput {
                     return;
                 }
                 _keys.forward = false;
+
                 break;
             case 65: //A: LEFT
             case 37: //left arrow
@@ -1474,6 +1510,7 @@ class PoseState extends State {
                 }
                 if (hitSound) {
                     hitSound.play();
+                    pause_music = false;
                 }
             }
             const prevAction = this._parent._proxy._animations[prevState.Name].action;
@@ -2366,7 +2403,7 @@ export class CharacterControllerDemo {
         const loader = new FBXLoader();
         loader.setPath('./models/');
 
-        if (!isTouchscreenDevice) {
+        if (!isTouchscreenDevice()) {
             loader.load('HSBC Entorno_MASTER 11.fbx', (fbx) => {
                 fbx.scale.setScalar(0.1);
                 fbx.traverse((c) => {
