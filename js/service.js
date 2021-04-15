@@ -33,7 +33,7 @@
              console.log('schedule :>> ', schedule);
              //let fechaActual = new Date();
              //QUITAR
-             let fechaActual = new Date("2021-04-24T07:00:00.000Z");
+             let fechaActual = new Date("2021-04-20T05:00:00.000Z");
              let diaActual = fechaActual.getDate();
              let mesActual = fechaActual.getMonth();
              console.log('fechaActual :>> ', fechaActual);
@@ -44,10 +44,11 @@
                  console.log('fechaAgenda :>> ', fechaAgenda);
                  let mesAgenda = fechaAgenda.getMonth();
                  let diaAgenda = fechaAgenda.getDate();
+                 let diaAgendaWeek = fechaAgenda.getDay();
                  console.log('mesAgenda :>> ', mesAgenda);
                  console.log('diaAgenda :>> ', diaAgenda);
                  if (diaActual == diaAgenda && mesActual == mesAgenda) {
-                     pintar += `${getDayTexto(diaAgenda)+' '+diaAgenda}<br>`
+                     pintar += `${getDayTexto(diaAgendaWeek)+' '+diaAgenda}<br>`
                      for (const agendad of iterator.res) {
                          if (agendad.status == "true") {
                              let fechaInicio = new Date(agendad.start);
