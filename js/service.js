@@ -26,19 +26,26 @@
  function agenda(type) {
      $.get(url + `schedule/${type}`, function(data) {
          let pintar = "";
-
+         let anteriores = ""
          if (data.statusCode == 200) {
              let schedule = data.schedule;
              let arraySchedule = [];
              console.log('schedule :>> ', schedule);
-             let fechaActual = new Date('2021-04-20T05:00:00.000Z');
+             //let fechaActual = new Date();
+             //QUITAR
+             let fechaActual = new Date("2021-04-24T07:00:00.000Z");
              let diaActual = fechaActual.getUTCDay();
              let mesActual = fechaActual.getMonth();
-
+             console.log('fechaActual :>> ', fechaActual);
+             console.log('diaActual :>> ', diaActual);
+             console.log('mesActual :>> ', mesActual);
              for (const iterator of schedule) {
                  let fechaAgenda = new Date(iterator.fecha[0]);
+                 console.log('fechaAgenda :>> ', fechaAgenda);
                  let mesAgenda = fechaAgenda.getMonth();
                  let diaAgenda = fechaAgenda.getDate();
+                 console.log('mesAgenda :>> ', mesAgenda);
+                 console.log('diaAgenda :>> ', diaAgenda);
                  if (diaActual == diaAgenda && mesActual == mesAgenda) {
                      pintar += `${getDayTexto(diaAgenda)+' '+diaAgenda}<br>`
                      for (const agendad of iterator.res) {
@@ -55,6 +62,8 @@
                                    </div>`
                          }
                      }
+                 } else {
+
                  }
              }
              console.log('pintar :>> ', pintar);
