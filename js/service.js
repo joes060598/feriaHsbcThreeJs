@@ -25,57 +25,47 @@
 
  function agenda(type) {
      $.get(url + `schedule/${type}`, function(data) {
+         let pintar = "";
+
          if (data.statusCode == 200) {
              let schedule = data.schedule;
              let arraySchedule = [];
+             console.log('schedule :>> ', schedule);
+             let fechaActual = new Date('2021-04-20T05:00:00.000Z');
+             let diaActual = fechaActual.getUTCDay();
+             let mesActual = fechaActual.getMonth();
+
              for (const iterator of schedule) {
-                 for (const scheduleAlone of iterator.res) {
-                     let register = {
-                         title: scheduleAlone.name,
-                         start: scheduleAlone.start,
-                         end: scheduleAlone.finish,
-                         url: scheduleAlone.url,
-                         video: scheduleAlone.url
+                 let fechaAgenda = new Date(iterator.fecha[0]);
+                 let mesAgenda = fechaAgenda.getMonth();
+                 let diaAgenda = fechaAgenda.getDate();
+                 if (diaActual == diaAgenda && mesActual == mesAgenda) {
+                     pintar += `${getDayTexto(diaAgenda)+' '+diaAgenda}<br>`
+                     for (const agendad of iterator.res) {
+                         if (agendad.status == "true") {
+                             let fechaInicio = new Date(agendad.start);
+                             let fechaFinal = new Date(agendad.finish);
+
+                             pintar += `<div>
+                                       <p> ${agendad.name}</p>
+                                       <p>${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</p>
+                                       <a href="${agendad.url}" target="_blank">
+                                       AQUI
+                                       </a>
+                                   </div>`
+                         }
                      }
-                     arraySchedule.push(register)
                  }
              }
-
-             let calendarEl = document.getElementById('calendar');
-             let calendar = new FullCalendar.Calendar(calendarEl, {
-                 height: 450,
-                 lang: 'es',
-                 initialView: 'timeGridWeek',
-                 headerToolbar: {
-                     left: 'prevYear,prev,next,nextYear today',
-                     center: 'title',
-                     right: 'dayGridMonth,timeGridWeek,dayGridDay'
-                 },
-                 initialDate: '2021-04-22',
-                 navLinks: true, // can click day/week names to navigate views
-                 editable: true,
-                 dayMaxEvents: true, // allow "more" link when too many events
-                 events: arraySchedule,
-                 eventClick: function(event) {
-                     if (event.event.url) {
-                         event.jsEvent.preventDefault();
-                         window.open(event.event.url, "_blank");
-                         return false;
-                     }
-                 }
-             });
-             setTimeout(() => {
-                 calendar.render();
-             }, 100)
+             console.log('pintar :>> ', pintar);
+             $('#calendar').html(pintar);
+             $("#agendaGral").hide();
+             $("canvas").hide();
+             $("#agendaEspecifica").show('slow');
          } else {
              alertify.error(data.message);
          }
      });
-
-
-     $("#agendaGral").hide();
-     $("canvas").hide();
-     $("#agendaEspecifica").show('slow');
  }
 
  function cerrarAgenda() {
@@ -228,4 +218,101 @@
          }
      }
      return pass;
+ }
+
+ function getHora(hora) {
+     if (hora == 1) {
+         return "1 am ";
+     }
+     if (hora == 2) {
+         return "2 am ";
+     }
+     if (hora == 3) {
+         return "3 am ";
+     }
+     if (hora == 4) {
+         return "4 am ";
+     }
+     if (hora == 5) {
+         return "5 am ";
+     }
+     if (hora == 6) {
+         return "6 am ";
+     }
+     if (hora == 7) {
+         return "7 am ";
+     }
+     if (hora == 8) {
+         return "8 am ";
+     }
+     if (hora == 9) {
+         return "9 am ";
+     }
+     if (hora == 10) {
+         return "10 am ";
+     }
+     if (hora == 11) {
+         return "11 am ";
+     }
+     if (hora == 12) {
+         return "12 pm ";
+     }
+     if (hora == 13) {
+         return "1 pm ";
+     }
+     if (hora == 14) {
+         return "2 pm ";
+     }
+     if (hora == 15) {
+         return "3 pm ";
+     }
+     if (hora == 16) {
+         return "4 pm ";
+     }
+     if (hora == 17) {
+         return "5 pm ";
+     }
+     if (hora == 18) {
+         return "6 pm ";
+     }
+     if (hora == 19) {
+         return "1 pm ";
+     }
+     if (hora == 20) {
+         return "8 pm ";
+     }
+     if (hora == 21) {
+         return "9 pm ";
+     }
+     if (hora == 22) {
+         return "10 pm ";
+     }
+     if (hora == 23) {
+         return "11 pm ";
+     }
+     if (hora == 24) {
+         return "12 pm ";
+     }
+ }
+
+
+ function getDayTexto(dia) {
+     if (dia == 1) {
+         return 'LUNES';
+     }
+     if (dia == 2) {
+         return 'MARTES';
+     }
+     if (dia == 3) {
+         return 'MIERCOLES';
+     }
+     if (dia == 4) {
+         return 'JUEVES';
+     }
+     if (dia == 5) {
+         return 'VIERNES';
+     }
+     if (dia == 6) {
+         return 'SÁBADO';
+     }
  }

@@ -113,10 +113,10 @@ class BasicCharacterController {
         loader.setPath(`./models/${genderPath}/`);
         loader.load('idle.fbx', (fbx) => {
             console.log('fbx :>> ', fbx);
-            fbx.position.x = 1250;
-
+            //fbx.position.x = 1250;
+            fbx.position.x = 1000;
             //fbx.position.x = 23;
-            fbx.position.z = 0;
+            fbx.position.z = -300;
             fbx.position.y = 0;
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
