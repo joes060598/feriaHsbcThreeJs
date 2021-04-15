@@ -72,28 +72,22 @@ $("#enter").click(function() {
     _onKeyDown({ keyCode: 13 });
 });
 
-$("#correr").mousedown(function() {
+$("#correr").click(function() {
     _onKeyDown({ keyCode: 16 });
 });
-$("#correr").mouseup(function() {
-    _onKeyUp({ keyCode: 16 })
-});
 
 
-$("#bailar").mousedown(function() {
+
+$("#bailar").click(function() {
     _onKeyDown({ keyCode: 66 });
 });
-$("#bailar").mouseup(function() {
-    _onKeyUp({ keyCode: 66 })
-});
 
 
-$("#brincar").mousedown(function() {
+
+$("#brincar").click(function() {
     _onKeyDown({ keyCode: 32 });
 });
-$("#brincar").mouseup(function() {
-    _onKeyUp({ keyCode: 32 })
-});
+
 
 class BasicCharacterControllerProxy {
     constructor(animations, camera) {
