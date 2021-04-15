@@ -1,5 +1,5 @@
- let url = 'http://173.231.203.133:4000/';
- //let url = 'https://api.feriaswbhsbc.com/';
+ //let url = 'http://173.231.203.133:4000/';
+ let url = 'https://api.feriaswbhsbc.com/';
  //let url = 'http://localhost:4000/';
  let _APP = null;
 
@@ -111,8 +111,7 @@
              }
              fechas.sort();
              if (pintar == "") {
-                 console.log('fechas[0] :>> ', fechas[0]);
-                 console.log('fechas[1] :>> ', fechas[1]);
+
                  console.log('fechaActual :>> ', fechaActual);
                  if (fechas[0] > fechaActual) {
                      let d = fechas[0].getDate();
@@ -229,39 +228,34 @@
 
  }
 
- function enviarPregunta(type, caja) {
+ function enviarPregunta(type, caja, cluster) {
      let pregunta = $('#' + type);
      let cajaHide = $('#' + caja);
-     if (pregunta.val() != undefined && pregunta.val() != "") {
-         alertify.success('Se ha enviado correctamente tu duda, espera a que el equipo de soporte te contacte.');
-         cajaHide.hide();
-     } else {
+     if (pregunta.val() == undefined && pregunta.val() == "") {
          alertify.error('No puede enviar una pregunta vacía.');
-
+         return;
      }
 
-     /* $.ajax({
-          url: url + "questions/create",
-          type: 'post',
-          data: {
-              question: pregunta.val(),
-              cluster: 'default'
-          },
-          beforeSend: function(jqXHR, settings) {
-              jqXHR.setRequestHeader('token', String(sessionStorage.getItem('token')));
-          },
-          dataType: 'json',
-          success: function(data) {
-              alertify.success('Sssss');
-              pregunta.val('');
-              cajaHide.hide();
-          },
-          error: function(err) {
-              console.log('err :>> ', err);
-              alertify.error(err.message);
+     $.ajax({
+         url: url + "questions/create",
+         type: 'post',
+         data: {
+             question: pregunta.val(),
+             cluster: cluster,
+             token: sessionStorage.getItem('token')
+         },
+         dataType: 'json',
+         success: function(data) {
+             alertify.success('Se ha enviado correctamente su pregunta, espere a que el equipo de soporte se comunique usted.');
+             pregunta.val('');
+             cajaHide.hide();
+         },
+         error: function(err) {
+             console.log('err :>> ', err);
+             alertify.error(err.message);
 
-          }
-      });*/
+         }
+     });
 
  }
 

@@ -530,7 +530,7 @@ class BasicCharacterController {
             response.x = position.x;
             response.z = position.z;
             response.rampa = true;
-            response.y = 10 // this.calculateY2(position.z, tarima2Rampa);
+            response.y = this.calculateY2(position.z, tarima2Rampa);
             return response;
         }
         //Tarima2Atras
@@ -581,7 +581,7 @@ class BasicCharacterController {
         return y;
     }
     calculateY2(z, tarima) {
-        let y = (((10 / 21) * z) - (190 / 7))
+        let y = (((-10 / 21) * z) + (260 / 7))
         return y;
     }
     _LoadModelsLeon() {
@@ -1022,7 +1022,8 @@ function _onKeyDown(event) {
                 $("#textInfo").html(textInfo);
                 $("#buttonAgenda").html(`<a onclick="agenda('Balance')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
                 $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('Balance')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
-
+                $("#divP1").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta1','cajacomments1','Balance')" value="Enviar">`);
+                $("#divP").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta','cajacomments','Balance')" value="Enviar">`);
             }
 
             if ((position.x >= salud.xn && position.x <= salud.xm) && (position.z >= salud.zn && position.z <= salud.zm)) {
@@ -1046,7 +1047,8 @@ function _onKeyDown(event) {
                 $("#textInfo").html(textInfo);
                 $("#buttonAgenda").html(`<a onclick="agenda('SaludBienestar')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
                 $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('SaludBienestar')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
-
+                $("#divP1").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta1','cajacomments1','SaludBienestar')" value="Enviar">`);
+                $("#divP").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta','cajacomments','SaludBienestar')" value="Enviar">`);
             }
             if ((position.x >= valores.xn && position.x <= valores.xm) && (position.z >= valores.zn && position.z <= valores.zm)) {
                 $('#agenda').show();
@@ -1070,7 +1072,8 @@ function _onKeyDown(event) {
                 $("#textInfo").html(textInfo);
                 $("#buttonAgenda").html(`<a onclick="agenda('Cultura')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
                 $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('Cultura')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
-
+                $("#divP1").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta1','cajacomments1','Cultura')" value="Enviar">`);
+                $("#divP").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta','cajacomments','Cultura')" value="Enviar">`);
             }
             if ((position.x >= finanzas.xn && position.x <= finanzas.xm) && (position.z >= finanzas.zn && position.z <= finanzas.zm)) {
                 $('#agenda').show();
@@ -1094,6 +1097,8 @@ function _onKeyDown(event) {
                 $("#textInfo").html(textInfo);
                 $("#buttonAgenda").html(`<a onclick="agenda('Finanzas')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
                 $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('Finanzas')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+                $("#divP1").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta1','cajacomments1','Finanzas')" value="Enviar">`);
+                $("#divP").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta','cajacomments','Finanzas')" value="Enviar">`);
 
             }
             if ((position.x >= desarrollo.xn && position.x <= desarrollo.xm) && (position.z >= desarrollo.zn && position.z <= desarrollo.zm)) {
@@ -1119,6 +1124,9 @@ function _onKeyDown(event) {
                 $("#textInfo").html(textInfo);
                 $("#buttonAgenda").html(`<a onclick="agenda('DesarrolloCarrera')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
                 $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('DesarrolloCarrera')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+
+                $("#divP1").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta1','cajacomments1','DesarrolloCarrera')" value="Enviar">`);
+                $("#divP").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta','cajacomments','DesarrolloCarrera')" value="Enviar">`);
 
             }
             break;
