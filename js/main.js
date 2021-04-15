@@ -42,7 +42,7 @@ setTimeout(() => {
 }, 1000);
 
 setTimeout(() => {
-    $("#over").html('<img src="models/Instrucciones-Jugabilidad-FINAL-1.png" width="50%"></img>')
+    $("#over").html('<img src="models/Instrucciones-Jugabilidad-FINAL-3.png" width="50%"></img>')
 }, 1000);
 setInterval(() => {
     if (mensaje) {
@@ -117,6 +117,7 @@ class BasicCharacterControllerProxyLeon {
     constructor(animations, camera) {
         this._animations = animations;
         this._camera = camera;
+        this.mobile = isTouchscreenDevice();
     }
 
     get animations() {
@@ -325,7 +326,7 @@ class BasicCharacterController {
             this._mixerLeon6.update(timeInSeconds);
         }
 
-        if (!isTouchscreenDevice()) {
+        if (!this.mobile) {
             if (this._mixerLeon1) {
                 this._mixerLeon1.update(timeInSeconds);
             }
@@ -930,7 +931,7 @@ function _onKeyDown(event) {
             }
             _keys.shift = true;
             break;
-        case 80: //shift
+        case 49: //shift
             if (pause_music) {
                 if (hitSound) {
                     hitSound.play();
@@ -2026,7 +2027,12 @@ export class CharacterControllerDemo {
         setTimeout(() => {
             $("#padre").hide();
             $("canvas").show();
-            $("#over").show();
+            if (!isTouchscreenDevice()) {
+                $("#over").show();
+            } else {
+                $("#btnJoy").show();
+            }
+
 
         }, 20000);
         window.addEventListener('resize', () => {
@@ -2835,7 +2841,6 @@ class ThirdPersonCamera {
 }
 let _APP = null;
 export function isTouchscreenDevice() {
-    console.log('checkin :>> ');
     let supportsTouch = false;
     if ("ontouchstart" in window)
     // iOS & android

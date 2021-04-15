@@ -15,10 +15,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <script src="./build/ammo.js"></script>
 
-    <script type="module" src="./js/main.js"></script>
+    <script type="module" src="./build/app.bundle.js"></script>
 
     <!--
    
+    <script type="module" src="./js/main.js"></script>
 
     <script type="module" src="./build/app.bundle.js"></script>
     -->
@@ -123,7 +124,7 @@
                         </div>
                     </div>
                     <div class="cajamore" style="height: 300px;">
-                        <p>Esta plataforma soporta los siguientes navegadores: Chrome/Edge/Firefox/safari</p>
+                        <p>Esta plataforma soporta los siguientes navegadores: Chrome/Edge/Firefox</p>
                     </div>
                 </div>
 
@@ -432,7 +433,7 @@
             </section>
         </div>
     </div>
-    <div class="botones">
+    <div class="botones" id="btnJoy" style="display: none;">
         <ul class="btns">
             <li>
                 <input style="height: 50px;width: 100px;background-color:#f00;color: white; border:none" type="button" id="correr" value="correr"><br><br>
@@ -446,7 +447,7 @@
             </li>
             <li>
                 <a id="musica">
-                    <img src="iconos/quitarmusica.svg">
+                    <img width="80px" height="80px" src="iconos/quitarmusica.svg">
                 </a>
             </li>
             <li>
