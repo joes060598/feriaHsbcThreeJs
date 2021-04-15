@@ -73,12 +73,15 @@ $("#enter").click(function() {
 });
 let scorrer = false;
 let sbrincar = false;
-$("#correr").touchstart(function() {
+
+$("#correr").on("touchstart", function() {
     _onKeyDown({ keyCode: 16 });
 });
-$("#correr").touchend(function() {
+
+$("#correr").on("touchend", function() {
     _onKeyUp({ keyCode: 16 })
 });
+
 
 
 $("#bailar").mousedown(function() {
