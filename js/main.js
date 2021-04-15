@@ -2902,11 +2902,11 @@ export function createJoystick(parent) {
     stick.setAttribute("id", "joystick");
 
     stick.addEventListener("mousedown", handleMouseDown);
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
+    stick.addEventListener("mousemove", handleMouseMove);
+    stick.addEventListener("mouseup", handleMouseUp);
     stick.addEventListener("touchstart", handleMouseDown);
-    document.addEventListener("touchmove", handleMouseMove);
-    document.addEventListener("touchend", handleMouseUp);
+    stick.addEventListener("touchmove", handleMouseMove);
+    stick.addEventListener("touchend", handleMouseUp);
 
     let dragStart = null;
     let currentPos = { x: 0, y: 0 };
