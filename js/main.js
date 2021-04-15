@@ -71,8 +71,6 @@ $("#musica").click(function() {
 $("#enter").click(function() {
     _onKeyDown({ keyCode: 13 });
 });
-let scorrer = false;
-let sbrincar = false;
 
 $("#correr").on("touchstart", function() {
     _onKeyDown({ keyCode: 16 });
@@ -82,22 +80,23 @@ $("#correr").on("touchend", function() {
     _onKeyUp({ keyCode: 16 })
 });
 
-
-
-$("#bailar").mousedown(function() {
+$("#bailar").on("touchstart", function() {
     _onKeyDown({ keyCode: 66 });
 });
-$("#bailar").mouseup(function() {
+
+$("#bailar").on("touchend", function() {
     _onKeyUp({ keyCode: 66 })
 });
 
-
-$("#brincar").mousedown(function() {
+$("#brincar").on("touchstart", function() {
     _onKeyDown({ keyCode: 32 });
 });
-$("#brincar").mouseup(function() {
+
+$("#brincar").on("touchend", function() {
     _onKeyUp({ keyCode: 32 })
 });
+
+
 
 class BasicCharacterControllerProxy {
     constructor(animations, camera) {
