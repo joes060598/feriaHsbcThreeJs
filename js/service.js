@@ -27,6 +27,7 @@
      $.get(url + `schedule/${type}`, function(data) {
          let pintar = "";
          let anteriores = ""
+         let tituloDia = ""
          if (data.statusCode == 200) {
              let schedule = data.schedule;
              let arraySchedule = [];
@@ -39,19 +40,99 @@
                  let diaAgenda = fechaAgenda.getDate();
                  let diaAgendaWeek = fechaAgenda.getDay();
                  if (fechaAgenda < fechaActual) {
-                     pintar += `<h1>${getDayTexto(diaAgendaWeek)+' '+diaAgenda}</h1><br>`
+                     tituloDia = `<h1>${getDayTexto(diaAgendaWeek)+' '+diaAgenda}</h1><br>`
                      for (const agendad of iterator.res) {
                          if (agendad.status == "true") {
                              let fechaInicio = new Date(agendad.start);
                              let fechaFinal = new Date(agendad.finish);
                              //<a href="${agendad.video}" target="_blank">
-                             pintar += `<div>
-                                      <p> ${agendad.name}</p>
-                                      <p>${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</p>
-                                      <a href="https://vimeo.com/535667880" target="_blank">
-                                      AQUI
-                                      </a>
-                                  </div>`
+
+                             if (type == 'DesarrolloCarrera') {
+                                 pintar += `<div class="col-sm-3 col-xs-12">
+                               <div class="cajainfo bg-desarrollo">
+                                   <div class="coso1">
+                                       <img src="img/coso1.svg" width="30">
+                                   </div>
+                                   <p>${agendad.name}</p>
+                                   <h3 class="color-desarrollo2">${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</h3>
+       
+                                   <div class="btn1">
+                                       <a href="https://vimeo.com/535667880" target="_blank">Aquí</a>
+                                       <div class="bola"></div>
+                                   </div>
+       
+                               </div>
+                           </div>`
+                             }
+                             if (type == 'Finanzas') {
+                                 pintar += `<div class="col-sm-3 col-xs-12">
+                               <div class="cajainfo bg-finanzas">
+                                   <div class="coso1">
+                                       <img src="img/coso1.svg" width="30">
+                                   </div>
+                                   <p>${agendad.name}</p>
+                                   <h3 class="color-finanzas2">${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</h3>
+       
+                                   <div class="btn1">
+                                       <a href="https://vimeo.com/535667880" target="_blank">Aquí</a>
+                                       <div class="bola"></div>
+                                   </div>
+       
+                               </div>
+                           </div>`
+                             }
+                             if (type == 'Cultura') {
+                                 pintar += `<div class="col-sm-3 col-xs-12">
+                               <div class="cajainfo bg-cultura">
+                                   <div class="coso1">
+                                       <img src="img/coso1.svg" width="30">
+                                   </div>
+                                   <p>${agendad.name}</p>
+                                   <h3 class="color-cultura2">${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</h3>
+       
+                                   <div class="btn1">
+                                       <a href="https://vimeo.com/535667880" target="_blank">Aquí</a>
+                                       <div class="bola"></div>
+                                   </div>
+       
+                               </div>
+                           </div>`
+                             }
+                             if (type == 'SaludBienestar') {
+                                 pintar += `<div class="col-sm-3 col-xs-12">
+                               <div class="cajainfo bg-salud">
+                                   <div class="coso1">
+                                       <img src="img/coso1.svg" width="30">
+                                   </div>
+                                   <p>${agendad.name}</p>
+                                   <h3 class="color-salud2">${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</h3>
+       
+                                   <div class="btn1">
+                                       <a href="https://vimeo.com/535667880" target="_blank">Aquí</a>
+                                       <div class="bola"></div>
+                                   </div>
+       
+                               </div>
+                           </div>`
+                             }
+                             if (type == 'Balance') {
+                                 pintar += `<div class="col-sm-3 col-xs-12">
+                               <div class="cajainfo bg-balance">
+                                   <div class="coso1">
+                                       <img src="img/coso1.svg" width="30">
+                                   </div>
+                                   <p>${agendad.name}</p>
+                                   <h3 class="color-balance">${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</h3>
+       
+                                   <div class="btn1">
+                                       <a href="https://vimeo.com/535667880" target="_blank">Aquí</a>
+                                       <div class="bola"></div>
+                                   </div>
+       
+                               </div>
+                           </div>`
+                             }
+
 
 
                          }
@@ -60,12 +141,56 @@
 
                  }
              }
-             $('#calendarAnterior').html(pintar);
-             $("#agendaGral").hide();
+
+             if (type == "DesarrolloCarrera") {
+                 //titutext
+                 $("#titutext").html('<h2 class="color-desarrollo">CALENDARIO | DESARROLLO Y CARRERA</h2>')
+                 $("#iconoAgendaEspecifica").html('<img src="img/desarrollo-de-carrera.png" width="200px">')
+                 $("#marco").removeClass();
+                 $("#marco").addClass("marco-desarrollo");
+                 $('#tituloDia').html('<h1 class="color-desarrollo">' + tituloDia + '</h1>')
+                 $('#contenidoAgenda').html(pintar)
+             }
+             if (type == "Balance") {
+                 //titutext
+                 $("#titutext").html('<h2 class="color-balance">CALENDARIO | BALANCE ENTRE TRABAJO Y TIEMPO LIBRE</h2>')
+                 $("#iconoAgendaEspecifica").html('<img src="img/balance.png" width="200px">')
+                 $("#marco").removeClass();
+                 $("#marco").addClass("marco-balance");
+                 $('#tituloDia').html('<h1 class="color-balance">' + tituloDia + '</h1>')
+                 $('#contenidoAgenda').html(pintar)
+             }
+             if (type == "Finanzas") {
+                 //titutext
+                 $("#titutext").html('<h2 class="color-finanzas">CALENDARIO | FINANZAS</h2>')
+                 $("#iconoAgendaEspecifica").html('<img src="img/finanzas.png" width="200px">')
+                 $("#marco").removeClass();
+                 $("#marco").addClass("marco-finanzas");
+                 $('#tituloDia').html('<h1 class="color-finanzas">' + tituloDia + '</h1>')
+                 $('#contenidoAgenda').html(pintar)
+             }
+             if (type == "Cultura") {
+                 //titutext
+                 $("#titutext").html('<h2 class="color-cultura">CALENDARIO | CULTURA Y VALORES</h2>')
+                 $("#iconoAgendaEspecifica").html('<img src="img/cultura-y-valores.png" width="200px">')
+                 $("#marco").removeClass();
+                 $("#marco").addClass("marco-cultura");
+                 $('#tituloDia').html('<h1 class="color-cultura">' + tituloDia + '</h1>')
+                 $('#contenidoAgenda').html(pintar)
+             }
+             if (type == "SaludBienestar") {
+                 //titutext
+                 $("#titutext").html('<h2 class="color-salud">CALENDARIO | SALUD Y BIENESTAR</h2>')
+                 $("#iconoAgendaEspecifica").html('<img src="img/salud-y-bienestar.png" width="200px">')
+                 $("#marco").removeClass();
+                 $("#marco").addClass("marco-salud");
+                 $('#tituloDia').html('<h1 class="color-salud">' + tituloDia + '</h1>')
+                 $('#contenidoAgenda').html(pintar)
+             }
+
+             $("#agenda").hide();
              $("canvas").hide();
-             $("#agendaEspecifica").show('slow');
-             $("#agendaDia").hide('slow');
-             $("#angendaAnterior").show('slow');
+             $("#agendaEspecifica").show();
          } else {
              alertify.error(data.message);
          }
@@ -79,6 +204,7 @@
          let fechas = [];
          //let fechaActual = new Date();
          //QUITAR
+         let tituloDia = "";
          let fechaActual = new Date('2021-04-24T05:00:00.000Z');
          let diaActual = fechaActual.getDate();
          let mesActual = fechaActual.getMonth();
@@ -92,19 +218,97 @@
                  let diaAgenda = fechaAgenda.getDate();
                  let diaAgendaWeek = fechaAgenda.getDay();
                  if (diaActual == diaAgenda && mesActual == mesAgenda) {
-                     pintar += `<h1>${getDayTexto(diaAgendaWeek)+' '+diaAgenda}</h1><br>`
+                     tituloDia = `<h1>${getDayTexto(diaAgendaWeek)+' '+diaAgenda}</h1><br>`;
                      for (const agendad of iterator.res) {
                          if (agendad.status == "true") {
                              let fechaInicio = new Date(agendad.start);
                              let fechaFinal = new Date(agendad.finish);
+                             if (type == 'DesarrolloCarrera') {
+                                 pintar += `<div class="col-sm-3 col-xs-12">
+                                <div class="cajainfo bg-desarrollo">
+                                    <div class="coso1">
+                                        <img src="img/coso1.svg" width="30">
+                                    </div>
+                                    <p>${agendad.name}</p>
+                                    <h3 class="color-desarrollo2">${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</h3>
+        
+                                    <div class="btn1">
+                                        <a href="${agendad.url}" target="_blank">Aquí</a>
+                                        <div class="bola"></div>
+                                    </div>
+        
+                                </div>
+                            </div>`
+                             }
+                             if (type == 'Finanzas') {
+                                 pintar += `<div class="col-sm-3 col-xs-12">
+                                <div class="cajainfo bg-finanzas">
+                                    <div class="coso1">
+                                        <img src="img/coso1.svg" width="30">
+                                    </div>
+                                    <p>${agendad.name}</p>
+                                    <h3 class="color-finanzas2">${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</h3>
+        
+                                    <div class="btn1">
+                                        <a href="${agendad.url}" target="_blank">Aquí</a>
+                                        <div class="bola"></div>
+                                    </div>
+        
+                                </div>
+                            </div>`
+                             }
+                             if (type == 'Cultura') {
+                                 pintar += `<div class="col-sm-3 col-xs-12">
+                                <div class="cajainfo bg-cultura">
+                                    <div class="coso1">
+                                        <img src="img/coso1.svg" width="30">
+                                    </div>
+                                    <p>${agendad.name}</p>
+                                    <h3 class="color-cultura2">${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</h3>
+        
+                                    <div class="btn1">
+                                        <a href="${agendad.url}" target="_blank">Aquí</a>
+                                        <div class="bola"></div>
+                                    </div>
+        
+                                </div>
+                            </div>`
+                             }
+                             if (type == 'SaludBienestar') {
+                                 pintar += `<div class="col-sm-3 col-xs-12">
+                                <div class="cajainfo bg-salud">
+                                    <div class="coso1">
+                                        <img src="img/coso1.svg" width="30">
+                                    </div>
+                                    <p>${agendad.name}</p>
+                                    <h3 class="color-salud2">${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</h3>
+        
+                                    <div class="btn1">
+                                        <a href="${agendad.url}" target="_blank">Aquí</a>
+                                        <div class="bola"></div>
+                                    </div>
+        
+                                </div>
+                            </div>`
+                             }
+                             if (type == 'Balance') {
+                                 pintar += `<div class="col-sm-3 col-xs-12">
+                                <div class="cajainfo bg-balance">
+                                    <div class="coso1">
+                                        <img src="img/coso1.svg" width="30">
+                                    </div>
+                                    <p>${agendad.name}</p>
+                                    <h3 class="color-balance">${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</h3>
+        
+                                    <div class="btn1">
+                                        <a href="${agendad.url}" target="_blank">Aquí</a>
+                                        <div class="bola"></div>
+                                    </div>
+        
+                                </div>
+                            </div>`
+                             }
 
-                             pintar += `<div>
-                                      <p> ${agendad.name}</p>
-                                      <p>${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</p>
-                                      <a href="${agendad.url}" target="_blank">
-                                      AQUI
-                                      </a>
-                                  </div>`
                          }
                      }
                  }
@@ -126,12 +330,66 @@
                  }
 
              }
-             $('#calendar').html(pintar);
-             $("#agendaGral").hide();
+             /**
+              * DesarrolloCarrera
+
+             Finanzas
+
+             Cultura
+
+             SaludBienestar
+
+             Balance
+              */
+             if (type == "DesarrolloCarrera") {
+                 //titutext
+                 $("#titutext").html('<h2 class="color-desarrollo">CALENDARIO | DESARROLLO Y CARRERA</h2>')
+                 $("#iconoAgendaEspecifica").html('<img src="img/desarrollo-de-carrera.png" width="200px">')
+                 $("#marco").removeClass();
+                 $("#marco").addClass("marco-desarrollo");
+                 $('#tituloDia').html('<h1 class="color-desarrollo">' + tituloDia + '</h1>')
+                 $('#contenidoAgenda').html(pintar)
+             }
+             if (type == "Balance") {
+                 //titutext
+                 $("#titutext").html('<h2 class="color-balance">CALENDARIO | BALANCE ENTRE TRABAJO Y TIEMPO LIBRE</h2>')
+                 $("#iconoAgendaEspecifica").html('<img src="img/balance.png" width="200px">')
+                 $("#marco").removeClass();
+                 $("#marco").addClass("marco-balance");
+                 $('#tituloDia').html('<h1 class="color-balance">' + tituloDia + '</h1>')
+                 $('#contenidoAgenda').html(pintar)
+             }
+             if (type == "Finanzas") {
+                 //titutext
+                 $("#titutext").html('<h2 class="color-finanzas">CALENDARIO | FINANZAS</h2>')
+                 $("#iconoAgendaEspecifica").html('<img src="img/finanzas.png" width="200px">')
+                 $("#marco").removeClass();
+                 $("#marco").addClass("marco-finanzas");
+                 $('#tituloDia').html('<h1 class="color-finanzas">' + tituloDia + '</h1>')
+                 $('#contenidoAgenda').html(pintar)
+             }
+             if (type == "Cultura") {
+                 //titutext
+                 $("#titutext").html('<h2 class="color-cultura">CALENDARIO | CULTURA Y VALORES</h2>')
+                 $("#iconoAgendaEspecifica").html('<img src="img/cultura-y-valores.png" width="200px">')
+                 $("#marco").removeClass();
+                 $("#marco").addClass("marco-cultura");
+                 $('#tituloDia').html('<h1 class="color-cultura">' + tituloDia + '</h1>')
+                 $('#contenidoAgenda').html(pintar)
+             }
+             if (type == "SaludBienestar") {
+                 //titutext
+                 $("#titutext").html('<h2 class="color-salud">CALENDARIO | SALUD Y BIENESTAR</h2>')
+                 $("#iconoAgendaEspecifica").html('<img src="img/salud-y-bienestar.png" width="200px">')
+                 $("#marco").removeClass();
+                 $("#marco").addClass("marco-salud");
+                 $('#tituloDia').html('<h1 class="color-salud">' + tituloDia + '</h1>')
+                 $('#contenidoAgenda').html(pintar)
+             }
+             $("#agenda").hide();
              $("canvas").hide();
-             $("#agendaEspecifica").show('slow');
-             $("#agendaDia").show('slow');
-             $("#angendaAnterior").hide('slow');
+             $("#agendaEspecifica").show();
+
          } else {
              alertify.error(data.message);
          }
@@ -141,7 +399,14 @@
  function cerrarAgenda() {
      $("#agenda").hide();
      $("#agendaGral").show();
-     $("#agendaEspecifica").hide();
+
+     $("#nameGral").show();
+     $("canvas").show();
+ }
+
+ function cerrarAgendaEspecifica() {
+     $("#agenda").hide();
+     $("#agendaEspecifica").css('display', 'none');
      $("#nameGral").show();
 
      $("canvas").show();

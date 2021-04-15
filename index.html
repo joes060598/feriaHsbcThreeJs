@@ -12,15 +12,13 @@
     -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <link href="./assets/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <script src="./build/ammo.js"></script>
 
-    <script type="module" src="./build/app.bundle.js"></script>
+    <script type="module" src="./js/main.js"></script>
 
     <!--
    
-    <script type="module" src="./js/main.js"></script>
 
     <script type="module" src="./build/app.bundle.js"></script>
     -->
@@ -28,8 +26,9 @@
     <script>
     </script>
     <link href='resources/lib/main.css' rel='stylesheet' />
-    <link href='assets/login.css' rel='stylesheet' />
+    <link href='assets/general.css' rel='stylesheet' />
     <link href='assets/loader.css' rel='stylesheet' />
+    <link href='assets/responsive.css' rel='stylesheet' />
 
     <script src='resources/lib/main.js'></script>
     <script src='resources/lib/es.js'></script>
@@ -171,8 +170,82 @@
             </td>
         </tr>
     </table>
-    <!--Finanzas-->
+
     <table class="shadowbox" id="agenda" style="display: none;">
+        <tr>
+            <td valign="middle">
+                <div class="cajacluster" id="classCluster">
+
+                    <div class="row">
+                        <div class="col-sm-1 col-xs-2">
+                            <div class="iconlog" id="icon">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xs-5">
+                            <div class="tituloscluster" id="tituloCluster">
+
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-xs-12" style="text-align: right;">
+                            <div class="cajacoments" id="cajacomments" style="display: none;">
+                                <form>
+                                    <div class="space1"></div>
+                                    <div class="titucom">
+                                        <label>Escribe tus Comentarios</label>
+                                    </div>
+                                    <div class="space1"></div>
+                                    <textarea rows="5" id="pregunta" class="cajacom" placeholder="Comentarios"></textarea>
+                                    <div class="space2"></div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <a class="ocultar btngocomm0">Cerrar</a>
+                                        </div>
+                                        <div class="col-sm-6" id="divP">
+                                            <button class="btngocomm">Enviar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="dudasx">
+                                <img class="mostrar" src="img/dejanostusdudas.svg" width="300">
+                            </div>
+                        </div>
+                        <div class="col-sm-1" style="text-align: right;">
+                            <a onclick="cerrarAgenda()"><img src="img/equis.svg" width="15"></a>
+                        </div>
+                    </div>
+                    <div class="space2"></div>
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <div class="infoalign">
+                                <div class="row">
+                                    <div class="col-xs-3" id="icon3">
+
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <div class="space2"></div>
+                                        <div class="txtinfo" id="textInfo">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space2"></div>
+
+
+                            </div>
+                        </div>
+                        <div class="col-sm-5" id="botonesAgenda">
+
+                        </div>
+                    </div>
+
+                </div>
+            </td>
+        </tr>
+        <!--
+
+
+      
         <tr id="agendaGral">
             <td valign="middle">
                 <div class="cajacluster" id="classCluster">
@@ -298,8 +371,52 @@
 
                 </div>
             </td>
-        </tr>
+        </tr>  -->
     </table>
+    <div class="contenedorcilloParent" style="display:none" id="agendaEspecifica">
+
+        <br><br><br>
+        <div class="contenedorcillo">
+            <div style="position:absolut;right:10px;margin-top:10px">
+                <a style="float: right; " onclick="cerrarAgendaEspecifica()"><img src="img/lanegra.svg" width="15"></a>
+            </div>
+            <section>
+                <img src="img/header.svg" width="100%">
+            </section>
+            <div class="space7"></div>
+            <section>
+                <div class="titulo">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <div class="titutext" id="titutext">
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="icono" id="iconoAgendaEspecifica">
+                            </div>
+                            <div class="barra hidden-xs">
+                                <img src="img/barra1.svg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="space5"><br></div>
+            <section class="marco-desarrollo" id="marco">
+                <div class="info" id="tituloDia">
+                </div>
+                <div class="space4"></div>
+                <div class="row" id="contenidoAgenda">
+
+                </div>
+                <div class="space4"></div>
+
+                <div class="cajafoot">
+                    <img src="img/logo-welbeing.svg" class="logow">
+                </div>
+            </section>
+        </div>
+    </div>
 
 
     <table class="shadowbox" id="nameGral" style="height: 49px; width: 100%;">

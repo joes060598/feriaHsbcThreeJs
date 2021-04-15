@@ -159,8 +159,8 @@ class BasicCharacterController {
             console.log('fbx :>> ', fbx);
             fbx.position.x = 1250;
             //fbx.position.x = 1000;
-            //fbx.position.z = 23;
-            fbx.position.z = -300;
+            fbx.position.z = 23;
+            //fbx.position.z = -300;
             fbx.position.y = 0;
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
@@ -587,7 +587,7 @@ class BasicCharacterController {
     }
     _LoadModelsLeon() {
         const loader = new FBXLoader();
-
+        loader.setPath('./models/leon/LEONCIO TEX/');
         /* loader.setPath('./models/');
          loader.load('HSBC Entorno_10_CAPAS_BOTONES ENTER.fbx', (fbx) => {
              fbx.position.y = 3;
@@ -980,8 +980,11 @@ function _onKeyDown(event) {
                     HSBC te ofrece una gran variedad de actividades, herramietnas y opciones para lograrlo.
                 </p>`
                 $("#textInfo").html(textInfo);
-                $("#buttonAgenda").html(`<a onclick="agenda('Balance')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
-                $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('Balance')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+                //$("#buttonAgenda").html(`<a onclick="agenda('Balance')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de eventos</a>`);
+                //$("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('Balance')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de días anteriores</a>`);
+                $("#botonesAgenda").html(`<div class="space5 visible-xs"></div>
+                <a onclick="agenda('Balance')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de eventos</a>
+                <a onclick="agendaAnterior('Balance')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de días anteriores</a>`);
                 $("#divP1").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta1','cajacomments1','Balance')" value="Enviar">`);
                 $("#divP").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta','cajacomments','Balance')" value="Enviar">`);
             }
@@ -1005,8 +1008,11 @@ function _onKeyDown(event) {
                     HSBC te ofrece una variedad de beneficios que te ayudarán a sentirte bien física y emocionalmente.
                 </p>`
                 $("#textInfo").html(textInfo);
-                $("#buttonAgenda").html(`<a onclick="agenda('SaludBienestar')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
-                $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('SaludBienestar')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+                $("#buttonAgenda").html(`<a onclick="agenda('SaludBienestar')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de eventos</a>`);
+                $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('SaludBienestar')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de días anteriores</a>`);
+                $("#botonesAgenda").html(`<div class="space5 visible-xs"></div>
+                <a onclick="agenda('SaludBienestar')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de eventos</a>
+                <a onclick="agendaAnterior('SaludBienestar')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de días anteriores</a>`);
                 $("#divP1").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta1','cajacomments1','SaludBienestar')" value="Enviar">`);
                 $("#divP").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta','cajacomments','SaludBienestar')" value="Enviar">`);
             }
@@ -1030,8 +1036,11 @@ function _onKeyDown(event) {
                     Para conocer más sobre la cultura y los programas ingresa al siguiente apartado.
                 </p>`
                 $("#textInfo").html(textInfo);
-                $("#buttonAgenda").html(`<a onclick="agenda('Cultura')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
-                $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('Cultura')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+                $("#buttonAgenda").html(`<a onclick="agenda('Cultura')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de eventos</a>`);
+                $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('Cultura')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de días anteriores</a>`);
+                $("#botonesAgenda").html(`<div class="space5 visible-xs"></div>
+                <a onclick="agenda('Cultura')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de eventos</a>
+                <a onclick="agendaAnterior('Cultura')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de días anteriores</a>`);
                 $("#divP1").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta1','cajacomments1','Cultura')" value="Enviar">`);
                 $("#divP").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta','cajacomments','Cultura')" value="Enviar">`);
             }
@@ -1055,8 +1064,12 @@ function _onKeyDown(event) {
                 y/o ingresos para alcanzar todo lo que habías soñado.
                 </p>`
                 $("#textInfo").html(textInfo);
-                $("#buttonAgenda").html(`<a onclick="agenda('Finanzas')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
-                $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('Finanzas')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+                $("#buttonAgenda").html(`<a onclick="agenda('Finanzas')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de eventos</a>`);
+                $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('Finanzas')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de días anteriores</a>`);
+                $("#botonesAgenda").html(`<div class="space5 visible-xs"></div>
+                <a onclick="agenda('Finanzas')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de eventos</a>
+                <a onclick="agendaAnterior('Finanzas')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de días anteriores</a>`);
+
                 $("#divP1").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta1','cajacomments1','Finanzas')" value="Enviar">`);
                 $("#divP").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta','cajacomments','Finanzas')" value="Enviar">`);
 
@@ -1082,8 +1095,11 @@ function _onKeyDown(event) {
                  Tú, que buscas retos y cambios constantes, ingresa a la siguiente sección para conocer cuál será tu siguiente paso y cómo darlo. 
                 </p>`
                 $("#textInfo").html(textInfo);
-                $("#buttonAgenda").html(`<a onclick="agenda('DesarrolloCarrera')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
-                $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('DesarrolloCarrera')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+                $("#buttonAgenda").html(`<a onclick="agenda('DesarrolloCarrera')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de eventos</a>`);
+                $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('DesarrolloCarrera')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de días anteriores</a>`);
+                $("#botonesAgenda").html(`<div class="space5 visible-xs"></div>
+                <a onclick="agenda('DesarrolloCarrera')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de eventos</a>
+                <a onclick="agendaAnterior('DesarrolloCarrera')" class="agendaicon"><img src="img/agenda.svg" width="100%"><br> Agenda de días anteriores</a>`);
 
                 $("#divP1").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta1','cajacomments1','DesarrolloCarrera')" value="Enviar">`);
                 $("#divP").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta','cajacomments','DesarrolloCarrera')" value="Enviar">`);

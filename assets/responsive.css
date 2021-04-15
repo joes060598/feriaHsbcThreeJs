@@ -1,0 +1,331 @@
+@charset "utf-8";
+
+/* CSS Document */
+
+
+/*******************************************************************************************************************/
+
+
+/* Small screens */
+
+@media only screen {}
+
+
+/* Define mobile styles */
+
+@media only screen and (max-width: 768px) {
+    .titutext {
+        width: 100%;
+        z-index: 10;
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .icono {
+        position: absolute;
+        margin-top: -65px;
+        z-index: 11;
+        margin-right: -100px;
+    }
+    .barra img {
+        width: 88px;
+        margin-left: 160px;
+    }
+    .login {
+        margin: 0 20px;
+    }
+    .login {
+        background-color: #f00;
+        MAX-width: 1000px;
+        margin: 0 20px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+    .cajacluster {
+        MAX-width: 1000px;
+        margin: 0 20px;
+        border-radius: 10px;
+        padding: 20px;
+        background-image: url(../img/bg-logo.png);
+        background-position: bottom;
+        background-size: 40%;
+        background-repeat: no-repeat;
+    }
+    .iconlog {
+        position: absolute;
+        margin-top: -70px;
+    }
+    .agendaicon img {
+        width: 50%;
+    }
+    .agendaicon {
+        display: block;
+        background-color: rgba(255, 255, 255, 0.42);
+        text-align: center;
+        color: #fff;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        padding: 20px;
+        font-size: 1.4em;
+    }
+    .agendaicon:hover {
+        color: rgba(255, 255, 255, 0.74);
+    }
+    .cajacoments {
+        background-color: #081423;
+        padding: 10px;
+        border-radius: 10px;
+        position: absolute;
+        z-index: 100;
+        width: 382px;
+        margin-top: 100px;
+        margin-left: 110px;
+    }
+    /*******************************************************************************************************************/
+}
+
+
+/*******************************************************************************************************************/
+
+
+/* Medium screens */
+
+@media only screen and (min-width: 769px) {}
+
+@media only screen and (min-width: 769px) and (max-width: 992px) {
+    .titutext {
+        position: absolute;
+        width: 100%;
+        z-index: 10;
+        background-color: #fff;
+        padding: 10px;
+        margin-left: -20px;
+        padding-left: 50px;
+        width: 135%;
+    }
+    .icono {
+        position: absolute;
+        margin-top: -65px;
+        z-index: 11;
+        margin-right: -100px;
+    }
+    .barra img {
+        width: 88px;
+        margin-left: 160px;
+    }
+    .login {
+        background-color: #f00;
+        height: 600px;
+        MAX-width: 1000px;
+        margin: 0px auto;
+        border-radius: 10px;
+        padding: 20px;
+    }
+    .cajacluster {
+        height: 600px;
+        MAX-width: 1000px;
+        margin: 0px auto;
+        border-radius: 10px;
+        padding: 20px;
+        background-image: url(../img/bg-logo.png);
+        background-position: bottom left;
+        background-size: 40%;
+        background-repeat: no-repeat;
+    }
+    .iconlog {
+        position: absolute;
+        margin-top: -70px;
+    }
+    .agendaicon img {
+        width: 50%;
+    }
+    .agendaicon {
+        display: block;
+        background-color: rgba(255, 255, 255, 0.42);
+        text-align: center;
+        color: #fff;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        padding: 20px;
+        font-size: 1.4em;
+    }
+    .agendaicon:hover {
+        color: rgba(255, 255, 255, 0.74);
+    }
+    .cajacoments {
+        background-color: #081423;
+        padding: 10px;
+        border-radius: 10px;
+        position: absolute;
+        z-index: 100;
+        width: 382px;
+        margin-top: 100px;
+        margin-left: -20px;
+    }
+    /*******************************************************************************************************************/
+}
+
+
+/*******************************************************************************************************************/
+
+
+/* Medium screens */
+
+@media only screen and (min-width: 993px) {}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .titutext {
+        position: absolute;
+        width: 100%;
+        z-index: 10;
+        background-color: #fff;
+        padding: 10px;
+        margin-left: -20px;
+        padding-left: 50px;
+        width: 135%;
+    }
+    .icono {
+        position: absolute;
+        margin-top: -65px;
+        z-index: 11;
+        margin-right: -100px;
+    }
+    .barra img {
+        width: 88px;
+        margin-left: 220px;
+    }
+    .login {
+        background-color: #f00;
+        height: 600px;
+        MAX-width: 1000px;
+        margin: 0px auto;
+        border-radius: 10px;
+        padding: 20px;
+    }
+    .cajacluster {
+        height: 600px;
+        MAX-width: 1000px;
+        margin: 0px auto;
+        border-radius: 10px;
+        padding: 20px;
+        background-image: url(../img/bg-logo.png);
+        background-position: bottom left;
+        background-size: 40%;
+        background-repeat: no-repeat;
+    }
+    .iconlog {
+        position: absolute;
+        margin-top: -70px;
+    }
+    .agendaicon img {
+        width: 50%;
+    }
+    .agendaicon {
+        display: block;
+        background-color: rgba(255, 255, 255, 0.42);
+        text-align: center;
+        color: #fff;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        padding: 20px;
+        font-size: 1.4em;
+    }
+    .agendaicon:hover {
+        color: rgba(255, 255, 255, 0.74);
+    }
+    .cajacoments {
+        background-color: #081423;
+        padding: 10px;
+        border-radius: 10px;
+        position: absolute;
+        z-index: 100;
+        width: 382px;
+        margin-top: 100px;
+        margin-left: -20px;
+    }
+    /*******************************************************************************************************************/
+}
+
+
+/*******************************************************************************************************************/
+
+
+/* Extra Large screens */
+
+@media only screen and (min-width: 1201px) {}
+
+@media only screen and (min-width: 1201px) {
+    .titutext {
+        position: absolute;
+        width: 100%;
+        z-index: 10;
+        background-color: #fff;
+        padding: 10px;
+        margin-left: -20px;
+        padding-left: 50px;
+        width: 135%;
+    }
+    .icono {
+        position: absolute;
+        margin-top: -65px;
+        z-index: 11;
+        margin-right: -100px;
+    }
+    .barra img {
+        width: 88px;
+        margin-left: 220px;
+    }
+    .login {
+        background-color: #f00;
+        height: 600px;
+        MAX-width: 1000px;
+        margin: 0px auto;
+        border-radius: 10px;
+        padding: 20px;
+    }
+    .cajacluster {
+        height: 600px;
+        MAX-width: 1000px;
+        margin: 0px auto;
+        border-radius: 10px;
+        padding: 20px;
+        background-image: url(../img/bg-logo.png);
+        background-position: bottom left;
+        background-size: 40%;
+        background-repeat: no-repeat;
+    }
+    .iconlog {
+        position: absolute;
+        margin-top: -70px;
+    }
+    .agendaicon img {
+        width: 50%;
+    }
+    .agendaicon {
+        display: block;
+        background-color: rgba(255, 255, 255, 0.42);
+        text-align: center;
+        color: #fff;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        padding: 20px;
+        font-size: 1.4em;
+    }
+    .agendaicon:hover {
+        color: rgba(255, 255, 255, 0.74);
+    }
+    .cajacoments {
+        background-color: #081423;
+        padding: 10px;
+        border-radius: 10px;
+        position: absolute;
+        z-index: 100;
+        width: 382px;
+        margin-top: 100px;
+        margin-left: -20px;
+    }
+    /******************************************************************************************************************/
+}
+
+
+/*******************************************************************************************************************/
