@@ -71,11 +71,12 @@ $("#musica").click(function() {
 $("#enter").click(function() {
     _onKeyDown({ keyCode: 13 });
 });
-
-$("#correr").mousedown(function() {
+let scorrer = false;
+let sbrincar = false;
+$("#correr").touchstart(function() {
     _onKeyDown({ keyCode: 16 });
 });
-$("#correr").mouseup(function() {
+$("#correr").touchend(function() {
     _onKeyUp({ keyCode: 16 })
 });
 
