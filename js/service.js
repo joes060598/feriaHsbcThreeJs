@@ -34,7 +34,7 @@
              //let fechaActual = new Date();
              //QUITAR
              let fechaActual = new Date("2021-04-24T07:00:00.000Z");
-             let diaActual = fechaActual.getUTCDay();
+             let diaActual = fechaActual.getDate();
              let mesActual = fechaActual.getMonth();
              console.log('fechaActual :>> ', fechaActual);
              console.log('diaActual :>> ', diaActual);
