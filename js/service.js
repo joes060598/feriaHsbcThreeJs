@@ -1,5 +1,5 @@
- //let url = 'http://173.231.203.133:4000/';
- let url = 'https://api.feriaswbhsbc.com/';
+ let url = 'http://173.231.203.133:4000/';
+ //let url = 'https://api.feriaswbhsbc.com/';
  //let url = 'http://localhost:4000/';
  let _APP = null;
 
@@ -23,55 +23,116 @@
      $("#login").fadeIn('slow');
  }
 
- function agenda(type) {
+ function agendaAnterior(type) {
      $.get(url + `schedule/${type}`, function(data) {
          let pintar = "";
          let anteriores = ""
          if (data.statusCode == 200) {
              let schedule = data.schedule;
              let arraySchedule = [];
-             console.log('schedule :>> ', schedule);
-             //let fechaActual = new Date();
-             //QUITAR
-             let fechaActual = new Date("2021-04-20T05:00:00.000Z");
+             let fechaActual = new Date('2021-04-24T05:00:00.000Z');
              let diaActual = fechaActual.getDate();
              let mesActual = fechaActual.getMonth();
-             console.log('fechaActual :>> ', fechaActual);
-             console.log('diaActual :>> ', diaActual);
-             console.log('mesActual :>> ', mesActual);
              for (const iterator of schedule) {
                  let fechaAgenda = new Date(iterator.fecha[0]);
-                 console.log('fechaAgenda :>> ', fechaAgenda);
                  let mesAgenda = fechaAgenda.getMonth();
                  let diaAgenda = fechaAgenda.getDate();
                  let diaAgendaWeek = fechaAgenda.getDay();
-                 console.log('mesAgenda :>> ', mesAgenda);
-                 console.log('diaAgenda :>> ', diaAgenda);
-                 if (diaActual == diaAgenda && mesActual == mesAgenda) {
-                     pintar += `${getDayTexto(diaAgendaWeek)+' '+diaAgenda}<br>`
+                 if (fechaAgenda < fechaActual) {
+                     pintar += `<h1>${getDayTexto(diaAgendaWeek)+' '+diaAgenda}</h1><br>`
                      for (const agendad of iterator.res) {
                          if (agendad.status == "true") {
                              let fechaInicio = new Date(agendad.start);
                              let fechaFinal = new Date(agendad.finish);
-
+                             //<a href="${agendad.video}" target="_blank">
                              pintar += `<div>
-                                       <p> ${agendad.name}</p>
-                                       <p>${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</p>
-                                       <a href="${agendad.url}" target="_blank">
-                                       AQUI
-                                       </a>
-                                   </div>`
+                                      <p> ${agendad.name}</p>
+                                      <p>${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</p>
+                                      <a href="https://vimeo.com/535667880" target="_blank">
+                                      AQUI
+                                      </a>
+                                  </div>`
+
+
                          }
                      }
                  } else {
 
                  }
              }
-             console.log('pintar :>> ', pintar);
+             $('#calendarAnterior').html(pintar);
+             $("#agendaGral").hide();
+             $("canvas").hide();
+             $("#agendaEspecifica").show('slow');
+             $("#agendaDia").hide('slow');
+             $("#angendaAnterior").show('slow');
+         } else {
+             alertify.error(data.message);
+         }
+     });
+ }
+
+ function agenda(type) {
+     $.get(url + `schedule/${type}`, function(data) {
+         let pintar = "";
+         let anteriores = ""
+         let fechas = [];
+         //let fechaActual = new Date();
+         //QUITAR
+         let fechaActual = new Date('2021-04-24T05:00:00.000Z');
+         let diaActual = fechaActual.getDate();
+         let mesActual = fechaActual.getMonth();
+         if (data.statusCode == 200) {
+             let schedule = data.schedule;
+             console.log('schedule :>> ', schedule);
+             for (const iterator of schedule) {
+                 let fechaAgenda = new Date(iterator.fecha[0]);
+                 fechas.push(fechaAgenda);
+                 let mesAgenda = fechaAgenda.getMonth();
+                 let diaAgenda = fechaAgenda.getDate();
+                 let diaAgendaWeek = fechaAgenda.getDay();
+                 if (diaActual == diaAgenda && mesActual == mesAgenda) {
+                     pintar += `<h1>${getDayTexto(diaAgendaWeek)+' '+diaAgenda}</h1><br>`
+                     for (const agendad of iterator.res) {
+                         if (agendad.status == "true") {
+                             let fechaInicio = new Date(agendad.start);
+                             let fechaFinal = new Date(agendad.finish);
+
+                             pintar += `<div>
+                                      <p> ${agendad.name}</p>
+                                      <p>${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</p>
+                                      <a href="${agendad.url}" target="_blank">
+                                      AQUI
+                                      </a>
+                                  </div>`
+                         }
+                     }
+                 }
+             }
+             fechas.sort();
+             if (pintar == "") {
+                 console.log('fechas[0] :>> ', fechas[0]);
+                 console.log('fechas[1] :>> ', fechas[1]);
+                 console.log('fechaActual :>> ', fechaActual);
+                 if (fechas[0] > fechaActual) {
+                     let d = fechas[0].getDate();
+                     let w = fechas[0].getDay();
+                     pintar = `El día de hoy no hay agenda abierta, hasta 
+                     ${getDayTexto(w)+' '+d}<br>`
+                 } else if (pintar == "" && fechas[1] > fechaActual) {
+                     let d = fechas[1].getDate();
+                     let w = fechas[1].getDay();
+                     pintar = `El día de hoy no hay agenda abierta, hasta 
+                    ${getDayTexto(w)+' '+d}<br>`
+                 }
+
+             }
              $('#calendar').html(pintar);
              $("#agendaGral").hide();
              $("canvas").hide();
              $("#agendaEspecifica").show('slow');
+             $("#agendaDia").show('slow');
+             $("#angendaAnterior").hide('slow');
          } else {
              alertify.error(data.message);
          }

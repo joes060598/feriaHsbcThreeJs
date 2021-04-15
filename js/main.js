@@ -19,6 +19,7 @@ var playSound = false;
 var hitSound, danceSound;
 var pause_music = false;
 var mensaje = false;
+var paramsGral;
 hitSound = new Audio('./assets/music2.mp3');
 console.log('hitSound :>> ', hitSound);
 hitSound.loop = true;
@@ -49,7 +50,50 @@ setInterval(() => {
     }
 }, 240000);
 
+$("#musica").click(function() {
+    if (pause_music) {
+        if (hitSound) {
+            hitSound.play();
+            hitSound.currentTime = 0;
+            pause_music = false;
+        }
 
+    } else {
+        if (hitSound) {
+            hitSound.pause();
+            hitSound.currentTime = 0;
+            pause_music = true;
+        }
+    }
+});
+
+
+$("#enter").click(function() {
+    _onKeyDown({ keyCode: 13 });
+});
+
+$("#correr").mousedown(function() {
+    _onKeyDown({ keyCode: 16 });
+});
+$("#correr").mouseup(function() {
+    _onKeyUp({ keyCode: 16 })
+});
+
+
+$("#bailar").mousedown(function() {
+    _onKeyDown({ keyCode: 66 });
+});
+$("#bailar").mouseup(function() {
+    _onKeyUp({ keyCode: 66 })
+});
+
+
+$("#brincar").mousedown(function() {
+    _onKeyDown({ keyCode: 32 });
+});
+$("#brincar").mouseup(function() {
+    _onKeyUp({ keyCode: 32 })
+});
 
 class BasicCharacterControllerProxy {
     constructor(animations, camera) {
@@ -827,380 +871,334 @@ class BasicCharacterController {
 
 };
 
+function _onKeyDown(event) {
+
+    switch (event.keyCode) {
+        case 87: //W: FORWARD
+        case 38: //up arrow
+            if (!botones) {
+                return;
+            }
+            if (!playSound && pause_music == false) {
+                playSound = true;
+                hitSound.play();
+            }
+            _keys.forward = true;
+
+            break;
+        case 65: //A: LEFT
+        case 37: //left arrow
+            if (!botones) {
+                return;
+            }
+            _keys.left = true;
+            break;
+
+        case 83: //S: BACK
+        case 40: //down arrow
+            if (!botones) {
+                return;
+            }
+            _keys.backward = true;
+            break;
+        case 68: //D: RIGHT
+        case 39: //right arrow
+            if (!botones) {
+                return;
+            }
+            _keys.right = true;
+            break;
+        case 32: //space
+            if (!botones) {
+                return;
+            }
+            _keys.space = true;
+            break;
+
+            /*case 66: //b
+                if (!botones) {
+                    return;
+                }
+                _keys.b = true;
+                break;*/
+        case 66: //b
+
+            _keys.b = true;
+            break;
+        case 16: //shift
+            if (!botones) {
+                return;
+            }
+            _keys.shift = true;
+            break;
+        case 80: //shift
+            if (pause_music) {
+                if (hitSound) {
+                    hitSound.play();
+                    hitSound.currentTime = 0;
+                    pause_music = false;
+                }
+
+            } else {
+                if (hitSound) {
+                    hitSound.pause();
+                    hitSound.currentTime = 0;
+                    pause_music = true;
+                }
+            }
+
+            break;
+        case 13: //enter
+
+            _keys.enter = true;
+
+            let balance = {
+                xn: 474,
+                xm: 500,
+                zn: 450,
+                zm: 482
+            }
+            let finanzas = {
+                zm: -370,
+                zn: -399.5,
+                xm: 524.5,
+                xn: 494
+            }
+
+            let desarrollo = {
+                zm: -369.6,
+                zn: -399.5,
+                xm: 24.5,
+                xn: -10
+            }
+
+            let valores = {
+                xm: -349,
+                xn: -379,
+                zn: 7.7,
+                zm: 38.1
+            }
+            let salud = {
+                xm: -15.5,
+                xn: -46,
+                zm: 483,
+                zn: 454.5
+
+            }
+            let juegoLadrillosJson = {
+                xm: -174,
+                xn: -209,
+                zm: 111,
+                zn: 82
+            }
+            let juegoFutJson = {
+                xm: -188,
+                xn: -216,
+                zm: -70.6,
+                zn: -94
+            }
+
+            let character = paramsGral.scene.children.find((a) => { return a.name == 'personaje' });
+            let position = character.position;
+
+            if ((position.x >= balance.xn && position.x <= balance.xm) && (position.z >= balance.zn && position.z <= balance.zm)) {
+                $('#agenda').show();
+                $("#nameGral").hide();
+
+                $("#classCluster").removeClass();
+                $("#classCluster").addClass("cajacluster balance");
+                $("#icon").html(`<img src="img/balance.svg" height="130"></img>`);
+
+                $("#classCluster2").addClass(" balance");
+                $("#icon2").html(`<img src="img/balance.svg" height="130"></img>`);
+                $("#icon3").html(`<img src="img/balance.svg" height="130"></img>`);
+                $("#tituloCluster").html(`<h1>Balance entre Trabajo y Tiempo Libre</h1>`);
+                let textInfo = `<h2>Balance entre Trabajo y Tiempo Libre</h2>
+                <div class="space2"></div>
+                <p style="text-align: justify;">
+                    Lograr un balance entre tu vida personal, profesional y social es importante.
+                    HSBC te ofrece una gran variedad de actividades, herramietnas y opciones para lograrlo.
+                </p>`
+                $("#textInfo").html(textInfo);
+                $("#buttonAgenda").html(`<a onclick="agenda('Balance')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+                $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('Balance')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+
+            }
+
+            if ((position.x >= salud.xn && position.x <= salud.xm) && (position.z >= salud.zn && position.z <= salud.zm)) {
+                $("#nameGral").hide();
+                $('#agenda').show();
+                $("#classCluster").removeClass();
+                $("#classCluster2").removeClass();
+                $("#classCluster").addClass("cajacluster salud");
+                $("#icon").html(`<img src="img/salud-y-bienestar.svg" height="130"></img>`);
+                $("#classCluster2").addClass("cajacluster salud");
+                $("#icon2").html(`<img src="img/salud-y-bienestar.svg" height="130"></img>`);
+
+                $("#icon3").html(`<img src="img/salud-y-bienestar.svg" height="130"></img>`);
+                $("#tituloCluster").html(`<h1>Salud y Bienestar</h1>`);
+                let textInfo = `<h2>Salud y Bienestar</h2>
+                <div class="space2"></div>
+                <p style="text-align: justify;">
+                    Tu salud y bienestar son importantes para ser la mejor versión de ti.
+                    HSBC te ofrece una variedad de beneficios que te ayudarán a sentirte bien física y emocionalmente.
+                </p>`
+                $("#textInfo").html(textInfo);
+                $("#buttonAgenda").html(`<a onclick="agenda('SaludBienestar')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+                $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('SaludBienestar')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+
+            }
+            if ((position.x >= valores.xn && position.x <= valores.xm) && (position.z >= valores.zn && position.z <= valores.zm)) {
+                $('#agenda').show();
+                $("#nameGral").hide();
+                $("#classCluster").removeClass();
+                $("#classCluster2").removeClass();
+                $("#classCluster").addClass("cajacluster cultura");
+                $("#classCluster2").addClass("cajacluster cultura");
+                $("#icon").html(`<img src="img/cultura-y-valores.svg" height="130"></img>`);
+                $("#icon2").html(`<img src="img/cultura-y-valores.svg" height="130"></img>`);
+
+                $("#icon3").html(`<img src="img/cultura-y-valores.svg" height="130"></img>`);
+                $("#tituloCluster").html(`<h1>Cultura y Valores</h1>`);
+                let textInfo = `<h2>Cultura y Valores</h2>
+                <div class="space2"></div>
+                <p style="text-align: justify;">
+                    HSBC es una empresa internacional sólida y sustentable, comprometida en ser una influencia positiva en la
+                    comunidad, haciendo lo correcto en todo momento. ¡Siéntete orgulloso de pertenecer a una institución como ésta!
+                    Para conocer más sobre la cultura y los programas ingresa al siguiente apartado.
+                </p>`
+                $("#textInfo").html(textInfo);
+                $("#buttonAgenda").html(`<a onclick="agenda('Cultura')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+                $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('Cultura')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+
+            }
+            if ((position.x >= finanzas.xn && position.x <= finanzas.xm) && (position.z >= finanzas.zn && position.z <= finanzas.zm)) {
+                $('#agenda').show();
+                $("#nameGral").hide();
+                $("#classCluster").removeClass();
+                $("#classCluster2").removeClass();
+                $("#classCluster").addClass("cajacluster finanzas");
+                $("#classCluster2").addClass("cajacluster finanzas");
+                $("#icon").html(`<img src="img/finanzas.svg" height="130"></img>`);
+                $("#icon2").html(`<img src="img/finanzas.svg" height="130"></img>`);
+                $("#icon3").html(`<img src="img/finanzas.svg" height="130"></img>`);
+
+                $("#tituloCluster").html(`<h1>Finanzas</h1>`);
+                let textInfo = `<h2>Finanzas</h2>
+                <div class="space2"></div>
+                <p style="text-align: justify;">
+                En HSBC apoyamos a nuestros colegas a cumplir sus sueños, conectando sus ambiciones con oportunidades. 
+                ¡HSBC te ayuda a cumplir tus sueños! Ingresa al siguiente apartado para conocer  cómo puedes incrementar tus ahorros
+                y/o ingresos para alcanzar todo lo que habías soñado.
+                </p>`
+                $("#textInfo").html(textInfo);
+                $("#buttonAgenda").html(`<a onclick="agenda('Finanzas')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+                $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('Finanzas')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+
+            }
+            if ((position.x >= desarrollo.xn && position.x <= desarrollo.xm) && (position.z >= desarrollo.zn && position.z <= desarrollo.zm)) {
+                $('#agenda').show();
+                $("#nameGral").hide();
+                $("#classCluster").removeClass();
+                $("#classCluster2").removeClass();
+                $("#classCluster").addClass("cajacluster desarrollo");
+                $("#classCluster2").addClass("cajacluster desarrollo");
+                $("#icon").html(`<img src="img/desarrollo.svg" height="130"></img>`);
+
+                $("#icon2").html(`<img src="img/desarrollo.svg" height="130"></img>`);
+                $("#icon3").html(`<img src="img/desarrollo.svg" height="130"></img>`);
+
+                $("#tituloCluster").html(`<h1>Desarrollo y Carrera</h1>`);
+                let textInfo = `<h2>Desarrollo y Carrera</h2>
+                <div class="space2"></div>
+                <p style="text-align: justify;">
+                HSBC brinda oportunidades de desarrollo de carrera y aprendizaje continuo en un ambiente retador
+                 e inclusivo en donde el talento es el único diferenciador, con oportunidades de desarrollo nacionales e internacionales. 
+                 Tú, que buscas retos y cambios constantes, ingresa a la siguiente sección para conocer cuál será tu siguiente paso y cómo darlo. 
+                </p>`
+                $("#textInfo").html(textInfo);
+                $("#buttonAgenda").html(`<a onclick="agenda('DesarrolloCarrera')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+                $("#buttonAgendaAnterior").html(`<a onclick="agendaAnterior('DesarrolloCarrera')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
+
+            }
+            break;
+    }
+}
+
+function _onKeyUp(event) {
+    if (!botones) {
+        return;
+    }
+    switch (event.keyCode) {
+        case 87: //W: FORWARD
+        case 38: //up arrow
+            if (!botones) {
+                return;
+            }
+            _keys.forward = false;
+
+            break;
+        case 65: //A: LEFT
+        case 37: //left arrow
+            if (!botones) {
+                return;
+            }
+            _keys.left = false;
+            break;
+
+        case 83: //S: BACK
+        case 40: //down arrow
+            if (!botones) {
+                return;
+            }
+            _keys.backward = false;
+            break;
+        case 68: //D: RIGHT
+        case 39: //right arrow
+            if (!botones) {
+                return;
+            }
+            _keys.right = false;
+            break;
+        case 32: //space
+            if (!botones) {
+                return;
+            }
+            _keys.space = false;
+            break;
+        case 16: //shift
+            if (!botones) {
+                return;
+            }
+            _keys.shift = false;
+            break;
+
+        case 13: //shift
+            if (!botones) {
+                return;
+            }
+            _keys.enter = false;
+            break;
+        case 66: //b
+            if (!botones) {
+                return;
+            }
+            _keys.b = false;
+            break;
+    }
+}
 class BasicCharacterControllerInput {
     constructor(params) {
         this._params = params;
         this._Init();
+        paramsGral = params
     }
     _Init() {
 
-        document.addEventListener('keydown', (e) => { this._onKeyDown(e), false });
-        document.addEventListener('keyup', (e) => { this._onKeyUp(e), false });
-    }
-    _onKeyDown(event) {
-
-        switch (event.keyCode) {
-            case 87: //W: FORWARD
-            case 38: //up arrow
-                if (!botones) {
-                    return;
-                }
-                console.log('playSound :>> ', playSound);
-                if (!playSound && pause_music == false) {
-                    playSound = true;
-                    hitSound.play();
-                }
-                _keys.forward = true;
-
-                break;
-            case 65: //A: LEFT
-            case 37: //left arrow
-                if (!botones) {
-                    return;
-                }
-                _keys.left = true;
-                break;
-
-            case 83: //S: BACK
-            case 40: //down arrow
-                if (!botones) {
-                    return;
-                }
-                _keys.backward = true;
-                break;
-            case 68: //D: RIGHT
-            case 39: //right arrow
-                if (!botones) {
-                    return;
-                }
-                _keys.right = true;
-                break;
-            case 32: //space
-                if (!botones) {
-                    return;
-                }
-                _keys.space = true;
-                break;
-
-                /*case 66: //b
-                    if (!botones) {
-                        return;
-                    }
-                    _keys.b = true;
-                    break;*/
-            case 66: //b
-
-                _keys.b = true;
-                break;
-            case 16: //shift
-                if (!botones) {
-                    return;
-                }
-                _keys.shift = true;
-                break;
-            case 80: //shift
-                if (pause_music) {
-                    if (hitSound) {
-                        hitSound.play();
-                        hitSound.currentTime = 0;
-                        pause_music = false;
-                    }
-
-                } else {
-                    if (hitSound) {
-                        hitSound.pause();
-                        hitSound.currentTime = 0;
-                        pause_music = true;
-                    }
-                }
-
-                break;
-            case 13: //enter
-
-                _keys.enter = true;
-
-                let balance = {
-                    xn: 474,
-                    xm: 500,
-                    zn: 450,
-                    zm: 482
-                }
-                let finanzas = {
-                    zm: -370,
-                    zn: -399.5,
-                    xm: 524.5,
-                    xn: 494
-                }
-
-                let desarrollo = {
-                    zm: -369.6,
-                    zn: -399.5,
-                    xm: 24.5,
-                    xn: -10
-                }
-
-                let valores = {
-                    xm: -349,
-                    xn: -379,
-                    zn: 7.7,
-                    zm: 38.1
-                }
-                let salud = {
-                    xm: -15.5,
-                    xn: -46,
-                    zm: 483,
-                    zn: 454.5
-
-                }
-                let juegoLadrillosJson = {
-                    xm: -174,
-                    xn: -209,
-                    zm: 111,
-                    zn: 82
-                }
-                let juegoFutJson = {
-                    xm: -188,
-                    xn: -216,
-                    zm: -70.6,
-                    zn: -94
-                }
-
-                let character = this._params.scene.children.find((a) => { return a.name == 'personaje' });
-                let position = character.position;
-                if ((position.x >= juegoFutJson.xn && position.x <= juegoFutJson.xm) && (position.z >= juegoFutJson.zn && position.z <= juegoFutJson.zm)) {
-                    if (!juegoFut) {
-                        juegoFut = true;
-                        botones = false;
-                        camara.third = false;
-                        console.log('this._params.camera :>> ', this._params.camera);
-                        this._params.camera.position.y = 50;
-                        this._params.camera.position.x = -150;
-                        this._params.camera.position.z = -50;
-                        this._params.camera.rotation._x = -2.973;
-                        this._params.camera.rotation._y = 1.1893;
-                        this._params.camera.rotation._z = 2.985;
-                        this._params.camera.quaternion._w = 0.3162136738971042
-                        this._params.camera.quaternion._x = -0.016136448217947852
-                        this._params.camera.quaternion._y = 0.355889745548271
-                        this._params.camera.quaternion._z = 0.026754464784025
-                            //aspect1.3668188
-                            //fov60
-                            //focus 10
-                            //far 2600
-                    } else {
-                        juegoFut = false;
-                        botones = true;
-                        camara.third = true;
-
-                    }
-
-                    console.log('this._params :>> ', this._params);
-                }
-                if ((position.x >= juegoLadrillosJson.xn && position.x <= juegoLadrillosJson.xm) && (position.z >= juegoLadrillosJson.zn && position.z <= juegoLadrillosJson.zm)) {
-                    if (!juegoLadrillos) {
-                        juegoLadrillos = true;
-                        botones = false;
-                        camara.third = false;
-                        console.log('this._params.camera :>> ', this._params.camera);
-                        this._params.camera.position.y = 50;
-                        this._params.camera.position.x = -100;
-                        this._params.camera.position.z = 150;
-                        this._params.camera.rotation._x = -2.973;
-                        this._params.camera.rotation._y = 1.1893;
-                        this._params.camera.rotation._z = 2.985;
-                        this._params.camera.quaternion._w = 0.5162136738971042
-                        this._params.camera.quaternion._x = -0.016136448217947852
-                        this._params.camera.quaternion._y = 0.855889745548271
-                        this._params.camera.quaternion._z = 0.026754464784025
-                            //aspect1.3668188
-                            //fov60
-                            //focus 10
-                            //far 2600
-                    } else {
-                        juegoLadrillos = false;
-                        botones = true;
-                        camara.third = true;
-
-                    }
-
-                    console.log('this._params :>> ', this._params);
-                }
-                if ((position.x >= balance.xn && position.x <= balance.xm) && (position.z >= balance.zn && position.z <= balance.zm)) {
-                    $('#agenda').show();
-                    $("#nameGral").hide();
-
-                    $("#classCluster").removeClass();
-                    $("#classCluster").addClass("cajacluster balance");
-                    $("#icon").html(`<img src="img/balance.svg" height="130"></img>`);
-
-                    $("#classCluster2").addClass(" balance");
-                    $("#icon2").html(`<img src="img/balance.svg" height="130"></img>`);
-                    $("#icon3").html(`<img src="img/balance.svg" height="130"></img>`);
-                    $("#tituloCluster").html(`<h1>Balance entre Trabajo y Tiempo Libre</h1>`);
-                    let textInfo = `<h2>Balance entre Trabajo y Tiempo Libre</h2>
-                    <div class="space2"></div>
-                    <p style="text-align: justify;">
-                        Lograr un balance entre tu vida personal, profesional y social es importante.
-                        HSBC te ofrece una gran variedad de actividades, herramietnas y opciones para lograrlo.
-                    </p>`
-                    $("#textInfo").html(textInfo);
-                    $("#buttonAgenda").html(`<a onclick="agenda('Balance')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
-                }
-
-                if ((position.x >= salud.xn && position.x <= salud.xm) && (position.z >= salud.zn && position.z <= salud.zm)) {
-                    $("#nameGral").hide();
-                    $('#agenda').show();
-                    $("#classCluster").removeClass();
-                    $("#classCluster2").removeClass();
-                    $("#classCluster").addClass("cajacluster salud");
-                    $("#icon").html(`<img src="img/salud-y-bienestar.svg" height="130"></img>`);
-                    $("#classCluster2").addClass("cajacluster salud");
-                    $("#icon2").html(`<img src="img/salud-y-bienestar.svg" height="130"></img>`);
-
-                    $("#icon3").html(`<img src="img/salud-y-bienestar.svg" height="130"></img>`);
-                    $("#tituloCluster").html(`<h1>Salud y Bienestar</h1>`);
-                    let textInfo = `<h2>Salud y Bienestar</h2>
-                    <div class="space2"></div>
-                    <p style="text-align: justify;">
-                        Tu salud y bienestar son importantes para ser la mejor versión de ti.
-                        HSBC te ofrece una variedad de beneficios que te ayudarán a sentirte bien física y emocionalmente.
-                    </p>`
-                    $("#textInfo").html(textInfo);
-                    $("#buttonAgenda").html(`<a onclick="agenda('SaludBienestar')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
-                }
-                if ((position.x >= valores.xn && position.x <= valores.xm) && (position.z >= valores.zn && position.z <= valores.zm)) {
-                    $('#agenda').show();
-                    $("#nameGral").hide();
-                    $("#classCluster").removeClass();
-                    $("#classCluster2").removeClass();
-                    $("#classCluster").addClass("cajacluster cultura");
-                    $("#classCluster2").addClass("cajacluster cultura");
-                    $("#icon").html(`<img src="img/cultura-y-valores.svg" height="130"></img>`);
-                    $("#icon2").html(`<img src="img/cultura-y-valores.svg" height="130"></img>`);
-
-                    $("#icon3").html(`<img src="img/cultura-y-valores.svg" height="130"></img>`);
-                    $("#tituloCluster").html(`<h1>Cultura y Valores</h1>`);
-                    let textInfo = `<h2>Cultura y Valores</h2>
-                    <div class="space2"></div>
-                    <p style="text-align: justify;">
-                        HSBC es una empresa internacional sólida y sustentable, comprometida en ser una influencia positiva en la
-                        comunidad, haciendo lo correcto en todo momento. ¡Siéntete orgulloso de pertenecer a una institución como ésta!
-                        Para conocer más sobre la cultura y los programas ingresa al siguiente apartado.
-                    </p>`
-                    $("#textInfo").html(textInfo);
-                    $("#buttonAgenda").html(`<a onclick="agenda('Cultura')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
-                }
-                if ((position.x >= finanzas.xn && position.x <= finanzas.xm) && (position.z >= finanzas.zn && position.z <= finanzas.zm)) {
-                    $('#agenda').show();
-                    $("#nameGral").hide();
-                    $("#classCluster").removeClass();
-                    $("#classCluster2").removeClass();
-                    $("#classCluster").addClass("cajacluster finanzas");
-                    $("#classCluster2").addClass("cajacluster finanzas");
-                    $("#icon").html(`<img src="img/finanzas.svg" height="130"></img>`);
-                    $("#icon2").html(`<img src="img/finanzas.svg" height="130"></img>`);
-                    $("#icon3").html(`<img src="img/finanzas.svg" height="130"></img>`);
-
-                    $("#tituloCluster").html(`<h1>Finanzas</h1>`);
-                    let textInfo = `<h2>Finanzas</h2>
-                    <div class="space2"></div>
-                    <p style="text-align: justify;">
-                    En HSBC apoyamos a nuestros colegas a cumplir sus sueños, conectando sus ambiciones con oportunidades. 
-                    ¡HSBC te ayuda a cumplir tus sueños! Ingresa al siguiente apartado para conocer  cómo puedes incrementar tus ahorros
-                    y/o ingresos para alcanzar todo lo que habías soñado.
-                    </p>`
-                    $("#textInfo").html(textInfo);
-                    $("#buttonAgenda").html(`<a onclick="agenda('Finanzas')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
-                }
-                if ((position.x >= desarrollo.xn && position.x <= desarrollo.xm) && (position.z >= desarrollo.zn && position.z <= desarrollo.zm)) {
-                    $('#agenda').show();
-                    $("#nameGral").hide();
-                    $("#classCluster").removeClass();
-                    $("#classCluster2").removeClass();
-                    $("#classCluster").addClass("cajacluster desarrollo");
-                    $("#classCluster2").addClass("cajacluster desarrollo");
-                    $("#icon").html(`<img src="img/desarrollo.svg" height="130"></img>`);
-
-                    $("#icon2").html(`<img src="img/desarrollo.svg" height="130"></img>`);
-                    $("#icon3").html(`<img src="img/desarrollo.svg" height="130"></img>`);
-
-                    $("#tituloCluster").html(`<h1>Desarrollo y Carrera</h1>`);
-                    let textInfo = `<h2>Desarrollo y Carrera</h2>
-                    <div class="space2"></div>
-                    <p style="text-align: justify;">
-                    HSBC brinda oportunidades de desarrollo de carrera y aprendizaje continuo en un ambiente retador
-                     e inclusivo en donde el talento es el único diferenciador, con oportunidades de desarrollo nacionales e internacionales. 
-                     Tú, que buscas retos y cambios constantes, ingresa a la siguiente sección para conocer cuál será tu siguiente paso y cómo darlo. 
-                    </p>`
-                    $("#textInfo").html(textInfo);
-                    $("#buttonAgenda").html(`<a onclick="agenda('DesarrolloCarrera')" class="agendaicon"><img src="img/agenda.svg" width="100%"></a>`);
-                }
-                break;
-        }
+        document.addEventListener('keydown', (e) => { _onKeyDown(e), false });
+        document.addEventListener('keyup', (e) => { _onKeyUp(e), false });
     }
 
-    _onKeyUp(event) {
-        if (!botones) {
-            return;
-        }
-        switch (event.keyCode) {
-            case 87: //W: FORWARD
-            case 38: //up arrow
-                if (!botones) {
-                    return;
-                }
-                _keys.forward = false;
-
-                break;
-            case 65: //A: LEFT
-            case 37: //left arrow
-                if (!botones) {
-                    return;
-                }
-                _keys.left = false;
-                break;
-
-            case 83: //S: BACK
-            case 40: //down arrow
-                if (!botones) {
-                    return;
-                }
-                _keys.backward = false;
-                break;
-            case 68: //D: RIGHT
-            case 39: //right arrow
-                if (!botones) {
-                    return;
-                }
-                _keys.right = false;
-                break;
-            case 32: //space
-                if (!botones) {
-                    return;
-                }
-                _keys.space = false;
-                break;
-            case 16: //shift
-                if (!botones) {
-                    return;
-                }
-                _keys.shift = false;
-                break;
-
-            case 13: //shift
-                if (!botones) {
-                    return;
-                }
-                _keys.enter = false;
-                break;
-            case 66: //b
-                if (!botones) {
-                    return;
-                }
-                _keys.b = false;
-                break;
-        }
-    }
 }
 class FiniteStateMachine {
     constructor() {
@@ -1574,6 +1572,7 @@ class WalkState extends State {
     }
     Update(_, input) {
         if (_keys.forward || _keys.backward) {
+            console.log('_keys.shift :>> ', _keys.shift);
             if (_keys.shift) {
                 this._parent.SetState('run');
             }
@@ -2404,7 +2403,7 @@ export class CharacterControllerDemo {
         loader.setPath('./models/');
 
         if (!isTouchscreenDevice()) {
-            loader.load('HSBC Entorno_MASTER 11.fbx', (fbx) => {
+            loader.load('HSBC Entorno_MASTER 11.2.fbx', (fbx) => {
                 fbx.scale.setScalar(0.1);
                 fbx.traverse((c) => {
                     c.castShadow = true;
@@ -2684,25 +2683,27 @@ export class CharacterControllerDemo {
                 });
 
         */
+        if (!isTouchscreenDevice()) {
+            loader.setPath('./models/grises/');
 
-        loader.setPath('./models/grises/');
+            loader.load('HSBC_Chicas Grises_Sentada Idle.fbx', (fbx) => {
 
-        loader.load('HSBC_Chicas Grises_Sentada Idle.fbx', (fbx) => {
+                fbx.scale.setScalar(0.1);
+                fbx.position.x = -38.23;
+                fbx.position.y = 1;
+                fbx.position.z = 521;
+                fbx.traverse((c) => {
+                    c.castShadow = true;
+                });
+                this._target = fbx;
+                this._target.name = 'gris1';
+                this._target.receiveShadow = false;
+                this._target.castShadows = true;
+                this._scene.add(this._target);
 
-            fbx.scale.setScalar(0.1);
-            fbx.position.x = -38.23;
-            fbx.position.y = 1;
-            fbx.position.z = 521;
-            fbx.traverse((c) => {
-                c.castShadow = true;
             });
-            this._target = fbx;
-            this._target.name = 'gris1';
-            this._target.receiveShadow = false;
-            this._target.castShadows = true;
-            this._scene.add(this._target);
+        }
 
-        });
 
 
 

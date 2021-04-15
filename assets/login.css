@@ -251,7 +251,7 @@ table {
 }
 
 .agendaicon {
-    max-width: 450px;
+    max-width: 200px;
     margin: 0px auto;
 }
 
@@ -292,7 +292,7 @@ table {
     font-size: .9em;
 }
 
-#calendar {
+.calendar {
     max-width: 1100px;
     margin: 0 auto;
     background-color: #fff;

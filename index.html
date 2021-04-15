@@ -49,6 +49,17 @@
 </head>
 
 <body>
+
+    <!-- 
+
+    <input type="button" value="CORRER" id="correr" style="position: fixed;"><br><br><br>
+    <input type="button" value="BRINCAR" id="brincar" style="position: fixed;"><br><br><br>
+    <input type="button" value="MUSICA" id="musica" style="position: fixed;"><br><br><br>
+    <input type="button" value="BAILAR" id="bailar" style="position: fixed;"><br><br><br>
+    <input type="button" value="ENTER" id="enter" style="position: fixed;"><br><br><br>
+
+    -->
+
     <div id="joystick-wrapper"></div>
     <div class="padre" id="padre" style="background-color: #333; display: none;">
         <div class="hijo">
@@ -221,6 +232,9 @@
                         <div class="col-sm-5" id="buttonAgenda">
 
                         </div>
+                        <div class="col-sm-5" id="buttonAgendaAnterior">
+
+                        </div>
                     </div>
 
                 </div>
@@ -267,10 +281,17 @@
                         </div>
                     </div>
                     <div class="space2"></div>
-                    <div class="row">
+                    <div class="row" id="agendaDia" style="display: none;">
                         <div class="col-sm-12">
                             <div class="scrollcal">
-                                <div id='calendar'></div>
+                                <div id='calendar' class="calendar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="angendaAnterior" style="display: none;">
+                        <div class="col-sm-12">
+                            <div class="scrollcal">
+                                <div id='calendarAnterior' class="calendar"></div>
                             </div>
                         </div>
                     </div>
