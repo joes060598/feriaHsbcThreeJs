@@ -314,7 +314,10 @@ class BasicCharacterController {
         if (this._mixer) {
             this._mixer.update(timeInSeconds);
         }
+        if (this._mixerLeon) {
+            this._mixerLeon.update(timeInSeconds);
 
+        }
         if (this._mixerLeon6) {
             this._mixerLeon6.update(timeInSeconds);
         }
@@ -601,7 +604,40 @@ class BasicCharacterController {
              this._targetT1.castShadows = true;
              this._params.scene.add(this._targetT1);
          });*/
+        loader.load('HSBC_Leon_Cheering_1.fbx', (fbx) => {
+            fbx.position.x = 1100;
+            fbx.position.z = -0;
+            fbx.position.y = 0.9;
+            fbx.scale.setScalar(0.1);
+            fbx.traverse((c) => {
+                c.castShadow = true;
+            });
+            this._targetLeon = fbx;
+            this._targetLeon.name = 'leon';
+            this._targetLeon.quaternion._w = 0.7440;
+            this._targetLeon.quaternion._y = 0.568;
+            this._targetLeon.receiveShadow = true;
+            this._targetLeon.castShadows = true
+            this._params.scene.add(this._targetLeon);
+            this._mixerLeon = new THREE.AnimationMixer(this._targetLeon);
+            this._managerLeon = new THREE.LoadingManager();
+            const _OnLoad = (animName, anim) => {
+                const clip = anim.animations[0];
+                const action = this._mixerLeon.clipAction(clip);
+                this._animationsLeon[animName] = {
+                    clip,
+                    action
+                }
+            }
+            this._managerLeon.onLoad = () => {
+                this._stateMachineLeon.SetState('dance1');
+            };
 
+            const loader = new FBXLoader(this._managerLeon);
+            loader.setPath('./models/leon/LEONCIO TEX/');
+            loader.load('HSBC_Leon_Victory idle_1.fbx', (a) => { _OnLoad('dance1', a); });
+
+        });
         loader.load('HSBC_Leon_Hip Hop Dancing_1 (1).fbx', (fbx) => {
             fbx.position.x = 455;
             fbx.position.z = 42;

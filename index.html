@@ -46,6 +46,21 @@
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css" />
     <!-- Bootstrap theme -->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css" />
+    <style>
+        .botones {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+        
+        .btns li a img {
+            width: 50px;
+        }
+        
+        .btns li {
+            list-style: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -417,7 +432,35 @@
             </section>
         </div>
     </div>
-
+    <div class="botones">
+        <ul class="btns">
+            <li>
+                <a id="correr">
+                    <img src="iconos/correr.svg">
+                </a>
+            </li>
+            <li>
+                <a id="brincar">
+                    <img src="iconos/saltar.svg">
+                </a>
+            </li>
+            <li>
+                <a id="bailar">
+                    <img src="iconos/bailar.svg">
+                </a>
+            </li>
+            <li>
+                <a id="musica">
+                    <img src="iconos/quitarmusica.svg">
+                </a>
+            </li>
+            <li>
+                <a id="enter">
+                    <img src="iconos/accion.svg">
+                </a>
+            </li>
+        </ul>
+    </div>
 
     <table class="shadowbox" id="nameGral" style="height: 49px; width: 100%;">
         <tr>
