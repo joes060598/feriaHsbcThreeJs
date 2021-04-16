@@ -4,16 +4,12 @@
 <head>
     <meta charset="utf8">
     <title>Feria digital HSBC</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js " integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin=" anonymous "></script>
+    <script src="./js/jquery.js "></script>
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <!-- THIS LINE 
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 
-    -->
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
-    <script src="./build/ammo.js"></script>
+    <link href="./assets/fontGoogle.css" rel="stylesheet">
+    <script src="./js/bootstrap.js"></script>
+    <link rel="stylesheet" href="./assets/bootstrap.css" />
 
     <script type="module" src="./js/main.js"></script>
 
@@ -35,19 +31,16 @@
     <script src='resources/lib/main.js'></script>
     <script src='resources/lib/es.js'></script>
     <script type="text/javascript" src="build/three.min.js"></script>
-    <script type="text/javascript" src="build/stats.js"></script>
-    <script type="text/javascript" src="build/simplex-noise.js"></script>
-    <script type="text/javascript" src="build/physi.js"></script>
     <!-- JavaScript -->
-    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script src="./js/alertify.min.js"></script>
     <!-- CSS -->
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <link rel="stylesheet" href="./assets/alertify.mis.css" />
     <!-- Default theme -->
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+    <link rel="stylesheet" href="./assets/default.min.css" />
     <!-- Semantic UI theme -->
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css" />
+    <link rel="stylesheet" href="./assets/semantic.css" />
     <!-- Bootstrap theme -->
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css" />
+    <link rel="stylesheet" href="./assets/bootstrapAlertify.min.css" />
     <style>
         .botones {
             position: fixed;
@@ -109,8 +102,8 @@
                         </div>
                         <div class="space5"></div>
                         <form class="logdate">
-                            <label>Correo Institucional</label>
-                            <input type="text" id="emailLogin" class="campostyle" placeholder="@hsbc.com.mx">
+                            <label>Usuario</label>
+                            <input type="text" id="emailLogin" class="campostyle" placeholder="Usuario proporcionado">
                             <div class="space2"></div>
                             <label>Contraseña</label>
                             <input type="password" id="passwordLogin" class="campostyle" placeholder="************">
@@ -120,13 +113,14 @@
                         </form>
                         <div class="space2"></div>
                         <div class="cajamore">
-                            <p>¿Aún no te has registrado a la feria?</p>
-                            <a onclick="registro()">REGISTRATE AHORA</a>
+                            <p>¿Tienes un usuario y te falta tu contraseña?</p>
+                            <br>
+                            <a onclick="registro()" style="border: 2px solid #fff; padding: 10px; border-radius: 5px; color:fff !important;"><strong>COMPLETA TU REGISTRO</strong></a>
                         </div>
+                        <br><span style="color: white; font-size: 10px;">Navegadores soportados: Chrome/Firefox/Edge/Safari</span>
+
                     </div>
-                    <div class="cajamore" style="height: 300px;">
-                        <p>Esta plataforma soporta los siguientes navegadores: Chrome/Edge/Firefox</p>
-                    </div>
+
                 </div>
 
 
@@ -148,13 +142,13 @@
                         <form class="logdate" id="registroForm">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <label>Correo Institucional *</label>
-                                    <input type="text" id="email" class="campostyle" placeholder="@hsbc.com.mx">
+                                    <label>Usuario *</label>
+                                    <input type="text" id="email" onkeyup="buscarUser('key')" onchange="buscarUser('none')" class="campostyle" placeholder="Usuario proporcionado">
                                     <div class="space2"></div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <label>Contraseña * <span>(no usar contraseña institucional)</span></label>
-                                    <input type="text" id="password" class="campostyle" placeholder="************">
+                                    <label>Contraseña<span>&nbsp;&nbsp;(Recuerda guardar tu contraseña)</span></label>
+                                    <input type="text" id="password" disabled="true" class="campostyle" placeholder="************">
                                     <div class="space2"></div>
                                 </div>
                                 <div class="col-sm-6">
@@ -169,20 +163,22 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="space2"></div>
-                                    <input type="button" class="btngo" onclick="registroSend()" value="Registrarme ahora">
+                                    <input type="button" class="btngo" onclick="registroSend()" value="Validar ahora">
                                     <div class="space2"></div>
                                 </div>
                             </div>
                         </form>
                         <div class="space2"></div>
+                        <div class="space2"></div>
                         <div class="cajamore">
-                            <p>Accede directamente a vivir la experiencia</p>
-                            <a onclick="loginDiv()">ENTRAR A LA FERIA</a>
+                            <p>Recuerda guardar tu contraseña para que la proxima vez accedas más rápido</p>
+                            <p>En esta pantalla también puedes volver a elegir tu personaje, sólo tienes que escribir tu usuario y dar clic en Validar Ahora</p>
+                            <br><br>
+                            <a onclick="loginDiv()" style="border: 2px solid #fff; padding: 10px; border-radius: 5px; color:fff;"><strong>ENTRAR A LA FERIA</strong></a>
                         </div>
+
                     </div>
-                    <div class="cajamore" style="height: 300px;">
-                        <p>Esta plataforma soporta los siguientes navegadores: Chrome/Edge/Firefox/safari</p>
-                    </div>
+
                 </div>
             </td>
         </tr>

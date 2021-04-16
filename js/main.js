@@ -325,22 +325,6 @@ class BasicCharacterController {
         }
 
         if (!this.mobile) {
-            if (this._mixerLeon1) {
-                this._mixerLeon1.update(timeInSeconds);
-            }
-            if (this._mixerLeon2) {
-                this._mixerLeon2.update(timeInSeconds);
-            }
-            if (this._mixerLeon3) {
-                this._mixerLeon3.update(timeInSeconds);
-            }
-            if (this._mixerLeon4) {
-                this._mixerLeon4.update(timeInSeconds);
-            }
-            if (this._mixerLeon5) {
-                this._mixerLeon5.update(timeInSeconds);
-            }
-
             if (this._mixerLeon7) {
                 this._mixerLeon7.update(timeInSeconds);
             }
@@ -356,7 +340,6 @@ class BasicCharacterController {
             if (this._mixerh3) {
                 this._mixerh3.update(timeInSeconds);
             }
-
         }
 
     }
@@ -657,109 +640,109 @@ class BasicCharacterController {
             action.play();
         });
         if (!isTouchscreenDevice()) {
-            loader.load('HSBC_Leon_Robot Hip Hop Dance_1.fbx', (fbx) => {
-                fbx.position.x = 427;
-                fbx.position.y = -0.5;
-                fbx.position.z = 449;
-                fbx.scale.setScalar(0.01);
-                fbx.traverse((c) => {
-                    c.castShadow = true;
-                });
-                this._targetLeon1 = fbx;
-                this._targetLeon1.name = 'leonHipHop';
-                this._targetLeon1.quaternion._w = 0.7440;
-                this._targetLeon1.quaternion._y = 0.568;
-                this._targetLeon1.receiveShadow = true;
-                this._targetLeon1.castShadows = true
-                this._params.scene.add(this._targetLeon1);
-                this._mixerLeon1 = new THREE.AnimationMixer(this._targetLeon1);
-                const action = this._mixerLeon1.clipAction(this._targetLeon1.animations[0]);
-                action.play();
+            /* loader.load('HSBC_Leon_Robot Hip Hop Dance_1.fbx', (fbx) => {
+                 fbx.position.x = 427;
+                 fbx.position.y = -0.5;
+                 fbx.position.z = 449;
+                 fbx.scale.setScalar(0.01);
+                 fbx.traverse((c) => {
+                     c.castShadow = true;
+                 });
+                 this._targetLeon1 = fbx;
+                 this._targetLeon1.name = 'leonHipHop';
+                 this._targetLeon1.quaternion._w = 0.7440;
+                 this._targetLeon1.quaternion._y = 0.568;
+                 this._targetLeon1.receiveShadow = true;
+                 this._targetLeon1.castShadows = true
+                 this._params.scene.add(this._targetLeon1);
+                 this._mixerLeon1 = new THREE.AnimationMixer(this._targetLeon1);
+                 const action = this._mixerLeon1.clipAction(this._targetLeon1.animations[0]);
+                 action.play();
 
-            });
+             });
 
-            loader.load('HSBC_Leon_Blowing Kiss_1.fbx', (fbx) => {
-                fbx.position.x = 74;
-                fbx.position.y = -0.5;
-                fbx.position.z = -393;
-                fbx.scale.setScalar(0.1);
-                fbx.traverse((c) => {
-                    c.castShadow = true;
-                });
-                this._targetLeon2 = fbx;
-                this._targetLeon2.name = 'leonKiss';
-                this._targetLeon2.quaternion._w = 0.7440;
-                this._targetLeon2.quaternion._y = -0.400;
-                this._targetLeon2.receiveShadow = true;
-                this._targetLeon2.castShadows = true
-                this._params.scene.add(this._targetLeon2);
-                this._mixerLeon2 = new THREE.AnimationMixer(this._targetLeon2);
-                const action = this._mixerLeon2.clipAction(this._targetLeon2.animations[0]);
-                action.play();
+             loader.load('HSBC_Leon_Blowing Kiss_1.fbx', (fbx) => {
+                 fbx.position.x = 74;
+                 fbx.position.y = -0.5;
+                 fbx.position.z = -393;
+                 fbx.scale.setScalar(0.1);
+                 fbx.traverse((c) => {
+                     c.castShadow = true;
+                 });
+                 this._targetLeon2 = fbx;
+                 this._targetLeon2.name = 'leonKiss';
+                 this._targetLeon2.quaternion._w = 0.7440;
+                 this._targetLeon2.quaternion._y = -0.400;
+                 this._targetLeon2.receiveShadow = true;
+                 this._targetLeon2.castShadows = true
+                 this._params.scene.add(this._targetLeon2);
+                 this._mixerLeon2 = new THREE.AnimationMixer(this._targetLeon2);
+                 const action = this._mixerLeon2.clipAction(this._targetLeon2.animations[0]);
+                 action.play();
 
-            });
+             });
 
-            loader.load('HSBC_Leon_Burpee_1.fbx', (fbx) => {
-                fbx.position.x = -89;
-                fbx.position.y = -0.5;
-                fbx.position.z = 457;
-                fbx.scale.setScalar(0.1);
-                fbx.traverse((c) => {
-                    c.castShadow = true;
-                });
-                this._targetLeon3 = fbx;
-                this._targetLeon3.name = 'salud';
-                this._targetLeon3.quaternion._w = 0.7440;
-                this._targetLeon3.quaternion._y = 0.568;
-                this._targetLeon3.receiveShadow = true;
-                this._targetLeon3.castShadows = true
-                this._params.scene.add(this._targetLeon3);
-                this._mixerLeon3 = new THREE.AnimationMixer(this._targetLeon3);
-                const action = this._mixerLeon3.clipAction(this._targetLeon3.animations[0]);
-                action.play();
+             loader.load('HSBC_Leon_Burpee_1.fbx', (fbx) => {
+                 fbx.position.x = -89;
+                 fbx.position.y = -0.5;
+                 fbx.position.z = 457;
+                 fbx.scale.setScalar(0.1);
+                 fbx.traverse((c) => {
+                     c.castShadow = true;
+                 });
+                 this._targetLeon3 = fbx;
+                 this._targetLeon3.name = 'salud';
+                 this._targetLeon3.quaternion._w = 0.7440;
+                 this._targetLeon3.quaternion._y = 0.568;
+                 this._targetLeon3.receiveShadow = true;
+                 this._targetLeon3.castShadows = true
+                 this._params.scene.add(this._targetLeon3);
+                 this._mixerLeon3 = new THREE.AnimationMixer(this._targetLeon3);
+                 const action = this._mixerLeon3.clipAction(this._targetLeon3.animations[0]);
+                 action.play();
 
-            });
+             });
 
 
-            loader.load('HSBC_Leon_Cheering (Chiquito)_1.fbx', (fbx) => {
-                fbx.position.x = -378;
-                fbx.position.y = -0.5;
-                fbx.position.z = -53;
-                fbx.scale.setScalar(0.1);
-                fbx.traverse((c) => {
-                    c.castShadow = true;
-                });
-                this._targetLeon4 = fbx;
-                this._targetLeon4.name = 'culturaValores';
-                this._targetLeon4.quaternion._w = 0.7440;
-                this._targetLeon4.quaternion._y = 0.568;
-                this._targetLeon4.receiveShadow = true;
-                this._targetLeon4.castShadows = true
-                this._params.scene.add(this._targetLeon4);
-                this._mixerLeon4 = new THREE.AnimationMixer(this._targetLeon4);
-                const action = this._mixerLeon4.clipAction(this._targetLeon4.animations[0]);
-                action.play();
-            });
+             loader.load('HSBC_Leon_Cheering (Chiquito)_1.fbx', (fbx) => {
+                 fbx.position.x = -378;
+                 fbx.position.y = -0.5;
+                 fbx.position.z = -53;
+                 fbx.scale.setScalar(0.1);
+                 fbx.traverse((c) => {
+                     c.castShadow = true;
+                 });
+                 this._targetLeon4 = fbx;
+                 this._targetLeon4.name = 'culturaValores';
+                 this._targetLeon4.quaternion._w = 0.7440;
+                 this._targetLeon4.quaternion._y = 0.568;
+                 this._targetLeon4.receiveShadow = true;
+                 this._targetLeon4.castShadows = true
+                 this._params.scene.add(this._targetLeon4);
+                 this._mixerLeon4 = new THREE.AnimationMixer(this._targetLeon4);
+                 const action = this._mixerLeon4.clipAction(this._targetLeon4.animations[0]);
+                 action.play();
+             });
 
-            loader.load('HSBC_Leon_Shuffling_1.fbx', (fbx) => {
-                fbx.position.x = 548;
-                fbx.position.y = -0.5;
-                fbx.position.z = -396;
-                fbx.scale.setScalar(0.1);
-                fbx.traverse((c) => {
-                    c.castShadow = true;
-                });
-                this._targetLeon5 = fbx;
-                this._targetLeon5.name = 'Finanzas';
-                this._targetLeon5.quaternion._w = 0.7440;
-                this._targetLeon5.quaternion._y = -0.300;
-                this._targetLeon5.receiveShadow = true;
-                this._targetLeon5.castShadows = true;
-                this._params.scene.add(this._targetLeon5);
-                this._mixerLeon5 = new THREE.AnimationMixer(this._targetLeon5);
-                const action = this._mixerLeon5.clipAction(this._targetLeon5.animations[0]);
-                action.play();
-            });
+             loader.load('HSBC_Leon_Shuffling_1.fbx', (fbx) => {
+                 fbx.position.x = 548;
+                 fbx.position.y = -0.5;
+                 fbx.position.z = -396;
+                 fbx.scale.setScalar(0.1);
+                 fbx.traverse((c) => {
+                     c.castShadow = true;
+                 });
+                 this._targetLeon5 = fbx;
+                 this._targetLeon5.name = 'Finanzas';
+                 this._targetLeon5.quaternion._w = 0.7440;
+                 this._targetLeon5.quaternion._y = -0.300;
+                 this._targetLeon5.receiveShadow = true;
+                 this._targetLeon5.castShadows = true;
+                 this._params.scene.add(this._targetLeon5);
+                 this._mixerLeon5 = new THREE.AnimationMixer(this._targetLeon5);
+                 const action = this._mixerLeon5.clipAction(this._targetLeon5.animations[0]);
+                 action.play();
+             });*/
 
 
 

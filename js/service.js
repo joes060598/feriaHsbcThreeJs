@@ -1,6 +1,6 @@
  //let url = 'http://173.231.203.133:4000/';
- let url = 'https://api.feriaswbhsbc.com/';
- //let url = 'http://localhost:4000/';
+ //let url = 'https://api.feriaswbhsbc.com/';
+ let url = 'http://localhost:4000/';
  let _APP = null;
 
  $(document).ready(function() {
@@ -15,10 +15,10 @@
  function registro() {
      $("#login").hide();
      $("#registro").fadeIn('slow');
-     $("#password").val(generatePasswordRand(8, 'alf'));
  }
 
  function loginDiv() {
+     $('#registroForm')[0].reset();
      $("#registro").hide();
      $("#login").fadeIn('slow');
  }
@@ -445,49 +445,61 @@
 
  }
 
+ function buscarUser(type) {
+     let email = $('#email').val();
+     $.get(url + "user/" + email, function(data) {
+         if (data.statusCode == 200) {
+             let user = data.user;
+             if (user.err) {
+                 if (type == 'none') {
+                     alertify.error(user.err)
+                 }
+
+                 $('#password').val("");
+                 $('#gender').val("-1");
+             } else {
+                 $('#password').val(user.password);
+                 $('#gender').val(user.gender);
+             }
+         } else {
+             alertify.error(data.message);
+         }
+     });
+ }
+
  function registroSend() {
      let email = $('#email').val();
-     let password = $('#password').val();
      let gender = $('#gender').val();
      if (gender == "-1") {
          alertify.error('Debe seleccionar su género');
          return;
      }
-     if (password.length < 8) {
-         alertify.error('La contraseña debe tener como mínimo 8 caracteres');
+     if (email == "") {
+         alertify.error('Debe buscar su usuario');
          return;
      }
-     let checkEmail = email.search("@hsbc.com.mx");
-     if (checkEmail == -1) {
-         alertify.error('El correo debe ser institucional de hsbc, verifique de nuevo');
-         return;
-     }
-
      let request = {
-         email: email,
-         password: password,
          gender: gender,
      }
 
 
-     $.post(url + "user/create", request, function(data) {
-         if (data.statusCode == 200) {
-             alertify.success('Se ha registrado correctamente a la feria.');
-             $('#registroForm')[0].reset();
-             $("#registro").hide();
-             $("#login").fadeIn('slow');
-
-         } else {
-             let err = data.message;
-             if (err = 'User validation failed') {
-                 //alertify.error('Verifique que los campos requeridos esten completos.');
-
+     $.ajax({
+         url: url + "user/" + email,
+         type: 'PUT',
+         data: request,
+         success: function(data) {
+             if (data.statusCode == 200) {
+                 if (data.user.err) {
+                     alertify.error(data.user.err);
+                 } else {
+                     alertify.success("Se han actualizado sus datos correctamente.");
+                 }
+             } else {
+                 alertify.error(data.message);
              }
-             alertify.error(data.message);
-
-
          }
      });
+
 
 
  }
