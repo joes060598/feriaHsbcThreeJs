@@ -401,13 +401,16 @@
 
      $("#nameGral").show();
      $("canvas").show();
+     $("#pregunta").html();
+     $("#cajacomments").hide();
  }
 
  function cerrarAgendaEspecifica() {
      $("#agenda").hide();
      $("#agendaEspecifica").css('display', 'none');
      $("#nameGral").show();
-
+     $("#pregunta").html();
+     $("#cajacomments").hide();
      $("canvas").show();
  }
 
@@ -432,7 +435,6 @@
                  sessionStorage.setItem('token', data.data.token);
                  sessionStorage.setItem('name', data.data.name);
                  sessionStorage.setItem('gender', data.data.gender);
-
                  $('#pasoLogin').hide();
              } else {
                  alertify.error('Debe completar su registro.');
@@ -442,12 +444,8 @@
 
          } else {
              alertify.error(data.message);
-
          }
      });
-
-
-
  }
 
  function buscarUser(type) {
@@ -510,8 +508,10 @@
  }
 
  function enviarPregunta(type, caja, cluster) {
-     let pregunta = $('#' + type);
-     let cajaHide = $('#' + caja);
+
+     let pregunta = $("#pregunta");
+     let cajaHide = $("#cajacomments");
+
      if (pregunta.val() == undefined && pregunta.val() == "") {
          alertify.error('No puede enviar una pregunta vacía.');
          return;
