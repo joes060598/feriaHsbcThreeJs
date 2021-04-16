@@ -122,7 +122,7 @@
                                        <img src="img/coso1.svg" width="30">
                                    </div>
                                    <p>${agendad.name}</p>
-                                   <h3 class="color-balance">${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</h3>
+                                   <h3 class="color-balance2">${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</h3>
        
                                    <div class="btn1">
                                        <a href="https://vimeo.com/535667880" target="_blank">Aquí</a>
@@ -210,7 +210,6 @@
          let mesActual = fechaActual.getMonth();
          if (data.statusCode == 200) {
              let schedule = data.schedule;
-             console.log('schedule :>> ', schedule);
              for (const iterator of schedule) {
                  let fechaAgenda = new Date(iterator.fecha[0]);
                  fechas.push(fechaAgenda);
@@ -298,7 +297,7 @@
                                         <img src="img/coso1.svg" width="30">
                                     </div>
                                     <p>${agendad.name}</p>
-                                    <h3 class="color-balance">${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</h3>
+                                    <h3 class="color-balance2">${getHora(fechaInicio.getUTCHours())+'- '+getHora(fechaFinal.getUTCHours())}</h3>
         
                                     <div class="btn1">
                                         <a href="${agendad.url}" target="_blank">Aquí</a>
@@ -316,7 +315,7 @@
              fechas.sort();
              if (pintar == "") {
 
-                 console.log('fechaActual :>> ', fechaActual);
+
                  if (fechas[0] > fechaActual) {
                      let d = fechas[0].getDate();
                      let w = fechas[0].getDay();
@@ -428,7 +427,7 @@
 
      $.post(url + "user/login", request, function(data) {
          if (data.statusCode == 200) {
-             console.log('data :>> ', data);
+
              alertify.success('Bienvenido ' + data.data.name);
              sessionStorage.setItem('token', data.data.token);
              sessionStorage.setItem('name', data.data.name);

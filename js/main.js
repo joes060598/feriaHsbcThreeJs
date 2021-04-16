@@ -21,7 +21,6 @@ var pause_music = false;
 var mensaje = false;
 var paramsGral;
 hitSound = new Audio('./assets/music2.mp3');
-console.log('hitSound :>> ', hitSound);
 hitSound.loop = true;
 hitSound.volume = 0.5;
 hitSound.currentTime = 0;
@@ -42,7 +41,7 @@ setTimeout(() => {
 }, 1000);
 
 setTimeout(() => {
-    $("#over").html('<img src="models/Instrucciones-Jugabilidad-FINAL-3.png" width="50%"></img>')
+    $("#over").html('<img style="z-index:120" src="models/Instrucciones-Jugabilidad-FINAL-3.png" width="50%"></img>')
 }, 1000);
 setInterval(() => {
     if (mensaje) {
@@ -160,7 +159,6 @@ class BasicCharacterController {
         const loader = new FBXLoader();
         loader.setPath(`./models/${genderPath}/`);
         loader.load('idle.fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.position.x = 1250;
             //fbx.position.x = 1000;
             fbx.position.z = 23;
@@ -507,10 +505,8 @@ class BasicCharacterController {
             this.oldPosition = position;
             response.val = true;
             response.y = 0;
-            console.log('positionmm :>> ', position.z);
             let mitad = (obRampa.zm - obRampa.zn) / 2; //4
             if (position.z < obRampa.zn + mitad) { //31
-                console.log('resta :>> ');
                 response.x = position.x;
                 response.z = position.z - 1;
                 return response;
@@ -518,7 +514,6 @@ class BasicCharacterController {
             if (position.z > obRampa.zm - mitad) {
                 response.x = position.x;
                 response.z = position.z + 1;
-                console.log('suma :>> ');
                 return response;
             }
             return response;
@@ -1368,7 +1363,6 @@ class JumpState extends State {
         const curAction = this._parent._proxy._animations['jump'].action;
         const mixer = curAction.getMixer();
         let pos = this._parent._camera.scene.children.find((a) => { return a.name == 'personaje' });
-        console.log('posichionsJmp :>> ', pos.position);
         mixer.addEventListener('finished', this._FinishedCallback);
         if (prevState) {
             const prevAction = this._parent._proxy._animations[prevState.Name].action;
@@ -1572,7 +1566,6 @@ class WalkState extends State {
     Enter(prevState) {
         const curAction = this._parent._proxy._animations['walk'].action;
         let pos = this._parent._camera.scene.children.find((a) => { return a.name == 'personaje' });
-        console.log('pox :>> ', pos.position.x, 'poy :>> ', pos.position.y, 'poz :>> ', pos.position.z);
         if (prevState) {
             const prevAction = this._parent._proxy._animations[prevState.Name].action;
             curAction.time = 0.0;
@@ -1596,7 +1589,6 @@ class WalkState extends State {
     }
     Update(_, input) {
         if (_keys.forward || _keys.backward) {
-            console.log('_keys.shift :>> ', _keys.shift);
             if (_keys.shift) {
                 this._parent.SetState('run');
             }
@@ -2411,7 +2403,6 @@ export class CharacterControllerDemo {
 
         this._controls = new BasicCharacterController(params);
         if (isTouchscreenDevice()) {
-            console.log('touch :>> ');
             createJoystick(document.getElementById("joystick-wrapper"));
             document.getElementById("joystick-wrapper").style.visibility = "visible";
             document.getElementById("joystick").style.visibility = "visible";
@@ -2459,7 +2450,6 @@ export class CharacterControllerDemo {
 
 
         /*loader.load('HSBC Entorno_MASTER 9 (ConP).fbx', (fbx) => {
-            console.log('fbx :>> ', fbx);
             fbx.scale.setScalar(0.1);
             fbx.traverse((c) => {
                 c.castShadow = true;

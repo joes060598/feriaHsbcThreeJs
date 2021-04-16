@@ -46,10 +46,6 @@
         margin: 0 20px;
         border-radius: 10px;
         padding: 20px;
-        background-image: url(../img/bg-logo.png);
-        background-position: bottom;
-        background-size: 40%;
-        background-repeat: no-repeat;
     }
     .iconlog {
         position: absolute;
@@ -127,10 +123,6 @@
         margin: 0px auto;
         border-radius: 10px;
         padding: 20px;
-        background-image: url(../img/bg-logo.png);
-        background-position: bottom left;
-        background-size: 40%;
-        background-repeat: no-repeat;
     }
     .iconlog {
         position: absolute;
@@ -208,10 +200,6 @@
         margin: 0px auto;
         border-radius: 10px;
         padding: 20px;
-        background-image: url(../img/bg-logo.png);
-        background-position: bottom left;
-        background-size: 40%;
-        background-repeat: no-repeat;
     }
     .iconlog {
         position: absolute;
@@ -289,10 +277,6 @@
         margin: 0px auto;
         border-radius: 10px;
         padding: 20px;
-        background-image: url(../img/bg-logo.png);
-        background-position: bottom left;
-        background-size: 40%;
-        background-repeat: no-repeat;
     }
     .iconlog {
         position: absolute;
