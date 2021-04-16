@@ -2010,7 +2010,7 @@ export class CharacterControllerDemo {
             powerPreference: 'low-power',
             precision: 'lowp',
             premultipliedAlpha: false,
-            logarithmicDepthBuffer: true,
+            logarithmicDepthBuffer: false,
 
         });
 
