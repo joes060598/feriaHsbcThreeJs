@@ -435,7 +435,7 @@
 
                  $('#pasoLogin').hide();
              } else {
-                 alertify.error('Debe completar suregistro ');
+                 alertify.error('Debe completar su registro.');
 
              }
 
