@@ -427,13 +427,18 @@
 
      $.post(url + "user/login", request, function(data) {
          if (data.statusCode == 200) {
+             if (data.data.gender != "-1") {
+                 alertify.success('Bienvenido ' + data.data.name);
+                 sessionStorage.setItem('token', data.data.token);
+                 sessionStorage.setItem('name', data.data.name);
+                 sessionStorage.setItem('gender', data.data.gender);
 
-             alertify.success('Bienvenido ' + data.data.name);
-             sessionStorage.setItem('token', data.data.token);
-             sessionStorage.setItem('name', data.data.name);
-             sessionStorage.setItem('gender', data.data.gender);
+                 $('#pasoLogin').hide();
+             } else {
+                 alertify.error('Debe completar suregistro ');
 
-             $('#pasoLogin').hide();
+             }
+
 
          } else {
              alertify.error(data.message);
