@@ -1,6 +1,7 @@
 'use strict';
 
 import * as THREE from '../build/threeBuild.js';
+//import * as THREE from './threenext-master/build/three.module.js';
 
 import { FBXLoader } from '../build/fbxLoader.js';
 import { OrbitControls } from '../build/orbitControls.js';
@@ -159,6 +160,7 @@ class BasicCharacterController {
         const loader = new FBXLoader();
         loader.setPath(`./models/${genderPath}/`);
         loader.load('idle.fbx', (fbx) => {
+            console.log('fbx :>> ', fbx);
             fbx.position.x = 1250;
             //fbx.position.x = 1000;
             fbx.position.z = 23;
@@ -287,6 +289,9 @@ class BasicCharacterController {
         sideways.normalize();
         sideways.multiplyScalar(velocity.x * timeInSeconds);
         forward.multiplyScalar(velocity.z * timeInSeconds);
+
+        controlObject.position.add(forward);
+        controlObject.position.add(sideways);
         let colision = this.collisions();
         if (!colision.val) {
             controlObject.position.add(forward);
@@ -611,6 +616,7 @@ class BasicCharacterController {
                     action
                 }
             }
+
             this._managerLeon.onLoad = () => {
                 this._stateMachineLeon.SetState('dance1');
             };
@@ -1547,8 +1553,8 @@ class WalkState extends State {
         return 'walk';
     }
     Enter(prevState) {
+        console.log('this._parent :>> ', this._parent);
         const curAction = this._parent._proxy._animations['walk'].action;
-        let pos = this._parent._camera.scene.children.find((a) => { return a.name == 'personaje' });
         if (prevState) {
             const prevAction = this._parent._proxy._animations[prevState.Name].action;
             curAction.time = 0.0;
@@ -1602,7 +1608,6 @@ export class CharacterControllerDemo {
         //this.rigidBodies = [];
 
         //this.tmpTrans = new Ammo.btTransform();
-        this.manager = new THREE.LoadingManager();
         //this.setupPhysicsWorld();
         this._Initialize();
 
@@ -1978,10 +1983,10 @@ export class CharacterControllerDemo {
 
         //Physijs.scripts.worker = '../physijs_worker.js';
         //|Physijs.scripts.ammo = 'examples/js/ammo.js';
-        this.clock = new THREE.Clock();
 
+        let antialias = isTouchscreenDevice() ? false : true;
         this._threejs = new THREE.WebGLRenderer({
-            antialias: true,
+            antialias,
             powerPreference: 'low-power',
             precision: 'lowp',
             premultipliedAlpha: false,
@@ -1991,9 +1996,9 @@ export class CharacterControllerDemo {
 
 
         this._threejs.outputEncoding = THREE.sRGBEncoding;
-        this._threejs.shadowMap.enabled = true;
+        this._threejs.shadowMap.enabled = false;
         this._threejs.shadowMap.type = new THREE.SpotLight();
-        this._threejs.shadowMap.needsUpdate = true;
+        this._threejs.shadowMap.needsUpdate = false;
         this._threejs.setPixelRatio(window.devicePixelRatio);
         this._threejs.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(this._threejs.domElement);
@@ -2019,16 +2024,18 @@ export class CharacterControllerDemo {
         const near = 0.01;
         const far = 2600.0;
         this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-        this._camera.castShadow = true;
-        this._camera.receiveShadow = true;
+
+        this._camera.focus = 0;
+        this._camera.castShadow = false;
+        this._camera.receiveShadow = false;
         this._scene = new THREE.Scene();
-        this._scene.castShadow = true;
-        this._scene.receiveShadow = true;
+        this._scene.castShadow = false;
+        this._scene.receiveShadow = false;
         let light = new THREE.HemisphereLight(0xAEF0FF, 0xB78E79, 0.6);
         this._scene.add(light);
         const spotLight = new THREE.SpotLight(0xffffff, 0.55);
-        spotLight.castShadow = true;
-        spotLight.shadow.camera.castShadow = true;
+        spotLight.castShadow = false;
+        spotLight.shadow.camera.castShadow = false;
         spotLight.shadow.camera.focus = 1;
 
         //spotLight.receiveShadow = true;
@@ -2220,7 +2227,6 @@ export class CharacterControllerDemo {
         let mass = 2;
 
         //import beach ball texture
-        var texture_loader = new THREE.TextureLoader(this.manager);
         var beachTexture = texture_loader.load("./assets/img/BeachBallColor.jpg");
         beachTexture.wrapS = beachTexture.wrapT = THREE.RepeatWrapping;
         beachTexture.repeat.set(1, 1);
