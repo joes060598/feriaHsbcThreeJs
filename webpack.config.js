@@ -17,9 +17,23 @@ module.exports = {
             query: {
                 presets: ["@babel/preset-env"],
             },
-        }, ],
+            }
+        // ,{
+        //     test: /three\/examples\/js/,
+        //     use: 'imports-loader?THREE=three'
+        //   }
+    
+        ]
+    // ,resolve: {
+    //     alias: {
+    //       'three-examples': path.join(__dirname, './node_modules/three/examples/js')
+    //     },
+
+    //   },
     },
-    plugins: [new CompressionPlugin()],
+    plugins: [
+        new CompressionPlugin(),
+    ],
     devServer: {
         contentBase: path.join(__dirname, ""),
         compress: true,

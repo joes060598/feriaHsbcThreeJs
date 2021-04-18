@@ -10,7 +10,19 @@
     <link href="./assets/fontGoogle.css" rel="stylesheet">
     <script src="./js/bootstrap.js"></script>
     <link rel="stylesheet" href="./assets/bootstrap.css" />
+    <!-- <script type="module" src="./build/./build/app.bundle.js"></script> -->
     <script type="module" src="./build/app.bundle.js"></script>
+
+    <meta name="MobileOptimized" content="width">
+    <meta name="HandheldFrienly" content="true">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" >
+
+    <link rel="shortcut icon" href="./iconos/hsbc/hsbc16.png" type="image/x-icon">
+    <link rel="apple-touch-ico" href="./iconos/hsbc/hsbc24.png" >
+    <link rel="apple-touch-startup-imag" href="./iconos/hsbc/hsbc48.png">
+
+    <link rel="manifest" href="manifest.json">
 
 
     <!--
@@ -19,19 +31,20 @@
 
     <script type="module" src="./js/main.js"></script>
 
-    <script type="module" src="./build/app.bundle.js"></script>
+    <script type="module" src="./build/./build/app.bundle.js"></script>
     -->
     <script src="./js/service.js"></script>
     <script>
     </script>
-    <link href='resources/lib/main.css' rel='stylesheet' />
-    <link href='assets/general.css' rel='stylesheet' />
-    <link href='assets/loader.css' rel='stylesheet' />
-    <link href='assets/responsive.css' rel='stylesheet' />
+    <link href='./resources/lib/main.css' rel='stylesheet' />
+    <link href='./assets/general.css' rel='stylesheet' />
+    <link href='./assets/loader.css' rel='stylesheet' />
+    <link href='./assets/responsive.css' rel='stylesheet' />
 
-    <script src='resources/lib/main.js'></script>
-    <script src='resources/lib/es.js'></script>
-    <script type="text/javascript" src="build/three.min.js"></script>
+    <script src='./resources/lib/main.js'></script>
+    <script src='./resources/lib/es.js'></script>
+    <script type="text/javascript" src="three.min.js"></script>
+    <!-- <script type="text/javascript" src="build/three.min.js"></script> -->
     <!-- JavaScript -->
     <script src="./js/alertify.min.js"></script>
     <!-- CSS -->
@@ -58,6 +71,12 @@
         }
     </style>
 </head>
+<script>
+    if ("serviceWorker" in navigator) {
+  // register service worker
+    navigator.serviceWorker.register("service-worker.js");
+    }
+</script>
 
 <body>
 
@@ -93,7 +112,7 @@
                     <div class="visible-xs"><br></div>
                     <div class="cajadatos">
                         <div class="logohsbc">
-                            <img src="img/logo-hsbc.svg" width="300">
+                            <img src="./img/logo-hsbc.svg" width="300">
                         </div>
                         <div class="space3"></div>
                         <div class="titulog">
@@ -131,7 +150,7 @@
                     <div class="visible-xs"><br></div>
                     <div class="cajadatos2">
                         <div class="logohsbc">
-                            <img src="img/logo-hsbc.svg" width="300">
+                            <img src="./img/logo-hsbc.svg" width="300">
                         </div>
                         <div class="space3"></div>
                         <div class="titulog">
@@ -221,11 +240,11 @@
                                 </form>
                             </div>
                             <div class="dudasx">
-                                <img class="mostrar" src="img/dejanostusdudas.svg" width="300">
+                                <img class="mostrar" src="./img/dejanostusdudas.svg" width="300">
                             </div>
                         </div>
                         <div class="col-sm-1" style="text-align: right;">
-                            <a onclick="cerrarAgenda()"><img src="img/equis.svg" width="15"></a>
+                            <a onclick="cerrarAgenda()"><img src="./img/equis.svg" width="15"></a>
                         </div>
                     </div>
                     <div class="space2"></div>
@@ -292,11 +311,11 @@
                                 </form>
                             </div>
                             <div class="dudasx">
-                                <img class="mostrar" src="img/dejanostusdudas.svg" width="300">
+                                <img class="mostrar" src="./img/dejanostusdudas.svg" width="300">
                             </div>
                         </div>
                         <div class="col-sm-1" style="text-align: right;">
-                            <a onclick="cerrarAgenda()"><img src="img/equis.svg" width="15"></a>
+                            <a onclick="cerrarAgenda()"><img src="./img/equis.svg" width="15"></a>
                         </div>
                     </div>
                     <div class="space2"></div>
@@ -360,11 +379,11 @@
                                 </form>
                             </div>
                             <div class="dudasx">
-                                <img class="mostrar" src="img/dejanostusdudas.svg" width="300">
+                                <img class="mostrar" src="./img/dejanostusdudas.svg" width="300">
                             </div>
                         </div>
                         <div class="col-sm-1" style="text-align: right;">
-                            <a onclick="cerrarAgenda()"><img src="img/equis.svg" width="15"></a>
+                            <a onclick="cerrarAgenda()"><img src="./img/equis.svg" width="15"></a>
                         </div>
                     </div>
                     <div class="space2"></div>
@@ -392,10 +411,10 @@
         <br><br><br>
         <div class="contenedorcillo">
             <div style="position:absolut;right:10px;margin-top:10px">
-                <a style="float: right; " onclick="cerrarAgendaEspecifica()"><img src="img/lanegra.svg" width="15"></a>
+                <a style="float: right; " onclick="cerrarAgendaEspecifica()"><img src="./img/lanegra.svg" width="15"></a>
             </div>
             <section>
-                <img src="img/header.svg" width="100%">
+                <img src="./img/header.svg" width="100%">
             </section>
             <div class="space7"></div>
             <section>
@@ -409,7 +428,7 @@
                             <div class="icono" id="iconoAgendaEspecifica">
                             </div>
                             <div class="barra hidden-xs">
-                                <img src="img/barra1.svg">
+                                <img src="./img/barra1.svg">
                             </div>
                         </div>
                     </div>
@@ -426,7 +445,7 @@
                 <div class="space4"></div>
 
                 <div class="cajafoot">
-                    <img src="img/logo-welbeing.svg" class="logow">
+                    <img src="./img/logo-welbeing.svg" class="logow">
                 </div>
             </section>
         </div>
@@ -445,12 +464,12 @@
             </li>
             <li>
                 <a id="musica">
-                    <img width="80px" height="80px" src="iconos/quitarmusica.svg">
+                    <img width="80px" height="80px" src="./iconos/quitarmusica.svg">
                 </a>
             </li>
             <li>
                 <a id="enter">
-                    <img src="iconos/accion.svg">
+                    <img src="./iconos/accion.svg">
                 </a>
             </li>
         </ul>

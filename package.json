@@ -2,7 +2,7 @@
     "name": "threejs",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "private": true,
     "scripts": {
         "build": "webpack --mode production --progress",
         "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,10 +11,12 @@
     "license": "ISC",
     "devDependencies": {
         "@babel/core": "^7.4.3",
+        "@babel/plugin-syntax-dynamic-import": "^7.8.3",
         "@babel/polyfill": "^7.4.3",
         "@babel/preset-env": "^7.4.3",
         "babel-loader": "^8.0.5",
         "compression-webpack-plugin": "^4.0.0",
+        "imports-loader": "^2.0.0",
         "webpack": "^4.43.0",
         "webpack-cli": "^3.3.11",
         "webpack-dev-server": "^3.11.0"
@@ -24,6 +26,7 @@
         "ammo.js": "github:kripken/ammo.js",
         "dat.gui": "^0.7.7",
         "express": "^4.17.1",
+        "lodash": "^4.17.21",
         "stats.js": "^0.17.0",
         "three": "^0.117.1"
     }

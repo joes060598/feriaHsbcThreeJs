@@ -1,9 +1,15 @@
 'use strict';
 
+import _ from 'lodash';
+
+
 import * as THREE from '../build/threeBuild.js';
+// import * as THREE from 'three-examples/threeBuild.js';
 
 import { FBXLoader } from '../build/fbxLoader.js';
+// import { FBXLoader } from 'three-examples/fbxLoader.js';
 import { OrbitControls } from '../build/orbitControls.js';
+// import { OrbitControls } from 'three-examples/orbitControls.js';
 // import { Service } from './service';
 var _keys = {
     forward: false,
