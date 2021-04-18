@@ -1,6 +1,6 @@
  //let url = 'http://173.231.203.133:4000/';
- let url = 'https://api.feriaswbhsbc.com/';
- //let url = 'http://localhost:4000/';
+//  let url = 'https://api.feriaswbhsbc.com/';
+ let url = 'http://localhost:4000/';
  let _APP = null;
 
  $(document).ready(function() {
@@ -210,6 +210,7 @@
          let mesActual = fechaActual.getMonth();
          if (data.statusCode == 200) {
              let schedule = data.schedule;
+             guardarEstadistica({typeSchedule: type,type: 'entrarAgenda',});
              for (const iterator of schedule) {
                  let fechaAgenda = new Date(iterator.fecha[0]);
                  fechas.push(fechaAgenda);
@@ -217,11 +218,13 @@
                  let diaAgenda = fechaAgenda.getDate();
                  let diaAgendaWeek = fechaAgenda.getDay();
                  if (diaActual == diaAgenda && mesActual == mesAgenda) {
+
                      tituloDia = `<h1>${getDayTexto(diaAgendaWeek)+' '+diaAgenda}</h1><br>`;
                      for (const agendad of iterator.res) {
                          if (agendad.status == "true") {
                              let fechaInicio = new Date(agendad.start);
                              let fechaFinal = new Date(agendad.finish);
+                             
                              if (type == 'DesarrolloCarrera') {
                                  pintar += `<div class="col-sm-3 col-xs-12">
                                 <div class="cajainfo bg-desarrollo">
@@ -436,6 +439,8 @@
                  sessionStorage.setItem('name', data.data.name);
                  sessionStorage.setItem('gender', data.data.gender);
                  $('#pasoLogin').hide();
+
+                 guardarEstadistica('Login');
              } else {
                  alertify.error('Debe completar su registro.');
 
@@ -446,6 +451,34 @@
              alertify.error(data.message);
          }
      });
+ }
+
+ function guardarEstadistica(obj) {
+     console.log(obj)
+    // obj  {
+        // type:string;
+        // typeSchedule?: eTypesSchedule
+    //  }
+    $.ajax({
+        url: url + "statistics/create2",
+        type: 'post',
+        data: {
+            ...obj,
+            token: sessionStorage.getItem('token')
+        },
+        dataType: 'json',
+        success: function(data) {
+            // alertify.success('Se ha enviado correctamente su pregunta, espere a que el equipo de soporte se comunique usted.');
+            // pregunta.val('');
+            // cajaHide.hide();
+            console.log(data);
+        },
+        error: function(err) {
+            console.log('err :>> ', err);
+            alertify.error(err.message);
+
+        }
+    });
  }
 
  function buscarUser(type) {

@@ -4,6 +4,7 @@ import * as THREE from '../build/threeBuild.js';
 
 import { FBXLoader } from '../build/fbxLoader.js';
 import { OrbitControls } from '../build/orbitControls.js';
+// import { Service } from './service';
 var _keys = {
     forward: false,
     backward: false,
@@ -980,6 +981,7 @@ function _onKeyDown(event) {
             let position = character.position;
 
             if ((position.x >= balance.xn && position.x <= balance.xm) && (position.z >= balance.zn && position.z <= balance.zm)) {
+                Service.guardarEstadistica({typeSchedule: 'Balance',type: 'entrarSchundle',});
                 $('#agenda').show();
                 $("#nameGral").hide();
 
@@ -1008,6 +1010,7 @@ function _onKeyDown(event) {
             }
 
             if ((position.x >= salud.xn && position.x <= salud.xm) && (position.z >= salud.zn && position.z <= salud.zm)) {
+                Service.guardarEstadistica({typeSchedule: 'SaludBienestar',type: 'entrarSchundle',});
                 $("#nameGral").hide();
                 $('#agenda').show();
                 $("#classCluster").removeClass();
@@ -1035,6 +1038,8 @@ function _onKeyDown(event) {
                 $("#divP").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta','cajacomments','SaludBienestar')" value="Enviar">`);
             }
             if ((position.x >= valores.xn && position.x <= valores.xm) && (position.z >= valores.zn && position.z <= valores.zm)) {
+                Service.guardarEstadistica({typeSchedule: 'Cultura',type: 'entrarSchundle',});
+
                 $('#agenda').show();
                 $("#nameGral").hide();
                 $("#classCluster").removeClass();
@@ -1063,6 +1068,8 @@ function _onKeyDown(event) {
                 $("#divP").html(`<input type="button" class="btngocomm" onclick="enviarPregunta('pregunta','cajacomments','Cultura')" value="Enviar">`);
             }
             if ((position.x >= finanzas.xn && position.x <= finanzas.xm) && (position.z >= finanzas.zn && position.z <= finanzas.zm)) {
+                Service.guardarEstadistica({typeSchedule: 'Finanzas',type: 'entrarSchundle'});
+
                 $('#agenda').show();
                 $("#nameGral").hide();
                 $("#classCluster").removeClass();
@@ -1093,6 +1100,8 @@ function _onKeyDown(event) {
 
             }
             if ((position.x >= desarrollo.xn && position.x <= desarrollo.xm) && (position.z >= desarrollo.zn && position.z <= desarrollo.zm)) {
+                Service.guardarEstadistica({typeSchedule: 'DesarrolloCarrera',type: 'entrarSchundle',});
+
                 $('#agenda').show();
                 $("#nameGral").hide();
                 $("#classCluster").removeClass();
